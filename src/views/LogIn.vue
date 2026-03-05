@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '../api.ts'
 
 const credentials = ref({
   email: '',
@@ -13,7 +13,7 @@ const router = useRouter()
 const login = async () => {
   errorMessage.value = '' // Clear previous errors
   try {
-    await axios.post('/auth/login', JSON.stringify(credentials.value))
+    await api.post('/auth/login', JSON.stringify(credentials.value))
     router.push('/')
   } catch (error) {
     errorMessage.value = error
