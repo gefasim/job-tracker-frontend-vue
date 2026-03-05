@@ -1,33 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
+
 const credentials = ref({
   email: '',
   password: '',
 })
 const errorMessage = ref()
 const router = useRouter()
-const apiUrl = import.meta.env.VITE_API_URL + 'auth/login/'
 
 const login = async () => {
   errorMessage.value = '' // Clear previous errors
   try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials.value),
-    })
-    if (!response.ok) {
-      errorMessage.value = response.statusText
-      throw new Error('Login error')
-    }
-    const data = await response.json()
-    console.log(data)
+    await axios.post('/auth/login', JSON.stringify(credentials.value))
     router.push('/')
   } catch (error) {
-    console.error(error)
+    errorMessage.value = error
     throw error
   }
 }
