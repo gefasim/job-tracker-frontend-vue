@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api.ts'
+import { CurrentUserService } from '@/current-user.service.ts'
 
 const credentials = ref({
   email: '',
@@ -13,8 +14,9 @@ const router = useRouter()
 const login = async () => {
   errorMessage.value = '' // Clear previous errors
   try {
-    await api.post('/auth/login', JSON.stringify(credentials.value))
-    router.push('/')
+    const response = await api.post('/auth/login', JSON.stringify(credentials.value))
+    CurrentUserService.setUser(response.data)
+    router.push('/boards')
   } catch (error) {
     errorMessage.value = error
     throw error
