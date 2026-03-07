@@ -5,7 +5,7 @@ import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
 
 const { boardId } = defineProps<{ boardId?: string }>()
-
+const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
 const board = ref<Board>()
 
 watch(
@@ -19,34 +19,39 @@ async function fetchData(boardId: string) {
   board.value = response.data
 }
 
-const handleDragStart = (event: DragEvent, jobId: string, fromColumnId: string) => {
+const OnDragStart = (event: DragEvent, fromColId: string, fromIndex: number) => {
+  dragInfo.value = { fromColId, fromIndex }
+
   if (event.dataTransfer) {
-    event.dataTransfer.dropEffect = 'move'
     event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('jobId', jobId)
-    event.dataTransfer.setData('fromColumnId', fromColumnId)
+    // Firefox requires any data in setData
+    event.dataTransfer.setData('text/plain', fromIndex.toString())
   }
 }
 
-const handleDragOver = (event: DragEvent) => {
+const onDragOver = (event: DragEvent) => {
   event.preventDefault()
 }
 
-const handleDrop = (event: DragEvent, toColumnId: string) => {
-  const jobId = event.dataTransfer?.getData('jobId')
-  const fromColumnId = event.dataTransfer?.getData('fromColumnId')
+const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
+  event.preventDefault()
+  if (!dragInfo.value) return
+  debugger
 
-  if (fromColumnId === toColumnId) return
+  const { fromColId: fromColumnId, fromIndex } = dragInfo.value
 
   const fromColumn = board.value?.columns.find((c) => c.id === fromColumnId)
   const toColumn = board.value?.columns.find((c) => c.id === toColumnId)
 
-  if (fromColumn && toColumn) {
-    const jobIndex = fromColumn.jobApplications.findIndex((j) => j.id === jobId)
-    const [job] = fromColumn.jobApplications.splice(jobIndex, 1)
-    toColumn.jobApplications.push(job as JobApplication)
-    // TODO: update jobApplication
-  }
+  if (!fromColumn || !toColumn) return
+
+  const [movedJob] = fromColumn.jobApplications.splice(fromIndex, 1)
+
+  // If toIndex is not passed (dropped into an empty column area), add to the end
+  const finalIndex = toIndex !== undefined ? toIndex : toColumn.jobApplications.length
+  toColumn.jobApplications.splice(finalIndex, 0, movedJob as JobApplication)
+  dragInfo.value = null
+  // TODO: update API
 }
 </script>
 
@@ -59,22 +64,32 @@ const handleDrop = (event: DragEvent, toColumnId: string) => {
       v-for="column in board?.columns"
       :key="column.id"
       class="column"
-      @dragover="handleDragOver"
-      @drop="handleDrop($event, column.id)"
+      @dragover="onDragOver"
+      @drop.self="OnDrop($event, column.id)"
     >
-      <h3 class="column-title">{{ column.name }} ({{ column.jobApplications.length }})</h3>
+      <h3 class="column-header">{{ column.name }}</h3>
 
       <div class="column-content">
         <div
-          v-for="job in column.jobApplications"
+          v-for="(job, index) in column.jobApplications"
           :key="job.id"
           class="card"
           draggable="true"
-          @dragstart="handleDragStart($event, job.id, column.id)"
+          @dragstart="OnDragStart($event, column.id, index)"
+          @dragover="onDragOver"
+          @drop.stop="OnDrop($event, column.id, index)"
         >
-          <strong>{{ job.title }}</strong>
-          <p>{{ job.company?.name }}</p>
+          {{ job.title }}
+          <p>
+            <small>{{ job.company?.name }}</small>
+          </p>
         </div>
+
+        <div
+          class="drop-placeholder"
+          @dragover="onDragOver"
+          @drop="OnDrop($event, column.id)"
+        ></div>
       </div>
     </div>
   </div>
@@ -83,43 +98,46 @@ const handleDrop = (event: DragEvent, toColumnId: string) => {
 <style scoped>
 .board {
   display: flex;
-  gap: 1.5rem;
-  padding: 2rem;
+  gap: 20px;
+  padding: 20px;
+  background: #f4f5f7;
   align-items: flex-start;
-  background: #f0f2f5;
-  min-height: 100vh;
 }
 
 .column {
   background: #ebedf0;
-  width: 300px;
   border-radius: 8px;
-  padding: 1rem;
-  min-height: 200px; /* Щоб була зона для drop, якщо колонка порожня */
+  width: 280px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 .column-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  min-height: 150px;
+  padding: 10px;
+  flex-grow: 1;
 }
 
 .card {
   background: white;
-  padding: 1rem;
+  margin-bottom: 8px;
+  padding: 15px;
   border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: grab;
-  user-select: none;
+  transition: transform 0.1s;
 }
 
 .card:active {
   cursor: grabbing;
 }
 
-/* Візуальний фідбек при перетягуванні */
-.card-dragging {
-  opacity: 0.5;
+.card:hover {
+  border: 1px dashed #4a90e2;
+}
+
+.drop-placeholder {
+  flex-grow: 1;
+  min-height: 50px;
 }
 </style>
