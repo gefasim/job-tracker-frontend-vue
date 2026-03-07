@@ -2,6 +2,7 @@
 
 <template>
   <h1>Hello world</h1>
+  <RouterLink :to="'login'">Login</RouterLink>
 </template>
 
 <style scoped></style>
