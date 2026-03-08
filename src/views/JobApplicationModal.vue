@@ -1,15 +1,24 @@
 <script setup lang="ts">
+import { useClickOutside } from '@/composables/useClickOutside'
+import { useKeydown } from '@/composables/useKeydown'
 import type { JobApplication } from '@/models/job-application.dto'
+import { ref } from 'vue'
 
 defineProps<{
   jobApplication: JobApplication | null
 }>()
+
+const modalContent = ref<HTMLElement | null>(null)
+const emit = defineEmits(['close'])
+
+useKeydown('Escape', () => emit('close'))
+useClickOutside(modalContent, () => emit('close'))
 </script>
 
 <template>
-  <Transition name="modal">
+  <Teleport to="body">
     <div v-if="jobApplication" class="modal-mask">
-      <div class="modal-container">
+      <div class="modal-container" ref="modalContent">
         <div class="modal-header">
           <slot name="header">default header</slot>
           <h2>JobId: {{ jobApplication?.id }}</h2>
@@ -28,7 +37,7 @@ defineProps<{
         </div>
       </div>
     </div>
-  </Transition>
+  </Teleport>
 </template>
 
 <style>

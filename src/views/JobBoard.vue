@@ -106,16 +106,14 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
     </div>
   </div>
 
-  <Teleport to="body">
-    <JobApplicationModal
-      :job-application="selectedJobApplication"
-      @close="closeSelectedJobApplication"
-    >
-      <template #header>
-        <h3>Custom Header</h3>
-      </template>
-    </JobApplicationModal>
-  </Teleport>
+  <JobApplicationModal
+    :job-application="selectedJobApplication"
+    @close="closeSelectedJobApplication"
+  >
+    <template #header>
+      <h3>Custom Header</h3>
+    </template>
+  </JobApplicationModal>
 </template>
 
 <style scoped>
