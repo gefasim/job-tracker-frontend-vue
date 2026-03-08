@@ -3,9 +3,11 @@ import api from '@/api'
 import type { Board } from '@/models/board.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
+import JobApplicationModal from './JobApplicationModal.vue'
 
 const { boardId } = defineProps<{ boardId?: string }>()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
+const selectedJobApplication = ref<JobApplication | null>(null)
 const board = ref<Board>()
 
 watch(
@@ -19,6 +21,16 @@ async function fetchData(boardId: string) {
   board.value = response.data
 }
 
+// On Job click
+const openSelectedJobApplication = (job: JobApplication) => {
+  selectedJobApplication.value = job
+}
+
+const closeSelectedJobApplication = () => {
+  selectedJobApplication.value = null
+}
+
+// On Job drag
 const OnDragStart = (event: DragEvent, fromColId: string, fromIndex: number) => {
   dragInfo.value = { fromColId, fromIndex }
 
@@ -36,7 +48,6 @@ const onDragOver = (event: DragEvent) => {
 const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
   event.preventDefault()
   if (!dragInfo.value) return
-  debugger
 
   const { fromColId: fromColumnId, fromIndex } = dragInfo.value
 
@@ -74,6 +85,7 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
           v-for="(job, index) in column.jobApplications"
           :key="job.id"
           class="card"
+          v-on:click="openSelectedJobApplication(job)"
           draggable="true"
           @dragstart="OnDragStart($event, column.id, index)"
           @dragover="onDragOver"
@@ -93,6 +105,17 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
       </div>
     </div>
   </div>
+
+  <Teleport to="body">
+    <JobApplicationModal
+      :job-application="selectedJobApplication"
+      @close="closeSelectedJobApplication"
+    >
+      <template #header>
+        <h3>Custom Header</h3>
+      </template>
+    </JobApplicationModal>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -124,7 +147,7 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
   padding: 15px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  cursor: grab;
+  cursor: pointer;
   transition: transform 0.1s;
 }
 
