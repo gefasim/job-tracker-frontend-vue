@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
+import RichTextEditor from '../RichTextEditor.vue'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 </script>
@@ -42,15 +43,9 @@ const jobApplication = defineModel<JobApplication>({ required: true })
     </div>
   </div>
 
-  <div class="form-group description-section">
-    <label>Description</label>
-    <div class="editor-toolbar"><span>B</span> <i>I</i> <u>U</u> <s>S</s> | ☰ ≣ | 🔗 📝</div>
-    <textarea
-      v-model="jobApplication.description"
-      placeholder="Add a description here..."
-      rows="8"
-    ></textarea>
-  </div>
+  <!--TODO: resolve a warning message when v-model receives null-->
+  <label>Description</label>
+  <RichTextEditor v-model="jobApplication.description as string" />
 </template>
 
 <style></style>
