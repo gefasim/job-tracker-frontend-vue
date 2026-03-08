@@ -1,3 +1,11 @@
+# 3rd parties libraries
+
+- TipTap
+- @tiptap/vue-3
+- @tiptap/pm
+- @tiptap/starter-kit
+- @tiptap/extension-text-align
+
 # job-tracker-frontend-vue
 
 This template should help get you started developing with Vue 3 in Vite.
