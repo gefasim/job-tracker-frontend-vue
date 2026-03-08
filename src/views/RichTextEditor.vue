@@ -65,19 +65,25 @@ const setLink = () => {
           @click="editor.chain().focus().toggleBold().run()"
           :class="{ 'is-active': editor.isActive('bold') }"
         >
-          B
+          <strong>B</strong>
         </button>
         <button
           @click="editor.chain().focus().toggleItalic().run()"
           :class="{ 'is-active': editor.isActive('italic') }"
         >
-          I
+          <em>I</em>
         </button>
         <button
           @click="editor.chain().focus().toggleUnderline().run()"
           :class="{ 'is-active': editor.isActive('underline') }"
         >
-          U
+          <u>U</u>
+        </button>
+        <button
+          @click="editor.chain().focus().toggleStrike().run()"
+          :class="{ 'is-active': editor.isActive('strike') }"
+        >
+          <s>S</s>
         </button>
       </div>
 
