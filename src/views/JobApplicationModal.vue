@@ -2,7 +2,13 @@
 import { useClickOutside } from '@/composables/useClickOutside'
 import { useKeydown } from '@/composables/useKeydown'
 import type { JobApplication } from '@/models/job-application.dto'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import JobTabNotes from './JobApplication/JobTabNotes.vue'
+import JobTabInfo from './JobApplication/JobTabInfo.vue'
+import JobTabContacts from './JobApplication/JobTabContacts.vue'
+import JobTabDocuments from './JobApplication/JobTabDocuments.vue'
+import JobTabCompany from './JobApplication/JobTabCompany.vue'
+import { JobApplicationTabEnum, type JobApplicationTabType } from './JobApplication/tabs'
 
 const props = defineProps<{
   jobApplicationParam: JobApplication | null
@@ -10,6 +16,18 @@ const props = defineProps<{
 const emit = defineEmits(['close'])
 const modalContent = ref<HTMLElement | null>(null)
 const jobApplication = ref<JobApplication | null>(null) // Shallow copy of jobApplicationParam
+const columns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected']
+
+// Tab navigation
+const activeTab = ref<JobApplicationTabType>(JobApplicationTabEnum.JobInfo)
+const tabComponents: Record<JobApplicationTabEnum, unknown> = {
+  [JobApplicationTabEnum.JobInfo]: JobTabInfo,
+  [JobApplicationTabEnum.Notes]: JobTabNotes,
+  [JobApplicationTabEnum.Contacts]: JobTabContacts,
+  [JobApplicationTabEnum.Documents]: JobTabDocuments,
+  [JobApplicationTabEnum.Company]: JobTabCompany,
+}
+const currentComponent = computed(() => tabComponents[activeTab.value])
 
 // Every time a new modal is opened, we copy the data from the props
 watch(
@@ -30,79 +48,209 @@ useClickOutside(modalContent, () => emit('close', jobApplication.value))
 
 <template>
   <Teleport to="body">
-    <div v-if="jobApplicationParam && jobApplication" class="modal-mask">
+    <div v-if="jobApplication" class="modal-overlay" @click.self="emit('close')">
       <div class="modal-container" ref="modalContent">
-        <div class="modal-header">
-          <slot name="header">default header</slot>
-          <h2>JobId: {{ jobApplication?.id }}</h2>
-          <h2>Title: {{ jobApplication?.title }}</h2>
-        </div>
+        <header class="modal-header">
+          <div class="header-left">
+            <h1>{{ jobApplication.title }}</h1>
+            <div class="subtitle">
+              <span class="icon-office">🏢</span> {{ jobApplication.company?.name }}
+            </div>
+          </div>
+          <div class="header-right">
+            <select v-model="jobApplication.status" class="status-dropdown">
+              <option v-for="s in columns" :key="s" :value="s">Move: {{ s }}</option>
+            </select>
+            <button class="btn-close" @click="emit('close', jobApplication)">Close</button>
+          </div>
+        </header>
 
-        <div class="modal-body">
-          <slot name="body">default body</slot>
-          <input type="text" v-model="jobApplication.title" />
-        </div>
+        <nav class="modal-tabs">
+          <button
+            v-for="tab in Object.values(JobApplicationTabEnum)"
+            :key="tab"
+            :class="['tab-item', { active: activeTab === tab }]"
+            @click="activeTab = tab"
+          >
+            <span class="tab-icon">📄</span> {{ tab }}
+          </button>
+        </nav>
+
+        <main class="modal-body">
+          <KeepAlive>
+            <component :is="currentComponent" v-model="jobApplication" />
+          </KeepAlive>
+        </main>
       </div>
     </div>
   </Teleport>
 </template>
 
 <style>
-.modal-mask {
+.modal-overlay {
   position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
-  transition: opacity 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
 }
 
 .modal-container {
-  width: 300px;
-  margin: auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
+  background: white;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
+/* Header */
+.modal-header {
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
+.header-left h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #70757a;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-right {
+  display: flex;
+  gap: 12px;
+}
+
+.status-dropdown {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-close {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Tabs */
+.modal-tabs {
+  display: flex;
+  background: #f1f4f9;
+  padding: 8px 32px;
+  gap: 8px;
+}
+
+.tab-item {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #5f6368;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.tab-item.active {
+  background: white;
+  color: #1a73e8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Form Layout */
 .modal-body {
-  margin: 20px 0;
+  padding: 32px;
+  background: white;
+  overflow-y: auto;
+  max-height: 70vh;
 }
 
-.modal-default-button {
-  float: right;
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* 3 колонки як на скрині */
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter-from {
-  opacity: 0;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.modal-leave-to {
-  opacity: 0;
+.form-group.full-row {
+  /* Якщо треба щоб дедлайн був в окремій секції або розтягнутий */
 }
 
-.modal-enter-from .modal-container,
-.modal-leave-to .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3c4043;
+}
+
+input,
+textarea {
+  border: 1px solid #dadce0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.color-picker-box {
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Description / Editor */
+.description-section {
+  margin-top: 24px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.editor-toolbar {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 8px;
+  color: #5f6368;
+  display: flex;
+  gap: 15px;
+}
+
+textarea {
+  border: none;
+  width: 100%;
+  resize: vertical;
+  background: #fffdf0;
+}
+
+textarea:focus {
+  outline: none;
 }
 </style>

@@ -1,0 +1,56 @@
+<script setup lang="ts">
+import type { JobApplication } from '@/models/job-application.dto'
+
+const jobApplication = defineModel<JobApplication>({ required: true })
+</script>
+
+<template>
+  <div class="form-grid" v-if="jobApplication">
+    <div class="form-group">
+      <label>Company</label>
+      <input type="text" />
+    </div>
+    <div class="form-group">
+      <label>Job Title</label>
+      <input v-model="jobApplication.title" type="text" />
+    </div>
+    <div class="form-group full-row">
+      <label>Deadline</label>
+      <input v-model="jobApplication.deadline" type="text" placeholder="August 30th, 2025" />
+    </div>
+
+    <div class="form-group">
+      <label>Post URL</label>
+      <input
+        v-model="jobApplication.postUrl"
+        type="text"
+        placeholder="+ add URL e.g. https://google.com"
+      />
+    </div>
+    <div class="form-group">
+      <label>Salary</label>
+      <input v-model="jobApplication.salary" type="text" />
+    </div>
+
+    <div class="form-group">
+      <label>Location</label>
+      <input v-model="jobApplication.location" type="text" placeholder="+ add location" />
+    </div>
+    <div class="form-group">
+      <label>Color</label>
+      <div class="color-picker-box" :style="{ backgroundColor: jobApplication.color }"></div>
+    </div>
+  </div>
+
+  <div class="form-group description-section">
+    <label>Description</label>
+    <div class="editor-toolbar"><span>B</span> <i>I</i> <u>U</u> <s>S</s> | ☰ ≣ | 🔗 📝</div>
+    <textarea
+      v-model="jobApplication.description"
+      placeholder="Add a description here..."
+      rows="8"
+    ></textarea>
+  </div>
+</template>
+
+<style></style>
