@@ -26,7 +26,8 @@ const openSelectedJobApplication = (job: JobApplication) => {
   selectedJobApplication.value = job
 }
 
-const closeSelectedJobApplication = () => {
+const closeSelectedJobApplication = (job: JobApplication) => {
+  console.log('TODO: JobApplication to update on Board UI (after modal window close):', job)
   selectedJobApplication.value = null
 }
 
@@ -107,13 +108,9 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
   </div>
 
   <JobApplicationModal
-    :job-application="selectedJobApplication"
+    :jobApplicationParam="selectedJobApplication"
     @close="closeSelectedJobApplication"
-  >
-    <template #header>
-      <h3>Custom Header</h3>
-    </template>
-  </JobApplicationModal>
+  ></JobApplicationModal>
 </template>
 
 <style scoped>

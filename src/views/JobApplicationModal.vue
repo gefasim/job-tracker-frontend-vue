@@ -2,22 +2,35 @@
 import { useClickOutside } from '@/composables/useClickOutside'
 import { useKeydown } from '@/composables/useKeydown'
 import type { JobApplication } from '@/models/job-application.dto'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-defineProps<{
-  jobApplication: JobApplication | null
+const props = defineProps<{
+  jobApplicationParam: JobApplication | null
 }>()
-
-const modalContent = ref<HTMLElement | null>(null)
 const emit = defineEmits(['close'])
+const modalContent = ref<HTMLElement | null>(null)
+const jobApplication = ref<JobApplication | null>(null) // Shallow copy of jobApplicationParam
 
-useKeydown('Escape', () => emit('close'))
-useClickOutside(modalContent, () => emit('close'))
+// Every time a new modal is opened, we copy the data from the props
+watch(
+  () => props.jobApplicationParam,
+  (newJobApplication) => {
+    if (newJobApplication) {
+      jobApplication.value = { ...newJobApplication }
+    } else {
+      jobApplication.value = null
+    }
+  },
+  { immediate: true },
+)
+
+useKeydown('Escape', () => emit('close', jobApplication.value))
+useClickOutside(modalContent, () => emit('close', jobApplication.value))
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="jobApplication" class="modal-mask">
+    <div v-if="jobApplicationParam && jobApplication" class="modal-mask">
       <div class="modal-container" ref="modalContent">
         <div class="modal-header">
           <slot name="header">default header</slot>
@@ -27,13 +40,7 @@ useClickOutside(modalContent, () => emit('close'))
 
         <div class="modal-body">
           <slot name="body">default body</slot>
-        </div>
-
-        <div class="modal-footer">
-          <slot name="footer">
-            default footer
-            <button class="modal-default-button" @click="$emit('close')">OK</button>
-          </slot>
+          <input type="text" v-model="jobApplication.title" />
         </div>
       </div>
     </div>
