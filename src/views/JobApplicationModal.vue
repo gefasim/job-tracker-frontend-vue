@@ -9,11 +9,12 @@ import JobTabContacts from './JobApplication/JobTabContacts.vue'
 import JobTabDocuments from './JobApplication/JobTabDocuments.vue'
 import JobTabCompany from './JobApplication/JobTabCompany.vue'
 import { JobApplicationTabEnum, type JobApplicationTabType } from './JobApplication/tabs'
+import api from '@/api'
 
 const props = defineProps<{
   jobApplicationParam: JobApplication | null
 }>()
-const emit = defineEmits(['close'])
+const emit = defineEmits(['update', 'close'])
 const modalContent = ref<HTMLElement | null>(null)
 const jobApplication = ref<JobApplication | null>(null) // Shallow copy of jobApplicationParam
 const columns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected']
@@ -42,8 +43,31 @@ watch(
   { immediate: true },
 )
 
-useKeydown('Escape', () => emit('close', jobApplication.value))
-useClickOutside(modalContent, () => emit('close', jobApplication.value))
+const saveChanges = async () => {
+  const hasChanged =
+    JSON.stringify(jobApplication.value) !== JSON.stringify(props.jobApplicationParam)
+
+  if (hasChanged && jobApplication.value) {
+    try {
+      const result = await api.put(
+        '/job-applications/' + jobApplication.value.id,
+        jobApplication.value,
+      )
+      console.log(result.data)
+      emit('update', jobApplication.value)
+    } catch (error) {
+      console.error('Failed to save:', error)
+    }
+  }
+}
+
+const handleClose = async () => {
+  await saveChanges()
+  emit('close', jobApplication.value)
+}
+
+useKeydown('Escape', handleClose)
+useClickOutside(modalContent, handleClose)
 </script>
 
 <template>
@@ -61,7 +85,7 @@ useClickOutside(modalContent, () => emit('close', jobApplication.value))
             <select v-model="jobApplication.status" class="status-dropdown">
               <option v-for="s in columns" :key="s" :value="s">Move: {{ s }}</option>
             </select>
-            <button class="btn-close" @click="emit('close', jobApplication)">Close</button>
+            <button class="btn-close" @click="handleClose">Close</button>
           </div>
         </header>
 

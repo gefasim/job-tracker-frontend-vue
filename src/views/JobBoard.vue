@@ -26,9 +26,23 @@ const openSelectedJobApplication = (job: JobApplication) => {
   selectedJobApplication.value = job
 }
 
-const closeSelectedJobApplication = (job: JobApplication) => {
-  console.log('TODO: JobApplication to update on Board UI (after modal window close):', job)
+const updateSelectedJobApplication = async (job: JobApplication) => {
+  const { columnIndex, jobIndex } = getJobPositionOnBoard(job)
+  board.value!.columns[columnIndex]!.jobApplications[jobIndex] = job
+  await closeSelectedJobApplication()
+}
+
+const closeSelectedJobApplication = async () => {
   selectedJobApplication.value = null
+}
+
+const getJobPositionOnBoard = (job: JobApplication): { columnIndex: number; jobIndex: number } => {
+  if (!board.value || !board.value.columns) throw new Error('Board model is invalid')
+  for (const [i, column] of board.value.columns.entries()) {
+    const j = column.jobApplications.findIndex((item) => item.id === job.id)
+    if (j !== -1) return { columnIndex: i, jobIndex: j }
+  }
+  throw new Error('Job not found')
 }
 
 // On Job drag
@@ -109,6 +123,7 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
 
   <JobApplicationModal
     :jobApplicationParam="selectedJobApplication"
+    @update="updateSelectedJobApplication"
     @close="closeSelectedJobApplication"
   ></JobApplicationModal>
 </template>
