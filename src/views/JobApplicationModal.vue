@@ -78,7 +78,7 @@ useClickOutside(modalContent, handleClose)
             </div>
           </div>
           <div class="header-right">
-            <select v-model="jobApplication.status" class="status-dropdown">
+            <select v-model="jobApplication.status" name="board-columns" class="status-dropdown">
               <option v-for="s in columns" :key="s" :value="s">Move: {{ s }}</option>
             </select>
             <button class="btn-close" @click="handleClose">Close</button>

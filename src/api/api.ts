@@ -5,6 +5,8 @@ import type { BoardsService } from './boards.service.interface'
 import type { Board } from '@/models/board.dto'
 import type { AuthService } from './auth.service.interface'
 import type { User } from '@/models/user.dto'
+import type { JobApplicationNotesService } from './job-notes.service.interface'
+import type { JobApplicationNote } from '@/models/job-application-note.dto'
 
 const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -72,8 +74,23 @@ const jobApplicationApi: JobApplicationsService = {
   },
 }
 
+const jobApplicationNoteApi: JobApplicationNotesService = {
+  async get(jobId: string): Promise<JobApplicationNote> {
+    const response = await httpClient.get<JobApplicationNote>(`/job-application-notes/${jobId}`)
+    return response.data
+  },
+  async create(jobId: string, content: string): Promise<JobApplicationNote> {
+    const response = await httpClient.post<JobApplicationNote>(`/job-application-notes`, {
+      content,
+      jobApplicationId: jobId,
+    })
+    return response.data
+  },
+}
+
 export const api = {
   auth: authApi,
   boards: boardApi,
   jobs: jobApplicationApi,
+  jobNotes: jobApplicationNoteApi,
 }
