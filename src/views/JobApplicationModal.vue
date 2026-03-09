@@ -9,7 +9,7 @@ import JobTabContacts from './JobApplication/JobTabContacts.vue'
 import JobTabDocuments from './JobApplication/JobTabDocuments.vue'
 import JobTabCompany from './JobApplication/JobTabCompany.vue'
 import { JobApplicationTabEnum, type JobApplicationTabType } from './JobApplication/tabs'
-import api from '@/api'
+import { api } from '@/api/api'
 
 const props = defineProps<{
   jobApplicationParam: JobApplication | null
@@ -49,11 +49,7 @@ const saveChanges = async () => {
 
   if (hasChanged && jobApplication.value) {
     try {
-      const result = await api.put(
-        '/job-applications/' + jobApplication.value.id,
-        jobApplication.value,
-      )
-      console.log(result.data)
+      await api.jobs.update(jobApplication.value)
       emit('update', jobApplication.value)
     } catch (error) {
       console.error('Failed to save:', error)

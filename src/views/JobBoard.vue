@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import api from '@/api'
 import type { Board } from '@/models/board.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
 import JobApplicationModal from './JobApplicationModal.vue'
+import { api } from '@/api/api'
 
 const { boardId } = defineProps<{ boardId?: string }>()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
@@ -17,8 +17,8 @@ watch(
 )
 
 async function fetchData(boardId: string) {
-  const response = await api.get<Board>('/boards/' + boardId)
-  board.value = response.data
+  const response = await api.boards.get(boardId)
+  board.value = response
 }
 
 // On Job click
