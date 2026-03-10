@@ -18,7 +18,6 @@ const httpClient = axios.create({
 httpClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    debugger
     const originalRequest = error.config
 
     // Checks if it is a 401 error, and if we have not already tried to refresh the token
@@ -85,6 +84,15 @@ const jobApplicationNoteApi: JobApplicationNotesService = {
       jobApplicationId: jobId,
     })
     return response.data
+  },
+  async update(jobId: string, content: string): Promise<JobApplicationNote> {
+    const response = await httpClient.put<JobApplicationNote>(`/job-application-notes/${jobId}`, {
+      content,
+    })
+    return response.data
+  },
+  async delete(noteId: string): Promise<void> {
+    await httpClient.delete<JobApplicationNote>(`/job-application-notes/${noteId}`)
   },
 }
 

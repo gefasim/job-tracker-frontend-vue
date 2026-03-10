@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useClickOutside } from '@/composables/useClickOutside'
 import { useKeydown } from '@/composables/useKeydown'
 import type { JobApplication } from '@/models/job-application.dto'
 import { computed, ref, watch } from 'vue'
@@ -15,7 +14,6 @@ const props = defineProps<{
   jobApplicationParam: JobApplication | null
 }>()
 const emit = defineEmits(['update', 'close'])
-const modalContent = ref<HTMLElement | null>(null)
 const jobApplication = ref<JobApplication | null>(null) // Shallow copy of jobApplicationParam
 const columns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected']
 
@@ -59,16 +57,15 @@ const saveChanges = async () => {
 
 const handleClose = async () => {
   await saveChanges()
-  emit('close', jobApplication.value)
+  emit('close')
 }
 
 useKeydown('Escape', handleClose)
-useClickOutside(modalContent, handleClose)
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="jobApplication" class="modal-overlay" @click.self="emit('close')">
+    <div v-if="jobApplication" class="modal-overlay" @click.self="handleClose">
       <div class="modal-container" ref="modalContent">
         <header class="modal-header">
           <div class="header-left">
