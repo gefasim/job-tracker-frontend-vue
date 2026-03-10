@@ -109,7 +109,6 @@ onUnmounted(() => document.removeEventListener('click', closeMenuOnClickOutside)
   <div v-if="jobApplication" class="notes-tab">
     <div class="note-div">
       <label>Add note</label>
-      <!-- TODO: clean up RichTextEditor on Save button click -->
       <RichTextEditor v-model="noteToAdd" />
       <button @click="createNote" class="overlap-button btn-primary">Save</button>
     </div>

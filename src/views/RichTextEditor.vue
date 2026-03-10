@@ -3,6 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
+import { watch } from 'vue'
 
 const props = defineProps<{
   modelValue: string
@@ -26,6 +27,19 @@ const editor = useEditor({
     emit('update:modelValue', editor.getHTML())
   },
 })
+
+// Updates content when parent component updates/clears `modelValue`
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (!editor.value) return
+    const currentContent = editor.value.getHTML()
+
+    if (newValue !== currentContent) {
+      editor.value.commands.setContent(newValue, { emitUpdate: false })
+    }
+  },
+)
 
 const setLink = () => {
   if (editor.value?.isActive('link')) {
