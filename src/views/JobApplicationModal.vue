@@ -9,6 +9,11 @@ import JobTabDocuments from './JobApplication/JobTabDocuments.vue'
 import JobTabCompany from './JobApplication/JobTabCompany.vue'
 import { JobApplicationTabEnum, type JobApplicationTabType } from './JobApplication/tabs'
 import { api } from '@/api/api'
+import InfoIcon from '@/assets/InfoIcon.vue'
+import NoteIcon from '@/assets/NoteIcon.vue'
+import CompanyIcon from '@/assets/CompanyIcon.vue'
+import DocumentIcon from '@/assets/DocumentIcon.vue'
+import ContactIcon from '@/assets/ContactIcon.vue'
 
 const props = defineProps<{
   jobApplicationParam: JobApplication | null
@@ -25,6 +30,13 @@ const tabComponents: Record<JobApplicationTabEnum, unknown> = {
   [JobApplicationTabEnum.Contacts]: JobTabContacts,
   [JobApplicationTabEnum.Documents]: JobTabDocuments,
   [JobApplicationTabEnum.Company]: JobTabCompany,
+}
+const tabIcon: Record<JobApplicationTabEnum, unknown> = {
+  [JobApplicationTabEnum.JobInfo]: InfoIcon,
+  [JobApplicationTabEnum.Notes]: NoteIcon,
+  [JobApplicationTabEnum.Contacts]: ContactIcon,
+  [JobApplicationTabEnum.Documents]: DocumentIcon,
+  [JobApplicationTabEnum.Company]: CompanyIcon,
 }
 const currentComponent = computed(() => tabComponents[activeTab.value])
 
@@ -89,7 +101,7 @@ useKeydown('Escape', handleClose)
             :class="['tab-item', { active: activeTab === tab }]"
             @click="activeTab = tab"
           >
-            <span class="tab-icon">📄</span> {{ tab }}
+            <component :is="tabIcon[tab]" class="tab-icon" /> {{ tab }}
           </button>
         </nav>
 
@@ -180,14 +192,16 @@ useKeydown('Escape', handleClose)
 }
 
 .tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 20px;
   border: none;
   background: transparent;
   border-radius: 8px;
   cursor: pointer;
   color: #5f6368;
-  display: flex;
-  align-items: center;
   gap: 8px;
   font-weight: 500;
 }
@@ -196,6 +210,13 @@ useKeydown('Escape', handleClose)
   background: white;
   color: #1a73e8;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  fill: currentColor;
 }
 
 /* Form Layout */
