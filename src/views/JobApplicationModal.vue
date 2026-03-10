@@ -53,6 +53,21 @@ watch(
   { immediate: true },
 )
 
+const getTabCount = (tab: JobApplicationTabEnum): number => {
+  if (!jobApplication.value) return 0
+
+  switch (tab) {
+    case JobApplicationTabEnum.Notes:
+      return jobApplication.value.notes?.length || 0
+    case JobApplicationTabEnum.Contacts:
+      return jobApplication.value.contacts?.length || 0
+    case JobApplicationTabEnum.Documents:
+      return jobApplication.value.documents?.length || 0
+    default:
+      return 0
+  }
+}
+
 const saveChanges = async () => {
   const hasChanged =
     JSON.stringify(jobApplication.value) !== JSON.stringify(props.jobApplicationParam)
@@ -101,7 +116,13 @@ useKeydown('Escape', handleClose)
             :class="['tab-item', { active: activeTab === tab }]"
             @click="activeTab = tab"
           >
-            <component :is="tabIcon[tab]" class="tab-icon" /> {{ tab }}
+            <component :is="tabIcon[tab]" class="tab-icon" />
+
+            {{ tab }}
+
+            <span v-if="getTabCount(tab) > 0" class="tab-badge">
+              {{ getTabCount(tab) }}
+            </span>
           </button>
         </nav>
 
@@ -204,6 +225,7 @@ useKeydown('Escape', handleClose)
   color: #5f6368;
   gap: 8px;
   font-weight: 500;
+  position: relative; /* for badge */
 }
 
 .tab-item.active {
@@ -217,6 +239,21 @@ useKeydown('Escape', handleClose)
   height: 18px;
   vertical-align: middle;
   fill: currentColor;
+}
+
+.tab-badge {
+  background-color: #818b9c;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  height: 20px;
+  min-width: 20px;
+  padding: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 /* Form Layout */
