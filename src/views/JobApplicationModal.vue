@@ -240,10 +240,6 @@ useKeydown('Escape', handleClose)
   gap: 8px;
 }
 
-.form-group.full-row {
-  /* Якщо треба щоб дедлайн був в окремій секції або розтягнутий */
-}
-
 label {
   font-size: 14px;
   font-weight: 600;
