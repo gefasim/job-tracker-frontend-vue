@@ -5,15 +5,15 @@ import { ContactMethodTypeEnum } from '@/models/contact-type.enum'
 import type { ContactEmail } from '@/models/contact-email.dto'
 import type { ContactPhone } from '@/models/contact-phone.dto'
 
+// TODO: implement multiple job assignment
 const props = defineProps<{
   contact: Contact | null
-  jobTitle?: string // Для відображення "Linked to"
+  jobTitle?: string
 }>()
 const emit = defineEmits(['close', 'save'])
 
 const isEditMode = computed(() => !!props.contact)
 
-// Ініціалізуємо форму порожніми масивами, щоб уникнути помилок v-for
 const form = ref<Partial<Contact>>({
   firstName: '',
   lastName: '',
@@ -31,7 +31,7 @@ onMounted(() => {
   }
 })
 
-// --- ЛОГІКА ДИНАМІЧНИХ МАСИВІВ ---
+// --- Email & Phone handlers ---
 const addEmail = () => {
   if (!form.value.emails) form.value.emails = []
   form.value.emails.push({ email: '', type: ContactMethodTypeEnum.WORK } as ContactEmail)
@@ -42,28 +42,23 @@ const removeEmail = (index: number) => {
 
 const addPhone = () => {
   if (!form.value.phones) form.value.phones = []
-  form.value.phones.push({ phone: '', type: ContactMethodTypeEnum.PERSONAL } as ContactPhone)
+  form.value.phones.push({ phone: '', type: ContactMethodTypeEnum.WORK } as ContactPhone)
 }
 const removePhone = (index: number) => {
   form.value.phones?.splice(index, 1)
 }
 
-// --- ЗБЕРЕЖЕННЯ ---
 const handleSave = () => {
   if (!form.value.firstName || !form.value.lastName) {
     alert('First Name and Last Name are required.')
     return
   }
 
-  // Фільтруємо порожні імейли/телефони перед збереженням
+  // Exclude empty email/phone before save
   if (form.value.emails) form.value.emails = form.value.emails.filter((e) => e.email.trim() !== '')
   if (form.value.phones) form.value.phones = form.value.phones.filter((p) => p.phone.trim() !== '')
 
-  // Емітуємо об'єкт (генеруємо ID для нових)
-  emit('save', {
-    ...form.value,
-    id: form.value.id || Date.now().toString(),
-  } as Contact)
+  emit('save', form.value as Contact)
 }
 </script>
 
