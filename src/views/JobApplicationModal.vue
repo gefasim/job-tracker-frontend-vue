@@ -266,7 +266,7 @@ useKeydown('Escape', handleClose)
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 колонки як на скрині */
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
   margin-bottom: 24px;
 }
