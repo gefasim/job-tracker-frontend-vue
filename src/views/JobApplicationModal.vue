@@ -9,11 +9,11 @@ import JobTabDocuments from './JobApplication/JobTabDocuments.vue'
 import JobTabCompany from './JobApplication/JobTabCompany.vue'
 import { JobApplicationTabEnum, type JobApplicationTabType } from './JobApplication/tabs'
 import { api } from '@/api/api'
-import InfoIcon from '@/assets/InfoIcon.vue'
-import NoteIcon from '@/assets/NoteIcon.vue'
-import CompanyIcon from '@/assets/CompanyIcon.vue'
-import DocumentIcon from '@/assets/DocumentIcon.vue'
-import ContactIcon from '@/assets/ContactIcon.vue'
+import JobInfoNavTabIcon from '@/assets/JobInfoNavTabIcon.vue'
+import NoteNavTabIcon from '@/assets/NoteNavTabIcon.vue'
+import CompanyNavTabIcon from '@/assets/CompanyNavTabIcon.vue'
+import DocumentNavTabIcon from '@/assets/DocumentNavTabIcon.vue'
+import ContactNavTabIcon from '@/assets/ContactNavTabIcon.vue'
 
 const props = defineProps<{
   jobApplicationParam: JobApplication | null
@@ -32,11 +32,11 @@ const tabComponents: Record<JobApplicationTabEnum, unknown> = {
   [JobApplicationTabEnum.Company]: JobTabCompany,
 }
 const tabIcon: Record<JobApplicationTabEnum, unknown> = {
-  [JobApplicationTabEnum.JobInfo]: InfoIcon,
-  [JobApplicationTabEnum.Notes]: NoteIcon,
-  [JobApplicationTabEnum.Contacts]: ContactIcon,
-  [JobApplicationTabEnum.Documents]: DocumentIcon,
-  [JobApplicationTabEnum.Company]: CompanyIcon,
+  [JobApplicationTabEnum.JobInfo]: JobInfoNavTabIcon,
+  [JobApplicationTabEnum.Notes]: NoteNavTabIcon,
+  [JobApplicationTabEnum.Contacts]: ContactNavTabIcon,
+  [JobApplicationTabEnum.Documents]: DocumentNavTabIcon,
+  [JobApplicationTabEnum.Company]: CompanyNavTabIcon,
 }
 const currentComponent = computed(() => tabComponents[activeTab.value])
 
