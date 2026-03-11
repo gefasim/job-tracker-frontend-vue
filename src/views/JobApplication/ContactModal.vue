@@ -27,7 +27,6 @@ const form = ref<Partial<Contact>>({
 
 onMounted(() => {
   if (props.contact) {
-    // Копіюємо дані контакту у форму
     form.value = JSON.parse(JSON.stringify(props.contact))
   }
 })

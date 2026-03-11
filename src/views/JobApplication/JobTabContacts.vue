@@ -10,7 +10,6 @@ const jobApplication = defineModel<JobApplication>({ required: true })
 const isModalOpen = ref(false)
 const contactToEdit = ref<Contact | null>(null)
 
-// Перевірка, чи є хоча б один контакт
 const hasContacts = computed(() => {
   return jobApplication.value.contacts && jobApplication.value.contacts.length > 0
 })
@@ -21,7 +20,7 @@ const openCreateModal = () => {
 }
 
 const openEditModal = (contact: Contact) => {
-  contactToEdit.value = JSON.parse(JSON.stringify(contact)) // Глибока копія, щоб не мутувати проп напряму
+  contactToEdit.value = JSON.parse(JSON.stringify(contact))
   isModalOpen.value = true
 }
 
@@ -30,9 +29,9 @@ const handleSaveContact = (savedContact: Contact) => {
 
   const index = jobApplication.value.contacts.findIndex((c) => c.id === savedContact.id)
   if (index !== -1) {
-    jobApplication.value.contacts[index] = savedContact // Оновлюємо
+    jobApplication.value.contacts[index] = savedContact
   } else {
-    jobApplication.value.contacts.unshift(savedContact) // Додаємо новий на початок
+    jobApplication.value.contacts.push(savedContact)
   }
   isModalOpen.value = false
 }
