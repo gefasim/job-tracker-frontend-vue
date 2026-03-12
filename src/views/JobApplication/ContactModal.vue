@@ -8,13 +8,17 @@ import TwitterIcon from '@/assets/external/TwitterIcon.vue'
 import FacebookIcon from '@/assets/external/FacebookIcon.vue'
 import LinkedInIcon from '@/assets/external/LinkedInIcon.vue'
 import GitHubIcon from '@/assets/external/GitHubIcon.vue'
+import { api } from '@/api/api'
+import { useRoute } from 'vue-router'
 
 // TODO: implement multiple job assignment
 const props = defineProps<{
   contact: Contact | null
   jobTitle?: string
+  jobId: string
 }>()
 const emit = defineEmits(['close', 'save'])
+const route = useRoute()
 
 const isEditMode = computed(() => !!props.contact)
 
@@ -52,7 +56,7 @@ const removePhone = (index: number) => {
   form.value.phones?.splice(index, 1)
 }
 
-const handleSave = () => {
+const handleSave = async () => {
   if (!form.value.firstName || !form.value.lastName) {
     alert('First Name and Last Name are required.')
     return
@@ -62,7 +66,12 @@ const handleSave = () => {
   if (form.value.emails) form.value.emails = form.value.emails.filter((e) => e.email.trim() !== '')
   if (form.value.phones) form.value.phones = form.value.phones.filter((p) => p.phone.trim() !== '')
 
-  emit('save', form.value as Contact)
+  // TODO: implement Company save
+  const boardId = route.params.boardId
+  const contact = { ...form.value, boardId } as Contact
+  const savedContact = await api.contacts.create(contact)
+  await api.contacts.assignJobApplication(savedContact.id, props.jobId)
+  emit('save', savedContact)
 }
 </script>
 
@@ -145,19 +154,39 @@ const handleSave = () => {
           <div class="input-group external-url">
             <div class="external-url-row">
               <TwitterIcon />
-              <input type="text" name="twitter-url" placeholder="Twitter URL" />
+              <input
+                v-model="form.twitterUrl"
+                type="text"
+                name="twitter-url"
+                placeholder="Twitter URL"
+              />
             </div>
             <div class="external-url-row">
               <FacebookIcon />
-              <input type="text" name="facebook-url" placeholder="Facebook URL" />
+              <input
+                v-model="form.facebookUrl"
+                type="text"
+                name="facebook-url"
+                placeholder="Facebook URL"
+              />
             </div>
             <div class="external-url-row">
               <LinkedInIcon />
-              <input type="text" name="linkedin-url" placeholder="LinkedIn URL" />
+              <input
+                v-model="form.linkedinUrl"
+                type="text"
+                name="linkedin-url"
+                placeholder="LinkedIn URL"
+              />
             </div>
             <div class="external-url-row">
               <GitHubIcon />
-              <input type="text" name="github-url" placeholder="GitHub URL" />
+              <input
+                v-model="form.githubUrl"
+                type="text"
+                name="github-url"
+                placeholder="GitHub URL"
+              />
             </div>
           </div>
         </div>
