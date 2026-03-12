@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { Contact } from '@/models/contact.dto'
+import GitHubIcon from '@/assets/external/GitHubIcon.vue'
+import TwitterIcon from '@/assets/external/TwitterIcon.vue'
+import FacebookIcon from '@/assets/external/FacebookIcon.vue'
+import LinkedInIcon from '@/assets/external/LinkedInIcon.vue'
 
 const props = defineProps<{ contact: Contact }>()
 const emit = defineEmits(['edit', 'unlink'])
@@ -25,6 +29,14 @@ const editContact = (contact: Contact) => {
 const unlinkContact = (contact: Contact) => {
   emit('unlink', contact.id)
   isMenuOpen.value = false
+}
+
+// http/https at the beginning marks the link as an external link,
+// otherwise Vue treats the link as an internal link
+const wrapExternalLink = (link: string): string => {
+  if (!link) return ''
+  if (link.startsWith('http://') || link.startsWith('https://')) return link
+  return 'https://' + link
 }
 
 onMounted(() => document.addEventListener('click', closeMenu))
@@ -83,18 +95,18 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
     </div>
 
     <div class="card-socials">
-      <a v-if="contact.linkedinUrl" :href="contact.linkedinUrl" target="_blank" class="social-icon"
-        >in</a
-      >
-      <a v-if="contact.facebookUrl" :href="contact.facebookUrl" target="_blank" class="social-icon"
-        >fb</a
-      >
-      <a v-if="contact.twitterUrl" :href="contact.twitterUrl" target="_blank" class="social-icon"
-        >tw</a
-      >
-      <a v-if="contact.githubUrl" :href="contact.githubUrl" target="_blank" class="social-icon"
-        >gh</a
-      >
+      <a :href="wrapExternalLink(contact.linkedinUrl)" target="_blank" class="social-icon"
+        ><LinkedInIcon
+      /></a>
+      <a :href="wrapExternalLink(contact.facebookUrl)" target="_blank" class="social-icon"
+        ><FacebookIcon
+      /></a>
+      <a :href="wrapExternalLink(contact.twitterUrl)" target="_blank" class="social-icon"
+        ><TwitterIcon
+      /></a>
+      <a :href="wrapExternalLink(contact.githubUrl)" target="_blank" class="social-icon"
+        ><GitHubIcon
+      /></a>
     </div>
 
     <div class="card-footer">Created by System OOO</div>
@@ -236,6 +248,7 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 .card-socials {
   padding: 12px 16px;
   display: flex;
+  justify-content: space-between;
   gap: 16px;
   border-bottom: 1px solid #f1f3f4;
 }
