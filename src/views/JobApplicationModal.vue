@@ -316,7 +316,6 @@ textarea {
 
 textarea {
   border: none;
-  width: 100%;
   resize: vertical;
   background: #fffdf0;
 }

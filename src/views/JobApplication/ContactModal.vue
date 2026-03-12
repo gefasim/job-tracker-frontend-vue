@@ -238,22 +238,22 @@ const handleSave = () => {
   align-items: flex-start;
 }
 .avatar-placeholder {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   background: #e8f0fe;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 30px;
   flex-shrink: 0;
-  margin-top: 24px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
 }
 .input-group label {
   font-size: 13px;
