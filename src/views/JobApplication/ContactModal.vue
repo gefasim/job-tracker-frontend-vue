@@ -4,6 +4,10 @@ import type { Contact } from '@/models/contact.dto'
 import { ContactMethodTypeEnum } from '@/models/contact-type.enum'
 import type { ContactEmail } from '@/models/contact-email.dto'
 import type { ContactPhone } from '@/models/contact-phone.dto'
+import TwitterIcon from '@/assets/external/TwitterIcon.vue'
+import FacebookIcon from '@/assets/external/FacebookIcon.vue'
+import LinkedInIcon from '@/assets/external/LinkedInIcon.vue'
+import GitHubIcon from '@/assets/external/GitHubIcon.vue'
 
 // TODO: implement multiple job assignment
 const props = defineProps<{
@@ -135,6 +139,25 @@ const handleSave = () => {
                 <button @click="removePhone(index)" class="remove-btn">✕</button>
               </div>
               <button @click="addPhone" class="add-text-btn">+ add phone</button>
+            </div>
+          </div>
+
+          <div class="input-group external-url">
+            <div class="external-url-row">
+              <TwitterIcon />
+              <input type="text" name="twitter-url" placeholder="Twitter URL" />
+            </div>
+            <div class="external-url-row">
+              <FacebookIcon />
+              <input type="text" name="facebook-url" placeholder="Facebook URL" />
+            </div>
+            <div class="external-url-row">
+              <LinkedInIcon />
+              <input type="text" name="linkedin-url" placeholder="LinkedIn URL" />
+            </div>
+            <div class="external-url-row">
+              <GitHubIcon />
+              <input type="text" name="github-url" placeholder="GitHub URL" />
             </div>
           </div>
         </div>
@@ -287,6 +310,20 @@ select:focus {
 textarea {
   resize: vertical;
   min-height: 80px;
+}
+
+.external-url {
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  padding: 12px;
+}
+.external-url-row {
+  display: flex;
+  align-items: center;
+}
+.external-url-row input {
+  flex: 1;
+  border: none;
 }
 
 /* Динамічні списки (Emails / Phones) */
