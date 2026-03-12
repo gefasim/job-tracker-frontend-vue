@@ -95,16 +95,32 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
     </div>
 
     <div class="card-socials">
-      <a :href="wrapExternalLink(contact.linkedinUrl)" target="_blank" class="social-icon"
-        ><LinkedInIcon
-      /></a>
-      <a :href="wrapExternalLink(contact.facebookUrl)" target="_blank" class="social-icon"
-        ><FacebookIcon
-      /></a>
-      <a :href="wrapExternalLink(contact.twitterUrl)" target="_blank" class="social-icon"
+      <a
+        :href="wrapExternalLink(contact.twitterUrl)"
+        target="_blank"
+        class="social-icon"
+        :class="{ socialIconNoLink: !contact.twitterUrl }"
         ><TwitterIcon
       /></a>
-      <a :href="wrapExternalLink(contact.githubUrl)" target="_blank" class="social-icon"
+      <a
+        :href="wrapExternalLink(contact.facebookUrl)"
+        target="_blank"
+        class="social-icon"
+        :class="{ socialIconNoLink: !contact.facebookUrl }"
+        ><FacebookIcon
+      /></a>
+      <a
+        :href="wrapExternalLink(contact.linkedinUrl)"
+        target="_blank"
+        class="social-icon"
+        :class="{ socialIconNoLink: !contact.linkedinUrl }"
+        ><LinkedInIcon
+      /></a>
+      <a
+        :href="wrapExternalLink(contact.githubUrl)"
+        target="_blank"
+        class="social-icon"
+        :class="{ socialIconNoLink: !contact.githubUrl }"
         ><GitHubIcon
       /></a>
     </div>
@@ -261,6 +277,9 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 }
 .social-icon:hover {
   color: #1a73e8;
+}
+.socialIconNoLink {
+  pointer-events: none;
 }
 
 .card-footer {
