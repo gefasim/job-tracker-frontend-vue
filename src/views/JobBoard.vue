@@ -4,6 +4,7 @@ import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
 import JobApplicationModal from './JobApplicationModal.vue'
 import { api } from '@/api/api'
+import { CurrentBoard } from '@/current-board.service'
 
 const { boardId } = defineProps<{ boardId?: string }>()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
@@ -19,6 +20,7 @@ watch(
 async function fetchData(boardId: string) {
   const response = await api.boards.get(boardId)
   board.value = response
+  CurrentBoard.setBoard(response)
 }
 
 // On Job click

@@ -10,12 +10,16 @@ import LinkedInIcon from '@/assets/external/LinkedInIcon.vue'
 import GitHubIcon from '@/assets/external/GitHubIcon.vue'
 import { api } from '@/api/api'
 import { useRoute } from 'vue-router'
+import JobSelectDropdown from './JobSelectDropdown.vue'
+import type { JobApplication } from '@/models/job-application.dto'
+import { CurrentBoard } from '@/current-board.service'
 
 // TODO: implement multiple job assignment
 const props = defineProps<{
   contact: Contact | null
   jobTitle?: string
   jobId: string
+  jobApplication: JobApplication
 }>()
 const emit = defineEmits(['close', 'save'])
 const route = useRoute()
@@ -32,12 +36,26 @@ const form = ref<Partial<Contact>>({
   phones: [],
   companies: [],
 })
+const allLinkedJobs = ref<JobApplication[]>([])
+const allAvailableJobs = ref<JobApplication[]>([])
 
 onMounted(() => {
-  if (props.contact) {
+  if (isEditMode.value) {
     form.value = JSON.parse(JSON.stringify(props.contact))
+    allLinkedJobs.value = calculateAllLinkedJobs()
+  } else {
+    allLinkedJobs.value = [props.jobApplication]
   }
+  allAvailableJobs.value = CurrentBoard.getBoard()!.columns.flatMap((c) => c.jobApplications)
 })
+
+const calculateAllLinkedJobs = (): JobApplication[] => {
+  return CurrentBoard.getBoard()!
+    .columns.flatMap((c) => c.jobApplications)
+    .filter((j) =>
+      j.contacts ? j.contacts.filter((c) => c.id === props.contact!.id).length > 0 : false,
+    )
+}
 
 // --- Email & Phone handlers ---
 const addEmail = () => {
@@ -72,6 +90,11 @@ const handleSave = async () => {
   const savedContact = await api.contacts.create(contact)
   await api.contacts.assignJobApplication(savedContact.id, props.jobId)
   emit('save', savedContact)
+}
+
+const handleJobSelect = (job: JobApplication) => {
+  allLinkedJobs.value.push(job)
+  allAvailableJobs.value = allAvailableJobs.value.filter((j) => j.id !== job.id)
 }
 </script>
 
@@ -194,12 +217,13 @@ const handleSave = async () => {
         <div class="form-sidebar">
           <div class="sidebar-block">
             <label class="sidebar-label">Linked to</label>
-            <h4>Jobs</h4>
-            <div class="linked-job-card">
-              <div class="job-title">{{ props.jobTitle || 'Current Job' }}</div>
+            <div class="linked-job-card" v-for="job in allLinkedJobs" :key="job.id" :value="job">
+              <div class="job-title" :style="{ color: job.color ?? 'black' }">
+                {{ job.title }} @ {{ job.company?.name }}
+              </div>
               <button class="job-menu">•••</button>
             </div>
-            <button class="add-link-btn">+ Link Job</button>
+            <JobSelectDropdown :items="allAvailableJobs" @select="handleJobSelect" />
           </div>
 
           <div class="sidebar-block mt-auto">
@@ -444,12 +468,11 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #1a73e8;
+  border: 1px solid #dadce0;
   border-radius: 6px;
   padding: 10px 12px;
 }
 .job-title {
-  color: #1a73e8;
   font-size: 13px;
 }
 .job-menu {
