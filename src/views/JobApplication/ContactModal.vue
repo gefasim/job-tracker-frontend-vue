@@ -37,12 +37,14 @@ const form = ref<Partial<Contact>>({
   companies: [],
 })
 const allLinkedJobs = ref<JobApplication[]>([])
+let allLinkedJobIdsBeforeUpdate: string[] = []
 const allAvailableJobs = ref<JobApplication[]>([])
 
 onMounted(() => {
   if (isEditMode.value) {
     form.value = JSON.parse(JSON.stringify(props.contact))
     allLinkedJobs.value = calculateAllLinkedJobs()
+    allLinkedJobIdsBeforeUpdate = allLinkedJobs.value.map((j) => j.id)
   } else {
     allLinkedJobs.value = [props.jobApplication]
   }
@@ -87,14 +89,42 @@ const handleSave = async () => {
   // TODO: implement Company save
   const boardId = route.params.boardId
   const contact = { ...form.value, boardId } as Contact
-  const savedContact = await api.contacts.create(contact)
-  await api.contacts.assignJobApplication(savedContact.id, props.jobId)
+  const savedContact = isEditMode.value
+    ? await api.contacts.update(contact)
+    : await api.contacts.create(contact)
+
+  sendAssignOrUnassignJobRequests(savedContact.id)
+
   emit('save', savedContact)
 }
 
-const handleJobSelect = (job: JobApplication) => {
+const sendAssignOrUnassignJobRequests = (contactId: string) => {
+  getAssignedJobIds().forEach(async (jobId) => {
+    await api.contacts.assignJobApplication(contactId, jobId)
+  })
+  getUnassignedJobIds().forEach(async (jobId) => {
+    await api.contacts.unassignJobApplication(contactId, jobId)
+  })
+}
+
+const getAssignedJobIds = (): string[] => {
+  const allLinkedJobIds = allLinkedJobs.value.map((j) => j.id)
+  return allLinkedJobIds.filter((id) => !allLinkedJobIdsBeforeUpdate.includes(id))
+}
+
+const getUnassignedJobIds = (): string[] => {
+  const allLinkedJobIds = allLinkedJobs.value.map((j) => j.id)
+  return allLinkedJobIdsBeforeUpdate.filter((id) => !allLinkedJobIds.includes(id))
+}
+
+const assignJob = (job: JobApplication) => {
   allLinkedJobs.value.push(job)
   allAvailableJobs.value = allAvailableJobs.value.filter((j) => j.id !== job.id)
+}
+
+const unassignJob = (job: JobApplication) => {
+  allLinkedJobs.value = allLinkedJobs.value.filter((j) => j.id !== job.id)
+  allAvailableJobs.value.push(job)
 }
 </script>
 
@@ -221,9 +251,9 @@ const handleJobSelect = (job: JobApplication) => {
               <div class="job-title" :style="{ color: job.color ?? 'black' }">
                 {{ job.title }} @ {{ job.company?.name }}
               </div>
-              <button class="job-menu">•••</button>
+              <button v-on:click="unassignJob(job)" class="job-menu">🗑️</button>
             </div>
-            <JobSelectDropdown :items="allAvailableJobs" @select="handleJobSelect" />
+            <JobSelectDropdown :items="allAvailableJobs" @select="assignJob" />
           </div>
 
           <div class="sidebar-block mt-auto">
