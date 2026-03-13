@@ -76,8 +76,6 @@ const handleUnlinkContact = (contactId: string) => {
       <ContactModal
         v-if="isModalOpen"
         :contact="contactToEdit"
-        :job-title="jobApplication.title"
-        :job-id="jobApplication.id"
         :jobApplication="jobApplication"
         @close="isModalOpen = false"
         @save="handleSaveContact"

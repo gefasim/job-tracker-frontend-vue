@@ -17,8 +17,6 @@ import { CurrentBoard } from '@/current-board.service'
 // TODO: implement multiple job assignment
 const props = defineProps<{
   contact: Contact | null
-  jobTitle?: string
-  jobId: string
   jobApplication: JobApplication
 }>()
 const emit = defineEmits(['close', 'save'])
