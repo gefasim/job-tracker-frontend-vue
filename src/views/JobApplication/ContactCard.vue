@@ -5,6 +5,7 @@ import GitHubIcon from '@/assets/external/GitHubIcon.vue'
 import TwitterIcon from '@/assets/external/TwitterIcon.vue'
 import FacebookIcon from '@/assets/external/FacebookIcon.vue'
 import LinkedInIcon from '@/assets/external/LinkedInIcon.vue'
+import AvatarIcon from '@/assets/AvatarIcon.vue'
 
 const props = defineProps<{ contact: Contact }>()
 const emit = defineEmits(['edit', 'unlink'])
@@ -53,18 +54,7 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
     <div class="card-header">
       <img v-if="contact.photoUrl" :src="contact.photoUrl" class="avatar" alt="Avatar" />
       <div v-else class="avatar-placeholder">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
+        <AvatarIcon width="24" height="24" />
       </div>
 
       <div class="header-info">

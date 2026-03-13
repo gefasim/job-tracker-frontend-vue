@@ -13,6 +13,7 @@ import { useRoute } from 'vue-router'
 import JobSelectDropdown from './JobSelectDropdown.vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import { CurrentBoard } from '@/current-board.service'
+import AvatarIcon from '@/assets/AvatarIcon.vue'
 
 // TODO: implement multiple job assignment
 const props = defineProps<{
@@ -136,7 +137,7 @@ const unassignJob = (job: JobApplication) => {
       <div class="modal-body">
         <div class="form-main">
           <div class="avatar-row">
-            <div class="avatar-placeholder">👤</div>
+            <div class="avatar-placeholder"><AvatarIcon width="30" height="30" /></div>
             <div class="form-row flex-1">
               <div class="input-group">
                 <label>First Name <span class="required">Required</span></label>
@@ -351,6 +352,7 @@ const unassignJob = (job: JobApplication) => {
   justify-content: center;
   font-size: 30px;
   flex-shrink: 0;
+  color: #1a73e8;
 }
 
 .input-group {
