@@ -114,7 +114,13 @@ onUnmounted(() => document.removeEventListener('click', closeMenuOnClickOutside)
     </div>
 
     <div class="notes-grid">
-      <div v-for="note in jobApplication.notes" :key="note.id" class="note-card">
+      <div
+        v-for="note in jobApplication.notes?.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        )"
+        :key="note.id"
+        class="note-card"
+      >
         <div v-if="editingNoteId === note.id" class="note-edit-mode">
           <RichTextEditor v-model="editingContent" />
           <div class="edit-actions">

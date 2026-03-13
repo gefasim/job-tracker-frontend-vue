@@ -64,7 +64,9 @@ const handleUnlinkContact = (contactId: string) => {
 
     <div v-else class="contacts-grid">
       <ContactCard
-        v-for="contact in jobApplication.contacts"
+        v-for="contact in jobApplication.contacts?.sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        )"
         :key="contact.id"
         :contact="contact"
         @edit="openEditModal"
