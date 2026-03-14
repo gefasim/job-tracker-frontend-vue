@@ -1,6 +1,7 @@
 import type { BaseDto } from './base.dto'
 import type { Company } from './company.dto'
 import type { Contact } from './contact.dto'
+import type { Document } from './document.dto'
 import type { JobApplicationNote } from './job-application-note.dto'
 import type { JobApplicationStatusType } from './job-application-status.enum'
 
