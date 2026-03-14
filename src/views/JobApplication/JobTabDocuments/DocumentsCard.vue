@@ -78,7 +78,9 @@ const uploaderName = computed(() => {
   <div class="document-card">
     <div class="card-header">
       <h3 class="title" :title="document.title">{{ document.title }}</h3>
-      <div class="subtitle">{{ fileInfo }}</div>
+      <div class="subtitle">
+        {{ fileInfo }}
+      </div>
     </div>
 
     <div class="card-preview">
@@ -143,6 +145,8 @@ const uploaderName = computed(() => {
   text-overflow: ellipsis;
 }
 .subtitle {
+  display: flex;
+  justify-content: center;
   font-size: 12px;
   color: #5f6368;
 }
