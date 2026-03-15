@@ -95,7 +95,7 @@ const handleUnlinkDocument = (documentId: string) => {
       <DocumentModal
         v-if="isModalOpen"
         :document="documentToEdit"
-        :job-title="jobApplication.title"
+        :job-application="jobApplication"
         @close="isModalOpen = false"
         @save="handleSaveDocument"
       />
