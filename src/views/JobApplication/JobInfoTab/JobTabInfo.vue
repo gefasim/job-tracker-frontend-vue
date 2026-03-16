@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
-import RichTextEditor from '../RichTextEditor.vue'
+import RichTextEditor from '../../RichTextEditor.vue'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 </script>
