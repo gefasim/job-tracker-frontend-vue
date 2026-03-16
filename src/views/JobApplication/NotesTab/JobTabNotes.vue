@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
-import RichTextEditor from '../RichTextEditor.vue'
+import RichTextEditor from '../../RichTextEditor.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { api } from '@/api/api'
 import type { JobApplicationNote } from '@/models/job-application-note.dto'

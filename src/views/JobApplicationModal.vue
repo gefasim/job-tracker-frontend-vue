@@ -2,7 +2,7 @@
 import { useKeydown } from '@/composables/useKeydown'
 import type { JobApplication } from '@/models/job-application.dto'
 import { computed, ref, watch } from 'vue'
-import JobTabNotes from './JobApplication/JobTabNotes.vue'
+import JobTabNotes from './JobApplication/NotesTab/JobTabNotes.vue'
 import JobTabInfo from './JobApplication/JobTabInfo.vue'
 import JobTabContacts from './JobApplication/ContactsTab/JobTabContacts.vue'
 import JobTabDocuments from './JobApplication/DocumentsTab/JobTabDocuments.vue'
