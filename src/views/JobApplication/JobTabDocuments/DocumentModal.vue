@@ -155,12 +155,17 @@ const handleDiscard = () => {
         <div class="form-sidebar">
           <div class="sidebar-section">
             <label class="sidebar-label">Linked to</label>
-            <h4 class="section-title">Jobs</h4>
-
             <div class="linked-items">
-              <div v-for="job in formData.linkedJobs" :key="job.id" class="linked-item-card">
-                <span class="job-text">{{ job.title }} @ {{ job.company?.name }}</span>
-                <button class="icon-btn" @click="removeLinkedJob(job.id)">•••</button>
+              <div
+                v-for="job in formData.linkedJobs"
+                :key="job.id"
+                class="linked-item-card"
+                :style="{ color: job.color ?? 'black', borderColor: job.color ?? 'black' }"
+              >
+                <div class="job-title" :style="{ color: job.color ?? 'black' }">
+                  {{ job.title }} @ {{ job.company?.name }}
+                </div>
+                <button class="job-menu" @click="removeLinkedJob(job.id)">🗑️</button>
               </div>
             </div>
 
@@ -342,13 +347,6 @@ const handleDiscard = () => {
   display: block;
 }
 
-.section-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #202124;
-  margin: 0 0 12px 0;
-}
-
 .linked-item-card {
   display: flex;
   justify-content: space-between;
@@ -360,18 +358,16 @@ const handleDiscard = () => {
   background-color: white;
 }
 
-.job-text {
+.job-title {
   font-size: 13px;
-  color: #1a73e8;
 }
-
-.icon-btn {
+.job-menu {
   background: none;
   border: 1px solid #dadce0;
   border-radius: 4px;
-  cursor: pointer;
+  padding: 0 4px;
   color: #5f6368;
-  padding: 2px 6px;
+  cursor: pointer;
 }
 
 .add-link-placeholder {
