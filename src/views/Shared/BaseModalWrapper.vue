@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
 import JobSelectDropdown from '../JobApplication/JobSelectDropdown.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { CurrentBoard } from '@/current-board.service'
 
-defineProps<{
+const props = defineProps<{
   title: string
-  confirmText?: string
+  isEditMode: boolean
   linkedJobsParam: JobApplication[]
 }>()
 
-const emit = defineEmits(['close', 'confirm'])
+const emit = defineEmits(['close', 'save'])
 const linkedJobs = ref<JobApplication[]>([])
 const availableJobs = ref<JobApplication[]>([])
+
+onMounted(() => {
+  linkedJobs.value = props.linkedJobsParam
+  availableJobs.value = CurrentBoard.getBoard()!
+    .columns.flatMap((c) => c.jobApplications)
+    .filter((j) => !props.linkedJobsParam.includes(j))
+})
 
 const assignJob = (job: JobApplication) => {
   linkedJobs.value.push(job)
@@ -28,7 +36,7 @@ const unassignJob = (job: JobApplication) => {
   <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>{{ title }}</h2>
+        <h2>{{ title }} - {{ isEditMode }}</h2>
       </div>
 
       <div class="modal-body">
@@ -40,7 +48,7 @@ const unassignJob = (job: JobApplication) => {
           <div class="sidebar-section">
             <label class="sidebar-label">Linked to</label>
             <div>
-              <div class="linked-item-card" v-for="job in linkedJobsParam" :key="job.id">
+              <div class="linked-item-card" v-for="job in linkedJobs" :key="job.id">
                 <div class="job-title" :style="{ color: job.color ?? 'black' }">
                   {{ job.title }} @ {{ job.company?.name }}
                 </div>
@@ -54,7 +62,7 @@ const unassignJob = (job: JobApplication) => {
       </div>
 
       <div class="modal-footer">
-        <button class="btn-primary" @click="emit('confirm')">{{ confirmText || 'Save' }}</button>
+        <button class="btn-primary" @click="emit('save', linkedJobs)">Save</button>
         <button class="btn-outline" @click="emit('close')">Discard</button>
       </div>
     </div>
@@ -109,7 +117,6 @@ const unassignJob = (job: JobApplication) => {
   flex: 2;
   display: flex;
   flex-direction: column;
-  padding: 24px;
   overflow-y: auto;
   gap: 24px;
 }
