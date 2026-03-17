@@ -21,7 +21,7 @@ const isModalOpen = ref(false)
 const linkedJobs = ref<JobApplication[]>([])
 let linkedJobIdsBeforeUpdate: string[] = []
 
-const formData = ref({
+const form = ref({
   title: '',
   category: '' as DocumentCategoryType | '',
   description: '',
@@ -31,9 +31,9 @@ const categories = Object.values(DocumentCategoryEnum)
 
 onMounted(() => {
   if (isEditMode.value) {
-    formData.value.title = props.document!.title
-    formData.value.category = props.document!.category
-    formData.value.description = props.document!.description || ''
+    form.value.title = props.document!.title
+    form.value.category = props.document!.category
+    form.value.description = props.document!.description || ''
     linkedJobs.value = getJobsLinkedToDocument(props.document!.id)
     linkedJobIdsBeforeUpdate = linkedJobs.value.map((j) => j.id)
   } else {
@@ -54,29 +54,29 @@ const getJobsLinkedToDocument = (documentId: string): JobApplication[] => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
-    formData.value.file = target.files.item(0)
+    form.value.file = target.files.item(0)
     // Auto-fill title if empty
-    if (!formData.value.title) {
-      formData.value.title = target.files[0]!.name
+    if (!form.value.title) {
+      form.value.title = target.files[0]!.name
     }
   }
 }
 
 const handleSave = async (linkedJobIds: string[]) => {
-  if (!formData.value.title || !formData.value.category || !formData.value.file) {
+  if (!form.value.title || !form.value.category || !form.value.file) {
     alert('File, Title, and Category are required.')
     return
   }
 
   const boardId = route.params.boardId!
   const document = {
-    title: formData.value.title,
-    category: formData.value.category,
-    description: formData.value.description,
+    title: form.value.title,
+    category: form.value.category,
+    description: form.value.description,
   } as Document
   const savedDocument = isEditMode.value
-    ? await api.documents.update(formData.value.file!, document)
-    : await api.documents.create(boardId as string, formData.value.file!, document)
+    ? await api.documents.update(form.value.file!, document)
+    : await api.documents.create(boardId as string, form.value.file!, document)
 
   sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
 
@@ -117,9 +117,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
           <input type="file" id="file-upload" class="file-input" @change="handleFileChange" />
           <label for="file-upload" class="upload-btn">Upload file</label>
           <span class="drop-text">or drag and drop a file here</span>
-          <div v-if="formData.file" class="selected-file-name">
-            Selected: {{ formData.file.name }}
-          </div>
+          <div v-if="form.file" class="selected-file-name">Selected: {{ form.file.name }}</div>
         </div>
       </div>
 
@@ -129,7 +127,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
           <span class="required-badge">Required</span>
         </div>
         <input
-          v-model="formData.title"
+          v-model="form.title"
           type="text"
           class="form-control"
           placeholder="Enter document title"
@@ -141,7 +139,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
           <label>Document Category</label>
           <span class="required-badge">Required</span>
         </div>
-        <select v-model="formData.category" class="form-control">
+        <select v-model="form.category" class="form-control">
           <option value="" disabled>Select category</option>
           <option v-for="category in categories" :key="category" :value="category">
             {{ category }}
@@ -152,7 +150,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
       <div class="form-group">
         <label>Description</label>
         <textarea
-          v-model="formData.description"
+          v-model="form.description"
           class="form-control textarea"
           placeholder="Add a description for this document"
         ></textarea>
