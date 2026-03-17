@@ -169,13 +169,13 @@ const documentApi: DocumentsService = {
     return response.data
   },
   async assignJobApplication(documentId: string, jobId: string): Promise<void> {
-    await httpClient.post(`/documents/${documentId}/jobApplication/${jobId}/attach`, {
+    await httpClient.post(`/documents/${documentId}/job-application/${jobId}/attach`, {
       documentId,
       jobId,
     })
   },
   async unassignJobApplication(documentId: string, jobId: string): Promise<void> {
-    await httpClient.post(`/documents/${documentId}/jobApplication/${jobId}/detach`, {
+    await httpClient.post(`/documents/${documentId}/job-application/${jobId}/detach`, {
       documentId,
       jobId,
     })
