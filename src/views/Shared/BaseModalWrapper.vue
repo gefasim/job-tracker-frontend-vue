@@ -48,10 +48,13 @@ const unassignJob = (job: JobApplication) => {
           <div class="sidebar-section">
             <label class="sidebar-label">Linked to</label>
             <div>
-              <div class="linked-item-card" v-for="job in linkedJobs" :key="job.id">
-                <div class="job-title" :style="{ color: job.color ?? 'black' }">
-                  {{ job.title }} @ {{ job.company?.name }}
-                </div>
+              <div
+                class="linked-item-card"
+                v-for="job in linkedJobs"
+                :key="job.id"
+                :style="{ color: job.color ?? 'black', borderColor: job.color ?? 'black' }"
+              >
+                <div class="job-title">{{ job.title }} @ {{ job.company?.name }}</div>
                 <button class="job-delete" @click="unassignJob(job)">🗑️</button>
               </div>
             </div>
@@ -175,6 +178,9 @@ const unassignJob = (job: JobApplication) => {
   padding: 0 4px;
   color: #5f6368;
   cursor: pointer;
+}
+.job-delete:hover {
+  background: #f8f9fa;
 }
 
 /* Footer Actions */
