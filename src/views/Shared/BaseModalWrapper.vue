@@ -29,6 +29,13 @@ const unassignJob = (job: JobApplication) => {
   linkedJobs.value = linkedJobs.value.filter((j) => j.id !== job.id)
   availableJobs.value.push(job)
 }
+
+const handleSave = async () => {
+  emit(
+    'save',
+    linkedJobs.value.map((j) => j.id),
+  )
+}
 </script>
 
 <template>
@@ -64,7 +71,7 @@ const unassignJob = (job: JobApplication) => {
       </div>
 
       <div class="modal-footer">
-        <button class="btn-primary" @click="emit('save', linkedJobs)">Save</button>
+        <button class="btn-primary" @click="handleSave">Save</button>
         <button class="btn-outline" @click="emit('close')">Discard</button>
       </div>
     </div>

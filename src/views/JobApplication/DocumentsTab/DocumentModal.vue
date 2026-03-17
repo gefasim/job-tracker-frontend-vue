@@ -62,7 +62,7 @@ const handleFileChange = (event: Event) => {
   }
 }
 
-const handleSave = async (linkedJobs: JobApplication[]) => {
+const handleSave = async (linkedJobIds: string[]) => {
   if (!formData.value.title || !formData.value.category || !formData.value.file) {
     alert('File, Title, and Category are required.')
     return
@@ -78,28 +78,23 @@ const handleSave = async (linkedJobs: JobApplication[]) => {
     ? await api.documents.update(formData.value.file!, document)
     : await api.documents.create(boardId as string, formData.value.file!, document)
 
-  sendAssignOrUnassignJobRequests(savedDocument.id)
+  sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
 
   emit('save', savedDocument)
 }
 
-const sendAssignOrUnassignJobRequests = (boardId: string) => {
-  getAssignedJobIds().forEach(async (jobId) => {
+// Filters which JobApplication where linked and which where unlinked during Save/Update
+const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]) => {
+  const jobIdsToLink = linkedJobIds.filter((id) => !linkedJobIdsBeforeUpdate.includes(id))
+  const jobIdsToUnLink = linkedJobIdsBeforeUpdate.filter((id) => !linkedJobIds.includes(id))
+
+  jobIdsToLink.forEach(async (jobId) => {
     await api.documents.assignJobApplication(boardId, jobId)
   })
-  getUnassignedJobIds().forEach(async (jobId) => {
+
+  jobIdsToUnLink.forEach(async (jobId) => {
     await api.documents.unassignJobApplication(boardId, jobId)
   })
-}
-
-const getAssignedJobIds = (): string[] => {
-  const linkedJobIds = linkedJobs.value.map((j) => j.id)
-  return linkedJobIds.filter((id) => !linkedJobIdsBeforeUpdate.includes(id))
-}
-
-const getUnassignedJobIds = (): string[] => {
-  const linkedJobIds = linkedJobs.value.map((j) => j.id)
-  return linkedJobIdsBeforeUpdate.filter((id) => !linkedJobIds.includes(id))
 }
 </script>
 
