@@ -5,6 +5,8 @@ import type { JobApplication } from '@/models/job-application.dto'
 import { DocumentCategoryEnum, type DocumentCategoryType } from '@/models/document-category.enum'
 import BaseModalWrapper from '@/views/Shared/BaseModalWrapper.vue'
 import { CurrentBoard } from '@/current-board.service'
+import { useRoute } from 'vue-router'
+import { api } from '@/api/api'
 
 const props = defineProps<{
   document?: Document | null
@@ -12,11 +14,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['close', 'save'])
+const route = useRoute()
 
 const isEditMode = computed(() => !!props.document)
 const isModalOpen = ref(false)
 const linkedJobs = ref<JobApplication[]>([])
-let linkedJobIdsBeforeSave: string[] = []
+let linkedJobIdsBeforeUpdate: string[] = []
 
 const formData = ref({
   title: '',
@@ -32,11 +35,11 @@ onMounted(() => {
     formData.value.category = props.document!.category
     formData.value.description = props.document!.description || ''
     linkedJobs.value = getJobsLinkedToDocument(props.document!.id)
+    linkedJobIdsBeforeUpdate = linkedJobs.value.map((j) => j.id)
   } else {
     linkedJobs.value = [props.jobApplication!]
   }
 
-  linkedJobIdsBeforeSave = linkedJobs.value.map((j) => j.id)
   isModalOpen.value = true
 })
 
@@ -59,12 +62,44 @@ const handleFileChange = (event: Event) => {
   }
 }
 
-const handleSave = (linkedJobsParam: JobApplication[]) => {
-  console.log('Linked jobs after Save', linkedJobsParam)
-  console.log('Linked jobs before Save', linkedJobIdsBeforeSave)
+const handleSave = async (linkedJobs: JobApplication[]) => {
+  if (!formData.value.title || !formData.value.category || !formData.value.file) {
+    alert('File, Title, and Category are required.')
+    return
+  }
 
-  isModalOpen.value = false // TODO: replace with emit('save')
-  emit('close') // TODO: replace with emit('save')
+  const boardId = route.params.boardId!
+  const document = {
+    title: formData.value.title,
+    category: formData.value.category,
+    description: formData.value.description,
+  } as Document
+  const savedDocument = isEditMode.value
+    ? await api.documents.update(formData.value.file!, document)
+    : await api.documents.create(boardId as string, formData.value.file!, document)
+
+  sendAssignOrUnassignJobRequests(savedDocument.id)
+
+  emit('save', savedDocument)
+}
+
+const sendAssignOrUnassignJobRequests = (boardId: string) => {
+  getAssignedJobIds().forEach(async (jobId) => {
+    await api.documents.assignJobApplication(boardId, jobId)
+  })
+  getUnassignedJobIds().forEach(async (jobId) => {
+    await api.documents.unassignJobApplication(boardId, jobId)
+  })
+}
+
+const getAssignedJobIds = (): string[] => {
+  const linkedJobIds = linkedJobs.value.map((j) => j.id)
+  return linkedJobIds.filter((id) => !linkedJobIdsBeforeUpdate.includes(id))
+}
+
+const getUnassignedJobIds = (): string[] => {
+  const linkedJobIds = linkedJobs.value.map((j) => j.id)
+  return linkedJobIdsBeforeUpdate.filter((id) => !linkedJobIds.includes(id))
 }
 </script>
 

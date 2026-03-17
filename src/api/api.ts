@@ -9,6 +9,8 @@ import type { JobApplicationNotesService } from './job-notes.service.interface'
 import type { JobApplicationNote } from '@/models/job-application-note.dto'
 import type { ContactsService } from './contacts.service.interface'
 import type { Contact } from '@/models/contact.dto'
+import type { DocumentsService } from './documents.service.interface'
+import type { Document } from '@/models/document.dto'
 
 const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -133,10 +135,61 @@ const contactApi: ContactsService = {
   },
 }
 
+const documentApi: DocumentsService = {
+  async get(documentId: string): Promise<Document> {
+    const response = await httpClient.get<Document>(`/documents/${documentId}`)
+    return response.data
+  },
+  async getAll(boardId: string): Promise<Document[]> {
+    const response = await httpClient.get<Document[]>(`/documents/board/${boardId}`)
+    return response.data
+  },
+  async create(boardId: string, file: File, document: Document): Promise<Document> {
+    const formData = new FormData()
+    formData.append('title', document.title)
+    formData.append('category', document.category)
+    formData.append('boardId', boardId)
+    formData.append('file', file)
+    if (document.description) formData.append('description', document.description)
+    debugger
+    const response = await httpClient.post<Document>(`/documents/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return response.data
+  },
+  async update(file: File, document: Document): Promise<Document> {
+    const formData = new FormData()
+    formData.append('title', document.title)
+    formData.append('category', document.category)
+    formData.append('file', file)
+    if (document.description) formData.append('description', document.description)
+    const response = await httpClient.put<Document>(`/documents/`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return response.data
+  },
+  async assignJobApplication(documentId: string, jobId: string): Promise<void> {
+    await httpClient.post(`/documents/${documentId}/jobApplication/${jobId}/attach`, {
+      documentId,
+      jobId,
+    })
+  },
+  async unassignJobApplication(documentId: string, jobId: string): Promise<void> {
+    await httpClient.post(`/documents/${documentId}/jobApplication/${jobId}/detach`, {
+      documentId,
+      jobId,
+    })
+  },
+  async delete(documentId: string): Promise<void> {
+    await httpClient.delete(`/documents/${documentId}`)
+  },
+}
+
 export const api = {
   auth: authApi,
   boards: boardApi,
   jobs: jobApplicationApi,
   jobNotes: jobApplicationNoteApi,
   contacts: contactApi,
+  documents: documentApi,
 }
