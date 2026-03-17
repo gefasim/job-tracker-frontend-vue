@@ -6,7 +6,6 @@ import { CurrentBoard } from '@/current-board.service'
 
 const props = defineProps<{
   title: string
-  isEditMode: boolean
   linkedJobsParam: JobApplication[]
 }>()
 
@@ -36,7 +35,7 @@ const unassignJob = (job: JobApplication) => {
   <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>{{ title }} - {{ isEditMode }}</h2>
+        <h2>{{ title }}</h2>
       </div>
 
       <div class="modal-body">
