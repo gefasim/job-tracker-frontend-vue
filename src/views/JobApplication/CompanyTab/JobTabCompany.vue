@@ -12,11 +12,18 @@ const company = computed(() => jobApplication.value.company!)
     <div class="company-info-left">
       <div class="logo-title">
         <img v-if="company.logo" :src="company.logo" />
-        <DefaultCompanyLogo v-if="!company.logo" />
+        <DefaultCompanyLogo v-else />
         <h2>{{ company.name }}</h2>
       </div>
       <p>{{ company.description }}</p>
-      <button class="btn-primary">Visit website</button>
+      <a v-if="company.url" :href="company.url!" class="fit-content"
+        ><button class="btn-primary fit-content" style="width: fit-content">
+          Visit website
+        </button></a
+      >
+      <button v-else class="btn-primary fit-content" style="width: fit-content" disabled="true">
+        Visit website
+      </button>
     </div>
     <div class="company-info-right">
       <div class="p-6 pt-0 flex flex-col gap-4">
@@ -46,6 +53,7 @@ const company = computed(() => jobApplication.value.company!)
   flex-direction: row;
   justify-content: space-between;
   gap: 30px;
+  margin-top: 2rem;
 }
 .company-info-left {
   display: flex;
@@ -60,7 +68,13 @@ const company = computed(() => jobApplication.value.company!)
 .company-info-right {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  justify-content: space-evenly;
+  gap: 1rem;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+  padding: 0 1.5rem;
+  width: 25%;
 }
 /* Buttons general */
 .btn-primary {
@@ -76,5 +90,15 @@ const company = computed(() => jobApplication.value.company!)
 }
 .btn-primary:hover {
   background: #3367d6;
+}
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  background-color: #e8eaed;
+  color: #9aa0a6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.fit-content {
+  width: fit-content;
 }
 </style>
