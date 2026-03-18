@@ -47,8 +47,8 @@ const handleUnlinkContact = (contactId: string) => {
 <template>
   <div class="contacts-tab">
     <div v-if="hasContacts" class="tab-header">
-      <button class="btn-primary" @click="openCreateModal">+ Create Contact</button>
-      <button class="btn-outline">+ Link Contact</button>
+      <button class="btn-primary" @click="openCreateModal">Create Contact</button>
+      <button class="btn-outline">Link Contact</button>
     </div>
 
     <div v-if="!hasContacts" class="empty-state">
@@ -57,8 +57,8 @@ const handleUnlinkContact = (contactId: string) => {
       </div>
       <h2>You have not linked any contacts to this job yet.</h2>
       <div class="empty-actions">
-        <button class="btn-primary" @click="openCreateModal">+ Create Contact</button>
-        <button class="btn-outline">+ Link Contact</button>
+        <button class="btn-primary" @click="openCreateModal">Create Contact</button>
+        <button class="btn-outline">Link Contact</button>
       </div>
     </div>
 
