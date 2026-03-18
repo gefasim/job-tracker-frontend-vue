@@ -68,7 +68,7 @@ const handleSave = async (linkedJobIds: string[]) => {
     return
   }
 
-  const boardId = route.params.boardId!
+  const boardId = route.params.boardId as string
   const document = {
     title: form.value.title,
     category: form.value.category,
@@ -76,7 +76,7 @@ const handleSave = async (linkedJobIds: string[]) => {
   } as Document
   const savedDocument = isEditMode.value
     ? await api.documents.update(form.value.file!, document)
-    : await api.documents.create(boardId as string, form.value.file!, document)
+    : await api.documents.create(boardId, form.value.file!, document)
 
   sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
 
