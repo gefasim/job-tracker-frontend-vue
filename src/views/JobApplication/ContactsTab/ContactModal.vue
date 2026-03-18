@@ -115,7 +115,6 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
   <BaseModalWrapper
     v-if="isModalOpen"
     :title="isEditMode ? 'Edit Contact' : 'Create Contact'"
-    :isEditMode="isEditMode"
     :linkedJobsParam="linkedJobs"
     @close="emit('close')"
     @save="handleSave"

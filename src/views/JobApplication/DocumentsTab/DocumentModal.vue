@@ -54,11 +54,11 @@ const getJobsLinkedToDocument = (documentId: string): JobApplication[] => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
-    form.value.file = target.files.item(0)
-    // Auto-fill title if empty
-    if (!form.value.title) {
+    // Automatically update name only if previous name matches file name
+    if (!form.value.title || form.value.title === form.value.file?.name) {
       form.value.title = target.files[0]!.name
     }
+    form.value.file = target.files.item(0)
   }
 }
 
@@ -102,7 +102,6 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
   <BaseModalWrapper
     v-if="isModalOpen"
     :title="isEditMode ? 'Edit Document' : 'Upload Document'"
-    :isEditMode="isEditMode"
     :linkedJobsParam="linkedJobs"
     @close="emit('close')"
     @save="handleSave"
