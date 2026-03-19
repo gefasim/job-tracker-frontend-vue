@@ -217,5 +217,5 @@ export const api = {
   jobNotes: jobApplicationNoteApi,
   contacts: contactApi,
   documents: documentApi,
-  company: companyApi,
+  companies: companyApi,
 }

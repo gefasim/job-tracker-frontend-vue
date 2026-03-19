@@ -11,10 +11,10 @@ const jobApplication = defineModel<JobApplication>({ required: true })
 const handleCompanyUpdate = async (company: Company) => {
   if (!company.name || company.name === jobApplication.value.company!.name) return
 
-  const companies = (await api.company.getByNameStartsWith(company.name)).filter(
+  const companies = (await api.companies.getByNameStartsWith(company.name)).filter(
     (c) => c.name === company.name,
   )
-  const companyResponse = companies.length == 1 ? companies[0] : await api.company.create(company)
+  const companyResponse = companies.length == 1 ? companies[0] : await api.companies.create(company)
 
   jobApplication.value = await api.jobs.updatePartial(jobApplication.value.id, {
     companyId: companyResponse!.id,

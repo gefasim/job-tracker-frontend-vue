@@ -26,7 +26,7 @@ const saveChanges = async () => {
     ...formData.value,
   } as Company
 
-  jobApplication.value.company = await api.company.update(updatedCompany.id, updatedCompany)
+  jobApplication.value.company = await api.companies.update(updatedCompany.id, updatedCompany)
   isEditMode.value = false
 }
 </script>
