@@ -137,30 +137,4 @@ const handleUnlinkDocument = (documentId: string) => {
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
-
-/* Empty State */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  text-align: center;
-}
-.empty-icon-wrapper {
-  color: #5f6368;
-  margin-bottom: 24px;
-}
-.empty-state h2 {
-  color: #5f6368;
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 32px;
-}
-.empty-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 200px;
-}
 </style>

@@ -98,31 +98,6 @@ const handleUnlinkContact = (contactId: string) => {
   gap: 12px;
 }
 
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  text-align: center;
-}
-.empty-icon-wrapper {
-  color: #202124;
-  margin-bottom: 24px;
-}
-.empty-state h2 {
-  color: #5f6368;
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 32px;
-}
-.empty-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 200px;
-}
-
 .contacts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
