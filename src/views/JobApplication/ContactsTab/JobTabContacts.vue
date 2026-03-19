@@ -128,33 +128,4 @@ const handleUnlinkContact = (contactId: string) => {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
 }
-
-/* Загальні стилі кнопок */
-.btn-primary {
-  background: #4285f4;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-primary:hover {
-  background: #3367d6;
-}
-.btn-outline {
-  background: white;
-  color: #202124;
-  border: 1px dashed #dadce0;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-.btn-outline:hover {
-  background: #f8f9fa;
-}
 </style>

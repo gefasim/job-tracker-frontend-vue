@@ -347,33 +347,4 @@ label {
   justify-content: flex-end;
   gap: 12px;
 }
-
-/* --- general buttons --- */
-.btn-primary {
-  background: #1a73e8;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-secondary {
-  background: transparent;
-  color: #5f6368;
-  border: 1px solid #dadce0;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-danger {
-  background: #d93025;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
 </style>

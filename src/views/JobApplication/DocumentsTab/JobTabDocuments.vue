@@ -163,37 +163,4 @@ const handleUnlinkDocument = (documentId: string) => {
   gap: 12px;
   min-width: 200px;
 }
-
-/* Buttons */
-.btn-primary {
-  background: #4285f4;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-primary:hover {
-  background: #3367d6;
-}
-.btn-outline {
-  background: white;
-  color: #202124;
-  border: 1px dashed #dadce0;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-.btn-outline:hover {
-  background: #f8f9fa;
-}
-.chevron {
-  font-size: 12px;
-  color: #5f6368;
-}
 </style>

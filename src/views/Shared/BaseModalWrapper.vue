@@ -199,34 +199,4 @@ const handleSave = async () => {
   background: white;
   border-radius: 0 0 12px 12px;
 }
-
-.btn-primary {
-  background: #4285f4;
-  color: white;
-  border: none;
-  padding: 10px 32px;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  background: #3367d6;
-}
-
-.btn-outline {
-  background: white;
-  color: #202124;
-  border: 1px solid #dadce0;
-  padding: 10px 32px;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.btn-outline:hover {
-  background: #f8f9fa;
-}
 </style>

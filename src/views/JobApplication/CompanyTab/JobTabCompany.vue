@@ -308,41 +308,4 @@ const saveChanges = async () => {
   padding-top: 16px;
   border-top: 1px solid #f1f3f4;
 }
-
-/* --- BUTTONS --- */
-.btn-primary {
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  width: fit-content;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #1557b0;
-}
-
-.btn-primary:disabled {
-  background-color: #e8eaed;
-  color: #9aa0a6;
-  cursor: not-allowed;
-}
-
-.btn-outline {
-  background-color: white;
-  color: #202124;
-  border: 1px solid #dadce0;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  width: fit-content;
-}
-
-.btn-outline:hover {
-  background-color: #f8f9fa;
-}
 </style>
