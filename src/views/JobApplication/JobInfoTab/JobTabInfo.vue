@@ -3,14 +3,32 @@ import type { JobApplication } from '@/models/job-application.dto'
 import RichTextEditor from '../../RichTextEditor.vue'
 
 import CompanySelectDropdown from '@/views/Shared/CompanySelectDropdown.vue'
+import type { Company } from '@/models/company.dto'
+import { api } from '@/api/api'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
+
+const handleCompanyUpdate = async (company: Company) => {
+  if (!company.name || company.name === jobApplication.value.company!.name) return
+
+  const companies = (await api.company.getByNameStartsWith(company.name)).filter(
+    (c) => c.name === company.name,
+  )
+  const companyResponse = companies.length == 1 ? companies[0] : await api.company.create(company)
+
+  jobApplication.value = await api.jobs.updatePartial(jobApplication.value.id, {
+    companyId: companyResponse!.id,
+  })
+}
 </script>
 
 <template>
   <div class="job-info-tab">
     <div class="form-grid" v-if="jobApplication">
-      <CompanySelectDropdown :company-name="jobApplication.company!.name"></CompanySelectDropdown>
+      <CompanySelectDropdown
+        :company-name="jobApplication.company!.name"
+        @select="handleCompanyUpdate"
+      ></CompanySelectDropdown>
       <div class="input-group">
         <label>Job Title</label>
         <input v-model="jobApplication.title" type="text" />

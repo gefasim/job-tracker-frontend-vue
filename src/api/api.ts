@@ -13,6 +13,7 @@ import type { DocumentsService } from './documents.service.interface'
 import type { Document } from '@/models/document.dto'
 import type { CompanyService } from './company.service.interface'
 import type { Company } from '@/models/company.dto'
+import type { UpdateJobApplication } from '@/models/update-job-application.dto'
 
 const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -73,8 +74,8 @@ const jobApplicationApi: JobApplicationsService = {
     const response = await httpClient.put<JobApplication>(`/job-applications/${data.id}`, data)
     return response.data
   },
-  async updatePartial(id: string, data: JobApplication): Promise<JobApplication> {
-    const response = await httpClient.patch<JobApplication>(`/job-applications/${id}`, data)
+  async updatePartial(id: string, data: UpdateJobApplication): Promise<JobApplication> {
+    const response = await httpClient.put<JobApplication>(`/job-applications/${id}`, data)
     return response.data
   },
 }
@@ -189,6 +190,11 @@ const documentApi: DocumentsService = {
 const companyApi: CompanyService = {
   async get(companyId: string): Promise<Company> {
     const response = await httpClient.get<Company>(`/companies/${companyId}`)
+    return response.data
+  },
+  async getByNameStartsWith(startsWith: string): Promise<Company[]> {
+    const body = { name: startsWith }
+    const response = await httpClient.post<Company[]>(`/companies/starts-with`, body)
     return response.data
   },
   async create(company: Company): Promise<Company> {

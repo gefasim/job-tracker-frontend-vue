@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useCompanyAutocomplete, type SuggestedCompany } from '@/composables/useCompanyAutocomplete'
 import CompanyImage from './CompanyImage.vue'
+import type { Company } from '@/models/company.dto'
 
 const { query, results, searchCompanies } = useCompanyAutocomplete()
 
@@ -21,10 +22,15 @@ const handleInput = (event: Event) => {
   searchCompanies(target.value)
 }
 
-const selectCompany = (company: SuggestedCompany) => {
+const selectCompany = (selectedCompany: SuggestedCompany) => {
   results.value = []
-  query.value = company.name
-  emit('select')
+  query.value = selectedCompany.name.trim()
+  const company = {
+    name: selectedCompany.name.trim(),
+    logo: selectedCompany.logo,
+    url: selectedCompany.url,
+  } as Company
+  emit('select', company)
 }
 
 const handleClickOutside = (event: MouseEvent) => {
