@@ -2,7 +2,7 @@
 import type { Board } from '@/models/board.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
-import JobApplicationModal from './JobApplicationModal.vue'
+import JobApplicationModal from './JobApplication/JobApplicationModal.vue'
 import { api } from '@/api/api'
 import { CurrentBoard } from '@/current-board.service'
 
