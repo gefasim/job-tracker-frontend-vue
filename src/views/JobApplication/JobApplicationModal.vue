@@ -152,6 +152,7 @@ useKeydown('Escape', handleClose)
   background: white;
   width: 100%;
   max-width: 900px;
+  height: 95vh;
   border-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -332,6 +333,8 @@ textarea:focus {
   justify-content: center;
   padding: 80px 20px;
   text-align: center;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
 }
 .empty-icon-wrapper {
   color: #5f6368;
