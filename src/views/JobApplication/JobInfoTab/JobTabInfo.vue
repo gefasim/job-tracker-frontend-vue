@@ -6,46 +6,55 @@ const jobApplication = defineModel<JobApplication>({ required: true })
 </script>
 
 <template>
-  <div class="form-grid" v-if="jobApplication">
-    <div class="form-group">
-      <label>Company</label>
-      <input type="text" />
-    </div>
-    <div class="form-group">
-      <label>Job Title</label>
-      <input v-model="jobApplication.title" type="text" />
-    </div>
-    <div class="form-group full-row">
-      <label>Deadline</label>
-      <input v-model="jobApplication.deadline" type="text" placeholder="August 30th, 2025" />
+  <div class="job-info-tab">
+    <div class="form-grid" v-if="jobApplication">
+      <div class="form-group">
+        <label>Company</label>
+        <input type="text" />
+      </div>
+      <div class="form-group">
+        <label>Job Title</label>
+        <input v-model="jobApplication.title" type="text" />
+      </div>
+      <div class="form-group full-row">
+        <label>Deadline</label>
+        <input v-model="jobApplication.deadline" type="text" placeholder="August 30th, 2025" />
+      </div>
+
+      <div class="form-group">
+        <label>Post URL</label>
+        <input
+          v-model="jobApplication.postUrl"
+          type="text"
+          placeholder="+ add URL e.g. https://google.com"
+        />
+      </div>
+      <div class="form-group">
+        <label>Salary</label>
+        <input v-model="jobApplication.salary" type="text" />
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <input v-model="jobApplication.location" type="text" placeholder="+ add location" />
+      </div>
+      <div class="form-group">
+        <label>Color</label>
+        <div class="color-picker-box" :style="{ backgroundColor: jobApplication.color }"></div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Post URL</label>
-      <input
-        v-model="jobApplication.postUrl"
-        type="text"
-        placeholder="+ add URL e.g. https://google.com"
-      />
-    </div>
-    <div class="form-group">
-      <label>Salary</label>
-      <input v-model="jobApplication.salary" type="text" />
-    </div>
-
-    <div class="form-group">
-      <label>Location</label>
-      <input v-model="jobApplication.location" type="text" placeholder="+ add location" />
-    </div>
-    <div class="form-group">
-      <label>Color</label>
-      <div class="color-picker-box" :style="{ backgroundColor: jobApplication.color }"></div>
-    </div>
+    <!--TODO: resolve a warning message when v-model receives null-->
+    <label>Description</label>
+    <RichTextEditor v-model="jobApplication.description!" />
   </div>
-
-  <!--TODO: resolve a warning message when v-model receives null-->
-  <label>Description</label>
-  <RichTextEditor v-model="jobApplication.description as string" />
 </template>
 
-<style></style>
+<style scoped>
+.job-info-tab {
+  background: white;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 24px;
+}
+</style>
