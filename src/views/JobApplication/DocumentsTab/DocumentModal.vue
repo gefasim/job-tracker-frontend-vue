@@ -107,11 +107,8 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
     @save="handleSave"
   >
     <template #form>
-      <div class="form-group">
-        <div class="label-row">
-          <label>Select file</label>
-          <span class="required-badge">Required</span>
-        </div>
+      <div class="input-group input-group-required">
+        <label>Select file <span>*</span></label>
         <div class="file-drop-zone">
           <input type="file" id="file-upload" class="file-input" @change="handleFileChange" />
           <label for="file-upload" class="upload-btn">Upload file</label>
@@ -120,25 +117,14 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="label-row">
-          <label>Title</label>
-          <span class="required-badge">Required</span>
-        </div>
-        <input
-          v-model="form.title"
-          type="text"
-          class="form-control"
-          placeholder="Enter document title"
-        />
+      <div class="input-group input-group-required">
+        <label>Title <span>*</span></label>
+        <input v-model="form.title" type="text" placeholder="Enter document title" />
       </div>
 
-      <div class="form-group">
-        <div class="label-row">
-          <label>Document Category</label>
-          <span class="required-badge">Required</span>
-        </div>
-        <select v-model="form.category" class="form-control">
+      <div class="input-group input-group-required">
+        <label>Document Category <span>*</span></label>
+        <select v-model="form.category">
           <option value="" disabled>Select category</option>
           <option v-for="category in categories" :key="category" :value="category">
             {{ category }}
@@ -146,11 +132,10 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
         </select>
       </div>
 
-      <div class="form-group">
+      <div class="input-group">
         <label>Description</label>
         <textarea
           v-model="form.description"
-          class="form-control textarea"
           placeholder="Add a description for this document"
         ></textarea>
       </div>
@@ -158,50 +143,6 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
   </BaseModalWrapper>
 </template>
 <style scoped>
-/* Form Controls */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.form-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #202124;
-}
-
-.required-badge {
-  font-size: 12px;
-  color: #9aa0a6;
-}
-
-.form-control {
-  padding: 10px 12px;
-  border: 1px solid #dadce0;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #202124;
-  outline: none;
-  transition: border-color 0.2s;
-  background: white;
-}
-
-.form-control:focus {
-  border-color: #1a73e8;
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
 /* File Drop Zone */
 .file-drop-zone {
   border: 1px dashed #dadce0;

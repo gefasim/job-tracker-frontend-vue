@@ -123,12 +123,12 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
       <div class="avatar-row">
         <div class="avatar-placeholder"><AvatarIcon width="30" height="30" /></div>
         <div class="form-row flex-1">
-          <div class="input-group">
-            <label>First Name <span class="required">Required</span></label>
+          <div class="input-group input-group-required">
+            <label>First Name <span>*</span></label>
             <input v-model="form.firstName" placeholder="First Name" />
           </div>
-          <div class="input-group">
-            <label>Last Name <span class="required">Required</span></label>
+          <div class="input-group input-group-required">
+            <label>Last Name <span>*</span></label>
             <input v-model="form.lastName" placeholder="Last Name" />
           </div>
         </div>
@@ -249,46 +249,6 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
   font-size: 30px;
   flex-shrink: 0;
   color: #1a73e8;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-}
-.input-group label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #202124;
-  display: flex;
-  justify-content: space-between;
-}
-.required {
-  color: #9aa0a6;
-  font-weight: 400;
-}
-
-input,
-textarea,
-select {
-  padding: 10px 12px;
-  border: 1px solid #dadce0;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #202124;
-  background: white;
-  transition: border-color 0.2s;
-}
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #1a73e8;
-  outline: none;
-}
-textarea {
-  resize: vertical;
-  min-height: 80px;
 }
 
 .external-url {

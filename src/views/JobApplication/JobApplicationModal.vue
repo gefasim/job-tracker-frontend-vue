@@ -272,24 +272,50 @@ useKeydown('Escape', handleClose)
   margin-bottom: 24px;
 }
 
-.form-group {
+.input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
 }
-
-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #3c4043;
+.input-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #202124;
+  display: flex;
+  justify-content: space-between;
+}
+.input-group-required label {
+  justify-content: left;
+}
+.input-group-required span {
+  color: red;
+}
+.required {
+  color: #9aa0a6;
+  font-weight: 400;
 }
 
 input,
-textarea {
-  border: 1px solid #dadce0;
+textarea,
+select {
   padding: 10px 12px;
-  border-radius: 8px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
   font-size: 14px;
+  color: #202124;
+  background: white;
+  transition: border-color 0.2s;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #1a73e8;
+  outline: none;
+}
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .color-picker-box {
@@ -314,17 +340,6 @@ textarea {
   display: flex;
   gap: 15px;
 }
-
-textarea {
-  border: none;
-  resize: vertical;
-  background: #fffdf0;
-}
-
-textarea:focus {
-  outline: none;
-}
-
 /* Empty State */
 .empty-state {
   display: flex;

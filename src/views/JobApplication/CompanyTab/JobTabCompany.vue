@@ -79,7 +79,7 @@ const saveChanges = async () => {
       </div>
 
       <div class="form-grid">
-        <div class="form-group full-width">
+        <div class="input-group full-width">
           <label for="company-logo">Logo URL</label>
           <input
             v-model="formData.logo"
@@ -91,8 +91,8 @@ const saveChanges = async () => {
           />
         </div>
 
-        <div class="form-group">
-          <label for="company-name">Company Name <span class="required">*</span></label>
+        <div class="input-group-required input-group">
+          <label for="company-name">Company Name <span>*</span></label>
           <input
             v-model="formData.name"
             id="company-name"
@@ -103,7 +103,7 @@ const saveChanges = async () => {
           />
         </div>
 
-        <div class="form-group">
+        <div class="input-group">
           <label for="company-industry">Industry</label>
           <input
             v-model="formData.industry"
@@ -115,7 +115,7 @@ const saveChanges = async () => {
           />
         </div>
 
-        <div class="form-group full-width">
+        <div class="input-group full-width">
           <label for="company-url">Website URL</label>
           <input
             v-model="formData.url"
@@ -127,7 +127,7 @@ const saveChanges = async () => {
           />
         </div>
 
-        <div class="form-group full-width">
+        <div class="input-group full-width">
           <label for="company-description">Description</label>
           <textarea
             v-model="formData.description"
@@ -265,14 +265,6 @@ const saveChanges = async () => {
 
 .full-width {
   grid-column: span 2;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: #202124;
-  margin-bottom: 6px;
 }
 
 .required {
