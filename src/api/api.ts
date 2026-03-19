@@ -11,6 +11,8 @@ import type { ContactsService } from './contacts.service.interface'
 import type { Contact } from '@/models/contact.dto'
 import type { DocumentsService } from './documents.service.interface'
 import type { Document } from '@/models/document.dto'
+import type { CompanyService } from './company.service.interface'
+import type { Company } from '@/models/company.dto'
 
 const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -184,6 +186,23 @@ const documentApi: DocumentsService = {
     await httpClient.delete(`/documents/${documentId}`)
   },
 }
+const companyApi: CompanyService = {
+  async get(companyId: string): Promise<Company> {
+    const response = await httpClient.get<Company>(`/companies/${companyId}`)
+    return response.data
+  },
+  async create(company: Company): Promise<Company> {
+    const response = await httpClient.post<Company>(`/companies/`, company)
+    return response.data
+  },
+  async update(companyId: string, company: Company): Promise<Company> {
+    const response = await httpClient.put<Company>(`/companies/${companyId}`, company)
+    return response.data
+  },
+  async delete(companyId: string): Promise<void> {
+    await httpClient.delete(`/companies/${companyId}`)
+  },
+}
 
 export const api = {
   auth: authApi,
@@ -192,4 +211,5 @@ export const api = {
   jobNotes: jobApplicationNoteApi,
   contacts: contactApi,
   documents: documentApi,
+  company: companyApi,
 }

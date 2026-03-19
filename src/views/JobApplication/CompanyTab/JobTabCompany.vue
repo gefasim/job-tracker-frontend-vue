@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import DefaultCompanyLogo from '@/assets/DefaultCompanyLogo.vue'
 import type { Company } from '@/models/company.dto'
 import type { JobApplication } from '@/models/job-application.dto'
+import { api } from '@/api/api'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 const company = computed(() => jobApplication.value.company!)
@@ -19,12 +20,13 @@ const cancelEdit = () => {
   isEditMode.value = false
 }
 
-const saveChanges = () => {
+const saveChanges = async () => {
   const updatedCompany = {
     ...jobApplication.value.company,
     ...formData.value,
   } as Company
 
+  jobApplication.value.company = await api.company.update(updatedCompany.id, updatedCompany)
   isEditMode.value = false
 }
 </script>
