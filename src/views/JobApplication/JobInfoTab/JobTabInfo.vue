@@ -2,16 +2,15 @@
 import type { JobApplication } from '@/models/job-application.dto'
 import RichTextEditor from '../../RichTextEditor.vue'
 
+import CompanySelectDropdown from '@/views/Shared/CompanySelectDropdown.vue'
+
 const jobApplication = defineModel<JobApplication>({ required: true })
 </script>
 
 <template>
   <div class="job-info-tab">
     <div class="form-grid" v-if="jobApplication">
-      <div class="input-group">
-        <label>Company</label>
-        <input type="text" />
-      </div>
+      <CompanySelectDropdown :company-name="jobApplication.company!.name"></CompanySelectDropdown>
       <div class="input-group">
         <label>Job Title</label>
         <input v-model="jobApplication.title" type="text" />
