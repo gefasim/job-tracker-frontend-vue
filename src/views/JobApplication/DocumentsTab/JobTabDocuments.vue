@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Document } from '@/models/document.dto'
 import DocumentsCard from './DocumentsCard.vue'
 import DocumentModal from './DocumentModal.vue'
+import LinkDocumentDropdown from '@/views/Shared/LinkDocumentDropdown.vue'
+import { CurrentBoard } from '@/current-board.service'
+import { api } from '@/api/api'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 
@@ -12,6 +15,16 @@ const documentToEdit = ref<Document | null>(null)
 
 const hasDocuments = computed(() => {
   return jobApplication.value.documents && jobApplication.value.documents.length > 0
+})
+const boardDocuments = ref<Document[]>([])
+const availableDocumentsToLink = computed(() => {
+  const assignedDocumentIds = jobApplication.value.documents?.map((c) => c.id)
+  return boardDocuments.value.filter((d) => !assignedDocumentIds!.some((id) => d!.id == id))
+})
+
+onMounted(async () => {
+  const boardId = CurrentBoard.getBoard()!.id
+  boardDocuments.value = await api.documents.getAll(boardId)
 })
 
 const openUploadModal = () => {
@@ -36,8 +49,14 @@ const handleSaveDocument = (savedDocument: Document) => {
   isModalOpen.value = false
 }
 
-const handleUnlinkDocument = (documentId: string) => {
+const handleLinkDocument = async (document: Document) => {
+  await api.documents.assignJobApplication(document.id, jobApplication.value.id)
+  jobApplication.value.documents.unshift(document)
+}
+
+const handleUnlinkDocument = async (documentId: string) => {
   if (confirm('Are you sure you want to unlink this document from the job?')) {
+    await api.documents.unassignJobApplication(documentId, jobApplication.value.id)
     jobApplication.value.documents = jobApplication.value.documents!.filter(
       (d) => d.id !== documentId,
     )
@@ -51,6 +70,10 @@ const handleUnlinkDocument = (documentId: string) => {
       <div class="tab-actions">
         <button class="btn-primary" @click="openUploadModal">Upload</button>
         <button class="btn-outline dropdown-btn">Link Document</button>
+        <LinkDocumentDropdown
+          :items="availableDocumentsToLink"
+          @select="handleLinkDocument"
+        ></LinkDocumentDropdown>
       </div>
     </div>
 
