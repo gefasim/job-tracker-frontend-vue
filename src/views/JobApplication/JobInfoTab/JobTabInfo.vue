@@ -36,7 +36,7 @@ const handleCompanyUpdate = async (company: Company) => {
       </div>
       <div class="input-group full-row">
         <label>Deadline</label>
-        <input v-model="jobApplication.deadline" type="text" placeholder="August 30th, 2025" />
+        <input v-model="jobApplication.deadline" type="date" placeholder="August 30th, 2025" />
       </div>
 
       <div class="input-group">
