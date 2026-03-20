@@ -213,6 +213,12 @@ useKeydown('Escape', handleClose)
   gap: 8px;
 }
 
+.tab-border {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 24px;
+}
+
 .tab-item {
   flex: 1;
   display: flex;
@@ -342,8 +348,6 @@ textarea {
   justify-content: center;
   padding: 80px 20px;
   text-align: center;
-  border: 1px solid #dadce0;
-  border-radius: 8px;
 }
 .empty-icon-wrapper {
   color: #5f6368;

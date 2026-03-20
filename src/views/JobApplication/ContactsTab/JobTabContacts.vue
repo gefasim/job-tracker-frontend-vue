@@ -65,8 +65,8 @@ const handleUnlinkContact = async (contactId: string) => {
 </script>
 
 <template>
-  <div class="contacts-tab">
-    <div v-if="hasContacts" class="tab-header">
+  <div class="contacts-tab tab-border">
+    <div class="tab-header">
       <button class="btn-primary" @click="openCreateModal">Create Contact</button>
       <LinkContactDropdown
         :items="availableContactsToLink"
@@ -79,13 +79,6 @@ const handleUnlinkContact = async (contactId: string) => {
         <ContactTabIcon />
       </div>
       <h2>You have not linked any contacts to this job yet.</h2>
-      <div class="empty-actions">
-        <button class="btn-primary" @click="openCreateModal">Create Contact</button>
-        <LinkContactDropdown
-          :items="availableContactsToLink"
-          @select="handleLinkContact"
-        ></LinkContactDropdown>
-      </div>
     </div>
 
     <div v-else class="contacts-grid">
