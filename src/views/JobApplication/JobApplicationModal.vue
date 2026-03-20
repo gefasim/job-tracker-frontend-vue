@@ -318,12 +318,6 @@ textarea {
   min-height: 80px;
 }
 
-.color-picker-box {
-  height: 40px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 /* Description / Editor */
 .description-section {
   margin-top: 24px;

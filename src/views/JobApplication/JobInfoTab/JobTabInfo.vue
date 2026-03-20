@@ -5,6 +5,7 @@ import RichTextEditor from '../../RichTextEditor.vue'
 import CompanySelectDropdown from '@/views/Shared/CompanySelectDropdown.vue'
 import type { Company } from '@/models/company.dto'
 import { api } from '@/api/api'
+import ColorPicker from '@/views/Shared/ColorPicker.vue'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 
@@ -57,7 +58,10 @@ const handleCompanyUpdate = async (company: Company) => {
       </div>
       <div class="input-group">
         <label>Color</label>
-        <div class="color-picker-box" :style="{ backgroundColor: jobApplication.color }"></div>
+        <ColorPicker
+          :model-value="jobApplication.color"
+          @update:model-value="(newColor) => (jobApplication.color = newColor)"
+        ></ColorPicker>
       </div>
     </div>
 
