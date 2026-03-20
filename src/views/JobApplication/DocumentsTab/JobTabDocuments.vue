@@ -46,8 +46,8 @@ const handleUnlinkDocument = (documentId: string) => {
 </script>
 
 <template>
-  <div class="documents-tab">
-    <div class="tab-header" v-if="hasDocuments">
+  <div class="documents-tab tab-border">
+    <div class="tab-header">
       <div class="tab-actions">
         <button class="btn-primary" @click="openUploadModal">Upload</button>
         <button class="btn-outline dropdown-btn">Link Document</button>
@@ -75,10 +75,6 @@ const handleUnlinkDocument = (documentId: string) => {
         </svg>
       </div>
       <h2>You have not linked any documents to this job yet.</h2>
-      <div class="empty-actions">
-        <button class="btn-primary" @click="openUploadModal">Upload Document</button>
-        <button class="btn-outline">Link Document</button>
-      </div>
     </div>
 
     <div v-else class="documents-grid">

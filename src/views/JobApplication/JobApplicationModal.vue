@@ -359,13 +359,6 @@ textarea {
   font-weight: 400;
   margin-bottom: 32px;
 }
-.empty-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  min-width: 200px;
-}
 
 /* Buttons */
 .btn-primary {
