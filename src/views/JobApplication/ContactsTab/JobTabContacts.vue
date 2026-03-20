@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Contact } from '@/models/contact.dto'
 import ContactCard from './ContactCard.vue'
 import ContactModal from './ContactModal.vue'
 import ContactTabIcon from '@/assets/ContactTabIcon.vue'
+import LinkContactDropdown from '@/views/Shared/LinkContactDropdown.vue'
+import { CurrentBoard } from '@/current-board.service'
+import { api } from '@/api/api'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 
@@ -13,6 +16,17 @@ const contactToEdit = ref<Contact | null>(null)
 
 const hasContacts = computed(() => {
   return jobApplication.value.contacts && jobApplication.value.contacts.length > 0
+})
+
+const boardContacts = ref<Contact[]>([])
+const availableContactsToLink = computed(() => {
+  const assignedContactIds = jobApplication.value.contacts?.map((c) => c.id)
+  return boardContacts.value.filter((c) => !assignedContactIds!.some((id) => c!.id == id))
+})
+
+onMounted(async () => {
+  const boardId = CurrentBoard.getBoard()!.id
+  boardContacts.value = await api.contacts.getAll(boardId)
 })
 
 const openCreateModal = () => {
@@ -37,8 +51,14 @@ const handleSaveContact = (savedContact: Contact) => {
   isModalOpen.value = false
 }
 
-const handleUnlinkContact = (contactId: string) => {
+const handleLinkContact = async (contact: Contact) => {
+  await api.contacts.assignJobApplication(contact.id, jobApplication.value.id)
+  jobApplication.value.contacts?.push(contact)
+}
+
+const handleUnlinkContact = async (contactId: string) => {
   if (confirm('Are you sure you want to unlink this contact from the job?')) {
+    await api.contacts.unassignJobApplication(contactId, jobApplication.value.id)
     jobApplication.value.contacts = jobApplication.value.contacts!.filter((c) => c.id !== contactId)
   }
 }
@@ -48,7 +68,10 @@ const handleUnlinkContact = (contactId: string) => {
   <div class="contacts-tab">
     <div v-if="hasContacts" class="tab-header">
       <button class="btn-primary" @click="openCreateModal">Create Contact</button>
-      <button class="btn-outline">Link Contact</button>
+      <LinkContactDropdown
+        :items="availableContactsToLink"
+        @select="handleLinkContact"
+      ></LinkContactDropdown>
     </div>
 
     <div v-if="!hasContacts" class="empty-state">
@@ -58,7 +81,10 @@ const handleUnlinkContact = (contactId: string) => {
       <h2>You have not linked any contacts to this job yet.</h2>
       <div class="empty-actions">
         <button class="btn-primary" @click="openCreateModal">Create Contact</button>
-        <button class="btn-outline">Link Contact</button>
+        <LinkContactDropdown
+          :items="availableContactsToLink"
+          @select="handleLinkContact"
+        ></LinkContactDropdown>
       </div>
     </div>
 
