@@ -67,7 +67,7 @@ const onDragOver = (event: DragEvent) => {
   event.preventDefault()
 }
 
-const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
+const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) => {
   event.preventDefault()
   if (!dragInfo.value) return
 
@@ -84,7 +84,7 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
   const finalIndex = toIndex !== undefined ? toIndex : toColumn.jobApplications.length
   toColumn.jobApplications.splice(finalIndex, 0, movedJob as JobApplication)
   dragInfo.value = null
-  // TODO: update API
+  await api.jobs.updatePartial(movedJob!.id, { columnId: toColumn.id })
 }
 </script>
 
