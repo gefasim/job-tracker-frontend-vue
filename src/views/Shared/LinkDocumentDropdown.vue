@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseLinkDropdown from './BaseLinkDropdown.vue'
 import type { Document } from '@/models/document.dto'
+import DocumentCategoryBadge from './DocumentCategoryBadge.vue'
 
 defineProps<{
   items: Document[]
@@ -30,7 +31,7 @@ const selectItem = (document: Document) => {
     <template #item="{ item }">
       <div class="item">
         <span>{{ item.title }}</span>
-        <span>{{ item.category }}</span>
+        <DocumentCategoryBadge :category="item.category"></DocumentCategoryBadge>
       </div>
     </template>
   </BaseLinkDropdown>

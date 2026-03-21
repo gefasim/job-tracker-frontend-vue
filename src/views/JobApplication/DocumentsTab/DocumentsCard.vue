@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { Document } from '@/models/document.dto'
-import type { DocumentCategoryType } from '@/models/document-category.enum'
 import type { User } from '@/models/user.dto'
+import DocumentCategoryBadge from '@/views/Shared/DocumentCategoryBadge.vue'
 
 const props = defineProps<{ document: Document }>()
 const emit = defineEmits(['edit', 'unlink'])
@@ -40,23 +40,6 @@ const formattedSize = computed(() => {
 const fileInfo = computed(() => {
   const ext = props.document.fileExtension?.toUpperCase() || 'FILE'
   return formattedSize.value ? `${ext} - ${formattedSize.value}` : ext
-})
-
-// Get category color classes based on the DocumentCategoryType
-const categoryClass = computed(() => {
-  const category = props.document.category as DocumentCategoryType
-  switch (category) {
-    case 'Certification':
-      return 'badge-green'
-    case 'Other':
-      return 'badge-purple'
-    case 'Resume':
-      return 'badge-blue'
-    case 'Offer Letter':
-      return 'badge-yellow'
-    default:
-      return 'badge-gray'
-  }
 })
 
 // Mock upload time formatter (assuming createdAt exists in BaseDto)
@@ -100,9 +83,7 @@ const uploaderName = computed(() => {
     </div>
 
     <div class="card-footer">
-      <span class="category-badge" :class="categoryClass">
-        {{ document.category }}
-      </span>
+      <DocumentCategoryBadge :category="document.category"></DocumentCategoryBadge>
 
       <div class="menu-container">
         <button class="menu-btn" @click.stop="isMenuOpen = !isMenuOpen">•••</button>

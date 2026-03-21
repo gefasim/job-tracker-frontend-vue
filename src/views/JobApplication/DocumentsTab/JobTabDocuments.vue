@@ -69,7 +69,6 @@ const handleUnlinkDocument = async (documentId: string) => {
     <div class="tab-header">
       <div class="tab-actions">
         <button class="btn-primary" @click="openUploadModal">Upload</button>
-        <button class="btn-outline dropdown-btn">Link Document</button>
         <LinkDocumentDropdown
           :items="availableDocumentsToLink"
           @select="handleLinkDocument"
