@@ -94,6 +94,15 @@ const saveChanges = async () => {
   }
 }
 
+const handleColumnChange = async (event: Event) => {
+  // TODO: replace with dropdown. emit update back to Board to update on UI
+  // @ts-expect-error ts-plugin(2339) says .value doesn't exists
+  const columnId = event.target!.value
+  jobApplication.value = await api.jobs.updatePartial(jobApplication.value!.id, {
+    columnId: columnId,
+  })
+}
+
 const handleClose = async () => {
   await saveChanges()
   emit('close')
@@ -114,7 +123,12 @@ useKeydown('Escape', handleClose)
             </div>
           </div>
           <div class="header-right">
-            <select v-model="selectedColumnId" name="board-columns" class="status-dropdown">
+            <select
+              v-model="selectedColumnId"
+              name="board-columns"
+              class="status-dropdown"
+              v-on:change="handleColumnChange"
+            >
               <option v-for="column in columns" :key="column.id" :value="column.id">
                 {{ column.name }}
               </option>
