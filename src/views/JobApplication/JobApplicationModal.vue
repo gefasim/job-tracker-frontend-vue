@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useKeydown } from '@/composables/useKeydown'
 import type { JobApplication } from '@/models/job-application.dto'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import JobTabNotes from './NotesTab/JobTabNotes.vue'
 import JobTabInfo from './JobInfoTab/JobTabInfo.vue'
 import JobTabContacts from './ContactsTab/JobTabContacts.vue'
@@ -14,13 +14,16 @@ import NoteNavTabIcon from '@/assets/NoteNavTabIcon.vue'
 import CompanyNavTabIcon from '@/assets/CompanyNavTabIcon.vue'
 import DocumentNavTabIcon from '@/assets/DocumentNavTabIcon.vue'
 import ContactNavTabIcon from '@/assets/ContactNavTabIcon.vue'
+import { CurrentBoard } from '@/current-board.service'
 
 const props = defineProps<{
   jobApplicationParam: JobApplication | null
+  columnId: string | null
 }>()
 const emit = defineEmits(['update', 'close'])
 const jobApplication = ref<JobApplication | null>(null) // Shallow copy of jobApplicationParam
-const columns = ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected']
+const selectedColumnId = ref<string | null>(null)
+const columns = ref<{ id: string; name: string }[]>([])
 
 // Tab navigation
 const activeTab = ref<JobApplicationTabType>(JobApplicationTabEnum.JobInfo)
@@ -46,12 +49,21 @@ watch(
   (newJobApplication) => {
     if (newJobApplication) {
       jobApplication.value = { ...newJobApplication }
+      selectedColumnId.value = props.columnId
     } else {
       jobApplication.value = null
     }
   },
   { immediate: true },
 )
+
+onMounted(() => {
+  const result = CurrentBoard.getBoard()!.columns.map((c) => ({
+    id: c.id,
+    name: c.name,
+  }))
+  columns.value = result
+})
 
 const getTabCount = (tab: JobApplicationTabEnum): number => {
   if (!jobApplication.value) return 0
@@ -102,8 +114,10 @@ useKeydown('Escape', handleClose)
             </div>
           </div>
           <div class="header-right">
-            <select v-model="jobApplication.status" name="board-columns" class="status-dropdown">
-              <option v-for="s in columns" :key="s" :value="s">Move: {{ s }}</option>
+            <select v-model="selectedColumnId" name="board-columns" class="status-dropdown">
+              <option v-for="column in columns" :key="column.id" :value="column.id">
+                {{ column.name }}
+              </option>
             </select>
             <button class="btn-close" @click="handleClose">Close</button>
           </div>

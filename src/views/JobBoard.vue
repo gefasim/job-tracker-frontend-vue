@@ -8,7 +8,10 @@ import { CurrentBoard } from '@/current-board.service'
 
 const { boardId } = defineProps<{ boardId?: string }>()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
-const selectedJobApplication = ref<JobApplication | null>(null)
+const selectedJobApplication = ref<{ job: JobApplication | null; columnId: string | null }>({
+  job: null,
+  columnId: null,
+})
 const board = ref<Board>()
 
 watch(
@@ -24,8 +27,9 @@ async function fetchData(boardId: string) {
 }
 
 // On Job click
-const openSelectedJobApplication = (job: JobApplication) => {
-  selectedJobApplication.value = job
+const openSelectedJobApplication = (job: JobApplication, columnId: string) => {
+  selectedJobApplication.value.job = job
+  selectedJobApplication.value.columnId = columnId
 }
 
 const updateSelectedJobApplication = async (job: JobApplication) => {
@@ -35,7 +39,8 @@ const updateSelectedJobApplication = async (job: JobApplication) => {
 }
 
 const closeSelectedJobApplication = async () => {
-  selectedJobApplication.value = null
+  selectedJobApplication.value.job = null
+  selectedJobApplication.value.columnId = null
 }
 
 const getJobPositionOnBoard = (job: JobApplication): { columnIndex: number; jobIndex: number } => {
@@ -102,7 +107,7 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
           v-for="(job, index) in column.jobApplications"
           :key="job.id"
           class="card"
-          v-on:click="openSelectedJobApplication(job)"
+          v-on:click="openSelectedJobApplication(job, column.id)"
           draggable="true"
           @dragstart="OnDragStart($event, column.id, index)"
           @dragover="onDragOver"
@@ -124,7 +129,8 @@ const OnDrop = (event: DragEvent, toColumnId: string, toIndex?: number) => {
   </div>
 
   <JobApplicationModal
-    :jobApplicationParam="selectedJobApplication"
+    :jobApplicationParam="selectedJobApplication.job"
+    :columnId="selectedJobApplication.columnId"
     @update="updateSelectedJobApplication"
     @close="closeSelectedJobApplication"
   ></JobApplicationModal>
