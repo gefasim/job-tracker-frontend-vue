@@ -17,12 +17,12 @@ import ContactNavTabIcon from '@/assets/ContactNavTabIcon.vue'
 import { CurrentBoard } from '@/current-board.service'
 
 const props = defineProps<{
-  jobApplicationParam: JobApplication | null
-  columnId: string | null
+  jobApplicationParam: JobApplication
+  columnId: string
 }>()
 const emit = defineEmits(['update', 'close'])
-const jobApplication = ref<JobApplication | null>(null) // Shallow copy of jobApplicationParam
-const selectedColumnId = ref<string | null>(null)
+const jobApplication = ref<JobApplication>() // Shallow copy of jobApplicationParam
+const selectedColumnId = ref<string>()
 const columns = ref<{ id: string; name: string }[]>([])
 
 // Tab navigation
@@ -47,12 +47,8 @@ const currentComponent = computed(() => tabComponents[activeTab.value])
 watch(
   () => props.jobApplicationParam,
   (newJobApplication) => {
-    if (newJobApplication) {
-      jobApplication.value = { ...newJobApplication }
-      selectedColumnId.value = props.columnId
-    } else {
-      jobApplication.value = null
-    }
+    jobApplication.value = { ...newJobApplication }
+    selectedColumnId.value = props.columnId
   },
   { immediate: true },
 )

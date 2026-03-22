@@ -138,8 +138,9 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
   </div>
 
   <JobApplicationModal
-    :jobApplicationParam="selectedJobApplication.job"
-    :columnId="selectedJobApplication.columnId"
+    v-if="selectedJobApplication.job"
+    :jobApplicationParam="selectedJobApplication.job!"
+    :columnId="selectedJobApplication.columnId!"
     @update="updateSelectedJobApplication"
     @close="closeSelectedJobApplication"
   ></JobApplicationModal>
