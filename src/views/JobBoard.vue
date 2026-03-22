@@ -5,6 +5,7 @@ import { ref, watch } from 'vue'
 import JobApplicationModal from './JobApplication/JobApplicationModal.vue'
 import { api } from '@/api/api'
 import { CurrentBoard } from '@/current-board.service'
+import CompanyImage from './Shared/CompanyImage.vue'
 
 const { boardId } = defineProps<{ boardId?: string }>()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
@@ -111,6 +112,7 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
           v-for="(job, index) in column.jobApplications"
           :key="job.id"
           class="card"
+          :style="{ backgroundColor: job.color }"
           v-on:click="openSelectedJobApplication(job, column.id)"
           draggable="true"
           @dragstart="OnDragStart($event, column.id, index)"
@@ -118,7 +120,8 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
           @drop.stop="OnDrop($event, column.id, index)"
         >
           {{ job.title }}
-          <p>
+          <p class="card-company">
+            <CompanyImage :src="job.company!.logo" :alt="job.company!.name"></CompanyImage>
             <small>{{ job.company?.name }}</small>
           </p>
         </div>
@@ -198,6 +201,13 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
 
 .card:hover {
   border: 1px dashed #4a90e2;
+}
+
+.card-company {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
 .drop-placeholder {

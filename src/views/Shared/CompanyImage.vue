@@ -3,7 +3,7 @@ import DefaultCompanyLogo from '@/assets/DefaultCompanyLogo.vue'
 import { ref, watch } from 'vue'
 
 const props = defineProps<{
-  src: string
+  src: string | null
   alt: string
 }>()
 
