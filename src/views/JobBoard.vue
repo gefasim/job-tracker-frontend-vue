@@ -100,7 +100,11 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
       @dragover="onDragOver"
       @drop.self="OnDrop($event, column.id)"
     >
-      <h3 class="column-header">{{ column.name }}</h3>
+      <div class="column-header">
+        <h3>{{ column.name }}</h3>
+        <span>{{ column.jobApplications.length }} JOBS</span>
+        <button class="btn-outline">+</button>
+      </div>
 
       <div class="column-content">
         <div
@@ -152,10 +156,28 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
   min-height: 100px;
   display: flex;
   flex-direction: column;
+  padding: 10px;
+}
+
+.column-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.column-header h3 {
+  margin: 0;
+}
+.column-header button {
+  width: stretch;
+}
+.column-header button:hover {
+  background-color: #e5eef8;
+  border-color: #1a73e8;
 }
 
 .column-content {
-  padding: 10px;
+  padding-top: 20px;
   flex-grow: 1;
 }
 
