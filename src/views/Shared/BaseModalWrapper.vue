@@ -1,0 +1,85 @@
+<script setup lang="ts">
+defineProps<{
+  title: string
+}>()
+
+const emit = defineEmits(['close', 'save'])
+
+const handleSave = async () => {
+  emit('save')
+}
+</script>
+
+<template>
+  <div class="modal-overlay" @click.self="emit('close')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>{{ title }}</h2>
+      </div>
+
+      <div class="modal-body">
+        <slot name="body"></slot>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" @click="handleSave">Save</button>
+        <button class="btn-outline" @click="emit('close')">Discard</button>
+      </div>
+    </div>
+  </div>
+</template>
+<style scoped>
+/* Modal Base */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 900px;
+  max-width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #202124;
+  font-weight: 600;
+}
+
+.modal-body {
+  display: flex;
+  flex: 1;
+  padding: 24px;
+  gap: 32px;
+  overflow: hidden;
+}
+
+/* Footer Actions */
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #f1f3f4;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  background: white;
+  border-radius: 0 0 12px 12px;
+}
+</style>
