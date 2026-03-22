@@ -6,6 +6,7 @@ import JobApplicationModal from './JobApplication/JobApplicationModal.vue'
 import { api } from '@/api/api'
 import { CurrentBoard } from '@/current-board.service'
 import CompanyImage from './Shared/CompanyImage.vue'
+import CreateJobApplicationModal from './JobApplication/CreateJobApplicationModal.vue'
 
 const { boardId } = defineProps<{ boardId?: string }>()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
@@ -14,6 +15,7 @@ const selectedJobApplication = ref<{ job: JobApplication | null; columnId: strin
   columnId: null,
 })
 const board = ref<Board>()
+const isCreateJobModalOpen = ref<boolean>(false)
 
 watch(
   () => boardId,
@@ -104,7 +106,7 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
       <div class="column-header">
         <h3>{{ column.name }}</h3>
         <span>{{ column.jobApplications.length }} JOBS</span>
-        <button class="btn-outline">+</button>
+        <button v-on:click="isCreateJobModalOpen = true" class="btn-outline">+</button>
       </div>
 
       <div class="column-content">
@@ -141,6 +143,9 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
     @update="updateSelectedJobApplication"
     @close="closeSelectedJobApplication"
   ></JobApplicationModal>
+  <Teleport to="body">
+    <CreateJobApplicationModal v-if="isCreateJobModalOpen" @close="isCreateJobModalOpen = false" />
+  </Teleport>
 </template>
 
 <style scoped>
