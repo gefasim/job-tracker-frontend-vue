@@ -143,20 +143,20 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
 <style scoped>
 .board {
   display: flex;
-  gap: 20px;
   padding: 20px;
-  background: #f4f5f7;
   align-items: flex-start;
 }
 
 .column {
-  background: #ebedf0;
-  border-radius: 8px;
   width: 280px;
-  min-height: 100px;
+  height: stretch;
   display: flex;
   flex-direction: column;
   padding: 10px;
+  border-right: 1px solid #dadce0;
+}
+.column:last-child {
+  border-right: 0;
 }
 
 .column-header {
@@ -169,6 +169,7 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
   margin: 0;
 }
 .column-header button {
+  margin-top: 10px;
   width: stretch;
 }
 .column-header button:hover {
@@ -201,6 +202,6 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
 
 .drop-placeholder {
   flex-grow: 1;
-  min-height: 50px;
+  height: stretch;
 }
 </style>
