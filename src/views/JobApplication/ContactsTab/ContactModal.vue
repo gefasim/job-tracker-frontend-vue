@@ -13,7 +13,7 @@ import { useRoute } from 'vue-router'
 import type { JobApplication } from '@/models/job-application.dto'
 import { CurrentBoard } from '@/current-board.service'
 import AvatarIcon from '@/assets/AvatarIcon.vue'
-import BaseModalWrapper from '@/views/Shared/BaseModalWrapper.vue'
+import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
 
 // TODO: implement multiple job assignment
 const props = defineProps<{
@@ -112,7 +112,7 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
 </script>
 
 <template>
-  <BaseModalWrapper
+  <BaseModalWithJobLinkWrapper
     v-if="isModalOpen"
     :title="isEditMode ? 'Edit Contact' : 'Create Contact'"
     :linkedJobsParam="linkedJobs"
@@ -221,7 +221,7 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
         </div>
       </div>
     </template>
-  </BaseModalWrapper>
+  </BaseModalWithJobLinkWrapper>
 </template>
 
 <style scoped>

@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import type { Document } from '@/models/document.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { DocumentCategoryEnum, type DocumentCategoryType } from '@/models/document-category.enum'
-import BaseModalWrapper from '@/views/Shared/BaseModalWrapper.vue'
+import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
 import { CurrentBoard } from '@/current-board.service'
 import { useRoute } from 'vue-router'
 import { api } from '@/api/api'
@@ -99,7 +99,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
 </script>
 
 <template>
-  <BaseModalWrapper
+  <BaseModalWithJobLinkWrapper
     v-if="isModalOpen"
     :title="isEditMode ? 'Edit Document' : 'Upload Document'"
     :linkedJobsParam="linkedJobs"
@@ -140,7 +140,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
         ></textarea>
       </div>
     </template>
-  </BaseModalWrapper>
+  </BaseModalWithJobLinkWrapper>
 </template>
 <style scoped>
 /* File Drop Zone */
