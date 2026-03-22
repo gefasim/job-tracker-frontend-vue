@@ -14,6 +14,7 @@ import type { Document } from '@/models/document.dto'
 import type { CompanyService } from './company.service.interface'
 import type { Company } from '@/models/company.dto'
 import type { UpdateJobApplication } from '@/models/update-job-application.dto'
+import type { CreateJobApplication } from '@/models/create-job-application.dto'
 
 const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -67,9 +68,17 @@ const boardApi: BoardsService = {
     const response = await httpClient.get<Board>(`/boards/${boardId}`)
     return response.data
   },
+  async getAllData(): Promise<Board[]> {
+    const response = await httpClient.get<Board[]>(`/boards-all`)
+    return response.data
+  },
 }
 
 const jobApplicationApi: JobApplicationsService = {
+  async create(data: CreateJobApplication): Promise<JobApplication> {
+    const response = await httpClient.post<JobApplication>(`/job-applications/`, data)
+    return response.data
+  },
   async update(data: JobApplication): Promise<JobApplication> {
     const response = await httpClient.put<JobApplication>(`/job-applications/${data.id}`, data)
     return response.data

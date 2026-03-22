@@ -14,7 +14,9 @@ const selectedJobApplication = ref<{ job: JobApplication | null; columnId: strin
   job: null,
   columnId: null,
 })
+const selectedColumnId = ref<string | null>()
 const board = ref<Board>()
+const boards = ref<Board[]>()
 const isCreateJobModalOpen = ref<boolean>(false)
 
 watch(
@@ -27,6 +29,12 @@ async function fetchData(boardId: string) {
   const response = await api.boards.get(boardId)
   board.value = response
   CurrentBoard.setBoard(response)
+  fetchAvailableBoards()
+}
+
+// TODO: move to higher level of hierarchy. Call `/boards` + `/columns` instead
+async function fetchAvailableBoards() {
+  boards.value = (await api.boards.getAllData()).filter((b) => !b.isArchived)
 }
 
 // On Job click
@@ -89,6 +97,26 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
   dragInfo.value = null
   await api.jobs.updatePartial(movedJob!.id, { columnId: toColumn.id })
 }
+
+// On CreateJobApplicationModal
+const onCreateJobApplicationModalOpened = (columnId: string) => {
+  selectedColumnId.value = columnId
+  isCreateJobModalOpen.value = true
+}
+
+const onCreateJobApplicationModalClosed = () => {
+  selectedColumnId.value = null
+  isCreateJobModalOpen.value = false
+}
+
+const onCreateJobApplicationModalSaved = (job: JobApplication) => {
+  if (board.value?.columns.some((c) => c.id === job.columnId)) {
+    board.value?.columns.find((c) => c.id === job.columnId)!.jobApplications.push(job)
+  }
+
+  selectedColumnId.value = null
+  isCreateJobModalOpen.value = false
+}
 </script>
 
 <template>
@@ -106,7 +134,9 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
       <div class="column-header">
         <h3>{{ column.name }}</h3>
         <span>{{ column.jobApplications.length }} JOBS</span>
-        <button v-on:click="isCreateJobModalOpen = true" class="btn-outline">+</button>
+        <button v-on:click="onCreateJobApplicationModalOpened(column.id)" class="btn-outline">
+          +
+        </button>
       </div>
 
       <div class="column-content">
@@ -145,7 +175,14 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
     @close="closeSelectedJobApplication"
   ></JobApplicationModal>
   <Teleport to="body">
-    <CreateJobApplicationModal v-if="isCreateJobModalOpen" @close="isCreateJobModalOpen = false" />
+    <CreateJobApplicationModal
+      v-if="isCreateJobModalOpen"
+      :boardId="board!.id"
+      :columnId="selectedColumnId!"
+      :boards="boards!"
+      @save="onCreateJobApplicationModalSaved"
+      @close="onCreateJobApplicationModalClosed"
+    />
   </Teleport>
 </template>
 
