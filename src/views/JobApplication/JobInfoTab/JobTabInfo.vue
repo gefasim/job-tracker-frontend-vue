@@ -86,8 +86,8 @@ const handleCompanyUpdate = async (company: Company) => {
 
 <style scoped>
 .job-info-tab {
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 24px;
 }

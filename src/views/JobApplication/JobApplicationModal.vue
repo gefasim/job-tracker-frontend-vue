@@ -172,7 +172,7 @@ useKeydown('Escape', handleClose)
 }
 
 .modal-container {
-  background: white;
+  background: var(--bg-main);
   width: 100%;
   max-width: 900px;
   height: 95vh;
@@ -221,7 +221,7 @@ useKeydown('Escape', handleClose)
 }
 
 .btn-close {
-  background: white;
+  background: var(--bg-main);
   border: 1px solid #ddd;
   padding: 8px 16px;
   border-radius: 8px;
@@ -234,6 +234,9 @@ useKeydown('Escape', handleClose)
   background: #f1f4f9;
   padding: 8px 32px;
   gap: 8px;
+}
+html.dark .modal-tabs {
+  background: #1e293b;
 }
 
 .tab-border {
@@ -289,7 +292,7 @@ useKeydown('Escape', handleClose)
 /* Form Layout */
 .modal-body {
   padding: 32px;
-  background: white;
+  background: var(--bg-main);
   overflow-y: auto;
   max-height: 70vh;
 }
@@ -333,7 +336,7 @@ select {
   border-radius: 6px;
   font-size: 14px;
   color: #202124;
-  background: white;
+  background: var(--bg-main);
   transition: border-color 0.2s;
 }
 input:focus,
