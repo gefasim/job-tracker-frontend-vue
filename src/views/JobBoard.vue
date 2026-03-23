@@ -7,6 +7,7 @@ import { CurrentBoard } from '@/current-board.service'
 import CompanyImage from './Shared/CompanyImage.vue'
 import CreateJobApplicationModal from './JobApplication/CreateJobApplicationModal.vue'
 import { useRouter } from 'vue-router'
+import { getContrastColor } from '@/utils/colorContrast'
 
 const { boardId } = defineProps<{
   boardId?: string
@@ -123,7 +124,10 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
           v-for="(job, index) in column.jobApplications"
           :key="job.id"
           class="card"
-          :style="{ backgroundColor: job.color }"
+          :style="{
+            backgroundColor: job.color,
+            color: job.color ? getContrastColor(job.color) : 'inherit',
+          }"
           v-on:click="openJobApplication(job.id)"
           draggable="true"
           @dragstart="OnDragStart($event, column.id, index)"
