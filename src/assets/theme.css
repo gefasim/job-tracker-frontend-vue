@@ -4,6 +4,18 @@
   --bg-card: #ffffff;
   --text-primary: #111827;
   --border-color: #e5e7eb;
+
+  /* Input Tokens */
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-text: #111827;
+  --input-placeholder: #9ca3af;
+
+  /* Button Tokens (Primary) */
+  --btn-primary-bg: #1a73e8;
+  --btn-primary-bg-disabled: #e8eaed;
+  --btn-primary-hover: #1d4ed8;
+  --btn-primary-text: #ffffff;
 }
 
 /* When the .dark class is present on <html> */
@@ -12,12 +24,15 @@ html.dark {
   --bg-card: #1f2937;
   --text-primary: #f9fafb;
   --border-color: #374151;
-}
 
-body {
-  background-color: var(--bg-main);
-  color: var(--text-primary);
-  transition:
-    background-color 0.3s,
-    color 0.3s; /* Smooth transition */
+  /* Input Tokens (Dark) */
+  --input-bg: #374151;
+  --input-border: #4b5563;
+  --input-text: #f9fafb;
+  --input-placeholder: #6b7280;
+
+  /* Button Tokens (Primary Dark) */
+  --btn-primary-bg: #3b82f6;
+  --btn-primary-hover: #60a5fa;
+  --btn-primary-text: #ffffff;
 }

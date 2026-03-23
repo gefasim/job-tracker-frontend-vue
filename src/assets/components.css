@@ -1,0 +1,39 @@
+/* Buttons */
+.btn-primary {
+  background-color: var(--btn-primary-bg);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.btn-primary:disabled {
+  background-color: var(--btn-primary-bg-disabled);
+  color: #87bcf0;
+  cursor: not-allowed;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--btn-primary-bg), black 10%);
+}
+
+html.dark .btn-primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--btn-primary-bg), white 10%);
+}
+
+.btn-outline {
+  background-color: white;
+  color: #202124;
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.btn-outline:hover {
+  background-color: #f8f9fa;
+}
