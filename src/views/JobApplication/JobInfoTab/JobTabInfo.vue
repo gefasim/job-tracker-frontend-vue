@@ -6,8 +6,20 @@ import CompanySelectDropdown from '@/views/Shared/CompanySelectDropdown.vue'
 import type { Company } from '@/models/company.dto'
 import { api } from '@/api/api'
 import ColorPicker from '@/views/Shared/ColorPicker.vue'
+import { CurrentBoard } from '@/current-board.service'
+import { computed } from 'vue'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
+const boardColors = computed(() => {
+  return [
+    ...new Set(
+      CurrentBoard.getBoard()!
+        .columns.flatMap((c) => c.jobApplications)
+        .map((j) => j.color)
+        .filter((color) => color) as string[],
+    ),
+  ]
+})
 
 const handleCompanyUpdate = async (company: Company) => {
   if (!company.name || company.name === jobApplication.value.company!.name) return
@@ -61,14 +73,14 @@ const handleCompanyUpdate = async (company: Company) => {
         <label>Color</label>
         <ColorPicker
           :model-value="jobApplication.color"
+          :board-colors="boardColors"
           @update:model-value="(newColor) => (jobApplication.color = newColor)"
         ></ColorPicker>
       </div>
     </div>
 
-    <!--TODO: resolve a warning message when v-model receives null-->
     <label>Description</label>
-    <RichTextEditor v-model="jobApplication.description!" />
+    <RichTextEditor v-model="jobApplication.description" />
   </div>
 </template>
 

@@ -6,7 +6,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import { watch } from 'vue'
 
 const props = defineProps<{
-  modelValue: string
+  modelValue: string | null
 }>()
 
 const emit = defineEmits(['update:modelValue'])
