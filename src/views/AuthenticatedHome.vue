@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import UserBoards from './UserBoards.vue'
-</script>
+<script setup lang="ts"></script>
 <template>
   <div class="home">
     <div class="left-sidebar">
@@ -23,9 +21,9 @@ import UserBoards from './UserBoards.vue'
         <div>LogOut</div>
       </div>
     </div>
-    <div class="main">
-      <UserBoards></UserBoards>
-    </div>
+    <main class="main-content">
+      <RouterView />
+    </main>
   </div>
 </template>
 <style>
@@ -42,7 +40,7 @@ import UserBoards from './UserBoards.vue'
   justify-content: space-between;
   border-right: 1px solid var(--border-color);
 }
-.main {
+.main-content {
   flex: 5;
 }
 </style>
