@@ -12,6 +12,7 @@ const jobApplication = defineModel<JobApplication>({ required: true })
 const handleCompanyUpdate = async (company: Company) => {
   if (!company.name || company.name === jobApplication.value.company!.name) return
 
+  // TODO: replace with strict check
   const companies = (await api.companies.getByNameStartsWith(company.name)).filter(
     (c) => c.name === company.name,
   )

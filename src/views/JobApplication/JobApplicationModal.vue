@@ -26,27 +26,20 @@ const props = defineProps<{
 const router = useRouter()
 
 let jobApplicationBeforeUpdate: JobApplication | null = null
-const jobApplication = ref<JobApplication>() // Shallow copy of jobApplicationParam
+const jobApplication = ref<JobApplication>()
 const selectedColumnId = ref<string>()
 const columns = ref<{ id: string; name: string }[]>([])
 
 // Tab navigation
 const activeTab = ref<JobApplicationTabType>(JobApplicationTabEnum.JobInfo)
-const tabComponents: Record<JobApplicationTabEnum, unknown> = {
-  [JobApplicationTabEnum.JobInfo]: JobTabInfo,
-  [JobApplicationTabEnum.Notes]: JobTabNotes,
-  [JobApplicationTabEnum.Contacts]: JobTabContacts,
-  [JobApplicationTabEnum.Documents]: JobTabDocuments,
-  [JobApplicationTabEnum.Company]: JobTabCompany,
+const tabComponents: Record<JobApplicationTabEnum, { icon: unknown; component: unknown }> = {
+  [JobApplicationTabEnum.JobInfo]: { icon: JobInfoNavTabIcon, component: JobTabInfo },
+  [JobApplicationTabEnum.Notes]: { icon: NoteNavTabIcon, component: JobTabNotes },
+  [JobApplicationTabEnum.Contacts]: { icon: ContactNavTabIcon, component: JobTabContacts },
+  [JobApplicationTabEnum.Documents]: { icon: DocumentNavTabIcon, component: JobTabDocuments },
+  [JobApplicationTabEnum.Company]: { icon: CompanyNavTabIcon, component: JobTabCompany },
 }
-const tabIcon: Record<JobApplicationTabEnum, unknown> = {
-  [JobApplicationTabEnum.JobInfo]: JobInfoNavTabIcon,
-  [JobApplicationTabEnum.Notes]: NoteNavTabIcon,
-  [JobApplicationTabEnum.Contacts]: ContactNavTabIcon,
-  [JobApplicationTabEnum.Documents]: DocumentNavTabIcon,
-  [JobApplicationTabEnum.Company]: CompanyNavTabIcon,
-}
-const currentComponent = computed(() => tabComponents[activeTab.value])
+const currentComponent = computed(() => tabComponents[activeTab.value].component)
 
 // Every time a new modal is opened, we copy the data from the props
 watch(
@@ -146,7 +139,7 @@ useKeydown('Escape', handleClose)
             :class="['tab-item', { active: activeTab === tab }]"
             @click="activeTab = tab"
           >
-            <component :is="tabIcon[tab]" class="tab-icon" />
+            <component :is="tabComponents[tab].icon" class="tab-icon" />
 
             {{ tab }}
 
