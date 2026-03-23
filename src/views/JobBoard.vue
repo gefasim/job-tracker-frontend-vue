@@ -100,9 +100,6 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 </script>
 
 <template>
-  <h1>Board name: {{ board?.name }}</h1>
-  <p>BoardId: {{ boardId }}</p>
-
   <div class="board">
     <div
       v-for="column in board?.columns"
@@ -173,12 +170,12 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 }
 
 .column {
-  width: 280px;
+  width: 15vw;
   height: stretch;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  border-right: 1px solid #dadce0;
+  border-right: 1px solid var(--border-color);
 }
 .column:last-child {
   border-right: 0;
@@ -198,8 +195,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
   width: stretch;
 }
 .column-header button:hover {
-  background-color: #e5eef8;
-  border-color: #1a73e8;
+  border-color: var(--btn-primary-bg);
 }
 
 .column-content {

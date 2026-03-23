@@ -39,6 +39,7 @@
   flex-direction: column;
   justify-content: space-between;
   border-right: 1px solid var(--border-color);
+  min-width: 10vw;
 }
 .main-content {
   flex: 5;

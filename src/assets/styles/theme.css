@@ -16,6 +16,9 @@
   --btn-primary-bg-disabled: #e8eaed;
   --btn-primary-hover: #1d4ed8;
   --btn-primary-text: #ffffff;
+
+  /* Button Tokens (Outline) */
+  --btn-outline-bg: #fefefe;
 }
 
 /* When the .dark class is present on <html> */
@@ -35,4 +38,7 @@ html.dark {
   --btn-primary-bg: #3b82f6;
   --btn-primary-hover: #60a5fa;
   --btn-primary-text: #ffffff;
+
+  /* Button Tokens (Outline) */
+  --btn-outline-bg: #adacac;
 }
