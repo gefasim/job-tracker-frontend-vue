@@ -2,18 +2,18 @@
 import type { Board } from '@/models/board.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
-import JobApplicationModal from './JobApplication/JobApplicationModal.vue'
 import { api } from '@/api/api'
 import { CurrentBoard } from '@/current-board.service'
 import CompanyImage from './Shared/CompanyImage.vue'
 import CreateJobApplicationModal from './JobApplication/CreateJobApplicationModal.vue'
+import { useRouter } from 'vue-router'
 
-const { boardId } = defineProps<{ boardId?: string }>()
+const { boardId } = defineProps<{
+  boardId?: string
+  jobId?: string // fix the warning Extraneous non-props attributes (jobId) were passed ...
+}>()
+const router = useRouter()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
-const selectedJobApplication = ref<{ job: JobApplication | null; columnId: string | null }>({
-  job: null,
-  columnId: null,
-})
 const selectedColumnId = ref<string | null>()
 const board = ref<Board>()
 const boards = ref<Board[]>()
@@ -35,32 +35,6 @@ async function fetchData(boardId: string) {
 // TODO: move to higher level of hierarchy. Call `/boards` + `/columns` instead
 async function fetchAvailableBoards() {
   boards.value = (await api.boards.getAllData()).filter((b) => !b.isArchived)
-}
-
-// On Job click
-const openSelectedJobApplication = (job: JobApplication, columnId: string) => {
-  selectedJobApplication.value.job = job
-  selectedJobApplication.value.columnId = columnId
-}
-
-const updateSelectedJobApplication = async (job: JobApplication) => {
-  const { columnIndex, jobIndex } = getJobPositionOnBoard(job)
-  board.value!.columns[columnIndex]!.jobApplications[jobIndex] = job
-  await closeSelectedJobApplication()
-}
-
-const closeSelectedJobApplication = async () => {
-  selectedJobApplication.value.job = null
-  selectedJobApplication.value.columnId = null
-}
-
-const getJobPositionOnBoard = (job: JobApplication): { columnIndex: number; jobIndex: number } => {
-  if (!board.value || !board.value.columns) throw new Error('Board model is invalid')
-  for (const [i, column] of board.value.columns.entries()) {
-    const j = column.jobApplications.findIndex((item) => item.id === job.id)
-    if (j !== -1) return { columnIndex: i, jobIndex: j }
-  }
-  throw new Error('Job not found')
 }
 
 // On Job drag
@@ -96,6 +70,11 @@ const OnDrop = async (event: DragEvent, toColumnId: string, toIndex?: number) =>
   toColumn.jobApplications.splice(finalIndex, 0, movedJob as JobApplication)
   dragInfo.value = null
   await api.jobs.updatePartial(movedJob!.id, { columnId: toColumn.id })
+}
+
+// TODO: replace with RouterLink + stretched-link to be able click on any part of card. Fix Drag&Drop is required in this scenario
+const openJobApplication = (jobId: string) => {
+  router.push({ name: 'job-application', params: { boardId: boardId, jobId: jobId } })
 }
 
 // On CreateJobApplicationModal
@@ -145,7 +124,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
           :key="job.id"
           class="card"
           :style="{ backgroundColor: job.color }"
-          v-on:click="openSelectedJobApplication(job, column.id)"
+          v-on:click="openJobApplication(job.id)"
           draggable="true"
           @dragstart="OnDragStart($event, column.id, index)"
           @dragover="onDragOver"
@@ -167,13 +146,9 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
     </div>
   </div>
 
-  <JobApplicationModal
-    v-if="selectedJobApplication.job"
-    :jobApplicationParam="selectedJobApplication.job!"
-    :columnId="selectedJobApplication.columnId!"
-    @update="updateSelectedJobApplication"
-    @close="closeSelectedJobApplication"
-  ></JobApplicationModal>
+  <RouterView v-slot="{ Component }">
+    <component :is="Component" v-if="Component" />
+  </RouterView>
   <Teleport to="body">
     <CreateJobApplicationModal
       v-if="isCreateJobModalOpen"

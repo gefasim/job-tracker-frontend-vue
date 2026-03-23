@@ -1,4 +1,5 @@
 import HelloWorld from '@/views/HelloWorld.vue'
+import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
 import UserBoards from '@/views/UserBoards.vue'
@@ -23,10 +24,18 @@ const router = createRouter({
       component: UserBoards,
     },
     {
-      path: '/board/:boardId',
+      path: '/boards/:boardId',
       name: 'board',
       component: JobBoard,
       props: true,
+      children: [
+        {
+          path: '/boards/:boardId/jobs/:jobId/',
+          name: 'job-application',
+          component: JobApplicationModal,
+          props: true,
+        },
+      ],
     },
   ],
 })

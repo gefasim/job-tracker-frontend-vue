@@ -15,12 +15,17 @@ import CompanyNavTabIcon from '@/assets/CompanyNavTabIcon.vue'
 import DocumentNavTabIcon from '@/assets/DocumentNavTabIcon.vue'
 import ContactNavTabIcon from '@/assets/ContactNavTabIcon.vue'
 import { CurrentBoard } from '@/current-board.service'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
-  jobApplicationParam: JobApplication
-  columnId: string
+  jobId?: string
+  boardId?: string
+  dick?: string
 }>()
-const emit = defineEmits(['update', 'close'])
+
+const router = useRouter()
+
+let jobApplicationBeforeUpdate: JobApplication | null = null
 const jobApplication = ref<JobApplication>() // Shallow copy of jobApplicationParam
 const selectedColumnId = ref<string>()
 const columns = ref<{ id: string; name: string }[]>([])
@@ -45,10 +50,11 @@ const currentComponent = computed(() => tabComponents[activeTab.value])
 
 // Every time a new modal is opened, we copy the data from the props
 watch(
-  () => props.jobApplicationParam,
-  (newJobApplication) => {
-    jobApplication.value = { ...newJobApplication }
-    selectedColumnId.value = props.columnId
+  () => props.jobId,
+  async (newJobId) => {
+    if (!newJobId) return
+    jobApplicationBeforeUpdate = await api.jobs.get(newJobId as string)
+    jobApplication.value = { ...jobApplicationBeforeUpdate }
   },
   { immediate: true },
 )
@@ -78,12 +84,12 @@ const getTabCount = (tab: JobApplicationTabEnum): number => {
 
 const saveChanges = async () => {
   const hasChanged =
-    JSON.stringify(jobApplication.value) !== JSON.stringify(props.jobApplicationParam)
+    JSON.stringify(jobApplication.value) !== JSON.stringify(jobApplicationBeforeUpdate)
 
   if (hasChanged && jobApplication.value) {
     try {
       await api.jobs.update(jobApplication.value)
-      emit('update', jobApplication.value)
+      router.push({ name: 'board', params: { boardId: props.boardId } })
     } catch (error) {
       console.error('Failed to save:', error)
     }
@@ -101,7 +107,7 @@ const handleColumnChange = async (event: Event) => {
 
 const handleClose = async () => {
   await saveChanges()
-  emit('close')
+  router.push({ name: 'board', params: { boardId: props.boardId } })
 }
 
 useKeydown('Escape', handleClose)

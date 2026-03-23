@@ -75,6 +75,10 @@ const boardApi: BoardsService = {
 }
 
 const jobApplicationApi: JobApplicationsService = {
+  async get(jobId: string): Promise<JobApplication> {
+    const response = await httpClient.get<JobApplication>(`/job-applications/${jobId}`)
+    return response.data
+  },
   async create(data: CreateJobApplication): Promise<JobApplication> {
     const response = await httpClient.post<JobApplication>(`/job-applications/`, data)
     return response.data
