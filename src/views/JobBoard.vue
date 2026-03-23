@@ -130,7 +130,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
           @dragover="onDragOver"
           @drop.stop="OnDrop($event, column.id, index)"
         >
-          {{ job.title }}
+          <span class="card-title">{{ job.title }}</span>
           <p class="card-company">
             <CompanyImage :src="job.company!.logo" :alt="job.company!.name"></CompanyImage>
             <small>{{ job.company?.name }}</small>
@@ -219,6 +219,10 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 
 .card:hover {
   border: 1px dashed #4a90e2;
+}
+
+.card-title {
+  font-weight: 600;
 }
 
 .card-company {
