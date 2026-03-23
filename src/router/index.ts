@@ -1,4 +1,4 @@
-import HelloWorld from '@/views/HelloWorld.vue'
+import HomeView from '@/views/HomeView.vue'
 import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
@@ -10,8 +10,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'helloWorld',
-      component: HelloWorld,
+      name: 'home',
+      component: HomeView,
     },
     {
       path: '/login',

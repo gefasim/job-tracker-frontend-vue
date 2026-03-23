@@ -17,7 +17,7 @@ const login = async () => {
     //const response = await api.post('/auth/login', JSON.stringify(credentials.value))
     const response = await api.auth.login(credentials.value.email, credentials.value.password)
     CurrentUserService.setUser(response)
-    router.push('/boards')
+    router.push('/')
   } catch (error) {
     errorMessage.value = error
     throw error
