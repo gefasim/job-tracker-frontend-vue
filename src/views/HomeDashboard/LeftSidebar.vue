@@ -34,8 +34,10 @@ const handleItemClick = (item: string) => {
       <RouterLink to="/documents" class="sidebar-item" active-class="active">
         <DocumentNavTabIcon /> Documents
       </RouterLink>
+
       <hr />
-      Your boards:
+
+      <RouterLink to="/" class="hide-link-decor"> Your boards: </RouterLink>
       <div
         class="sidebar-item"
         :class="{ active: activeItem === 'board1' }"
@@ -50,7 +52,9 @@ const handleItemClick = (item: string) => {
       >
         <BoardIcon /> Board2
       </div>
+
       <hr />
+
       Help
       <RouterLink to="/about" class="sidebar-item" active-class="active">
         <AboutIcon /> About
@@ -115,6 +119,19 @@ html.dark .sidebar-item:hover {
   background-color: color-mix(in srgb, var(--bg-main), white 10%);
 }
 
+.sidebar-item.active {
+  border: 1px solid #1a73e8;
+  background-color: #2563eb66;
+}
+
+.hide-link-decor {
+  text-decoration: none;
+  color: var(--input-text);
+}
+.hide-link-decor:hover {
+  text-decoration: underline;
+}
+
 .theme-value {
   opacity: 0;
   transition:
@@ -126,8 +143,7 @@ html.dark .sidebar-item:hover {
   opacity: 1;
 }
 
-.sidebar-item.active {
-  border: 1px solid #1a73e8;
-  background-color: #2563eb66;
+hr {
+  margin: 1rem 0;
 }
 </style>
