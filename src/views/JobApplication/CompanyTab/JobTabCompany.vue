@@ -151,7 +151,6 @@ const saveChanges = async () => {
 
 <style scoped>
 .company-tab {
-  background: white;
   border: 1px solid #dadce0;
   border-radius: 8px;
   padding: 24px;
@@ -199,7 +198,6 @@ const saveChanges = async () => {
 .company-name {
   margin: 0 0 4px 0;
   font-size: 20px;
-  color: #202124;
   font-weight: 600;
 }
 
@@ -232,7 +230,6 @@ const saveChanges = async () => {
 .detail-group p {
   margin: 0;
   font-size: 15px;
-  color: #202124;
   line-height: 1.5;
 }
 
@@ -254,7 +251,6 @@ const saveChanges = async () => {
 .edit-header h2 {
   font-size: 18px;
   margin: 0;
-  color: #202124;
 }
 
 .form-grid {
@@ -277,7 +273,6 @@ const saveChanges = async () => {
   border: 1px solid #dadce0;
   border-radius: 6px;
   font-size: 14px;
-  color: #202124;
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
@@ -290,7 +285,6 @@ const saveChanges = async () => {
 .textarea {
   min-height: 100px;
   resize: vertical;
-  background-color: white;
 }
 
 .form-actions {
@@ -298,6 +292,5 @@ const saveChanges = async () => {
   display: flex;
   gap: 12px;
   padding-top: 16px;
-  border-top: 1px solid #f1f3f4;
 }
 </style>

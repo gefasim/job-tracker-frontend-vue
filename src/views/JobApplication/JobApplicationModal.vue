@@ -128,7 +128,7 @@ useKeydown('Escape', handleClose)
                 {{ column.name }}
               </option>
             </select>
-            <button class="btn-close" @click="handleClose">Close</button>
+            <button class="btn-outline" @click="handleClose">Close</button>
           </div>
         </header>
 
@@ -220,14 +220,6 @@ useKeydown('Escape', handleClose)
   cursor: pointer;
 }
 
-.btn-close {
-  background: var(--bg-main);
-  border: 1px solid #ddd;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 /* Tabs */
 .modal-tabs {
   display: flex;
@@ -262,7 +254,7 @@ html.dark .modal-tabs {
 }
 
 .tab-item.active {
-  background: white;
+  background: var(--bg-main);
   color: #1a73e8;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
