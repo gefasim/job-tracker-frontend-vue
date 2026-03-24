@@ -9,6 +9,7 @@ import LightThemeIcon from '@/LightThemeIcon.vue'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
 import { useTheme, type ColorScheme } from '@/store/themeStore'
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const { isDark, theme, setTheme } = useTheme()
 const activeItem = ref<string>('contacts')
@@ -27,20 +28,12 @@ const handleItemClick = (item: string) => {
 <template>
   <div class="left-sidebar">
     <div>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'contacts' }"
-        @click="handleItemClick('contacts')"
-      >
+      <RouterLink to="/contacts" class="sidebar-item" active-class="active">
         <ContactNavTabIcon /> Contacts
-      </div>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'documents' }"
-        @click="handleItemClick('documents')"
-      >
+      </RouterLink>
+      <RouterLink to="/documents" class="sidebar-item" active-class="active">
         <DocumentNavTabIcon /> Documents
-      </div>
+      </RouterLink>
       <hr />
       Your boards:
       <div
@@ -59,27 +52,15 @@ const handleItemClick = (item: string) => {
       </div>
       <hr />
       Help
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'about' }"
-        @click="handleItemClick('about')"
-      >
+      <RouterLink to="/about" class="sidebar-item" active-class="active">
         <AboutIcon /> About
-      </div>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'contact-us' }"
-        @click="handleItemClick('contact-us')"
-      >
+      </RouterLink>
+      <RouterLink to="/contact-us" class="sidebar-item" active-class="active">
         <ContactUsIcon /> Contact Us
-      </div>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'how-to' }"
-        @click="handleItemClick('how-to')"
-      >
+      </RouterLink>
+      <RouterLink to="/how-to" class="sidebar-item" active-class="active">
         <HowToIcon /> How to?
-      </div>
+      </RouterLink>
       <hr />
     </div>
     <div>
@@ -88,13 +69,9 @@ const handleItemClick = (item: string) => {
         <span>Theme</span>
         <span class="theme-value">({{ theme }})</span>
       </div>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'settings' }"
-        @click="handleItemClick('settings')"
-      >
+      <RouterLink to="/personal-account" class="sidebar-item" active-class="active">
         Personal Account Settings
-      </div>
+      </RouterLink>
       <div
         class="sidebar-item"
         :class="{ active: activeItem === 'logout' }"
@@ -124,6 +101,10 @@ const handleItemClick = (item: string) => {
   padding: 0.5rem;
   cursor: pointer;
   border-radius: 8px;
+
+  /* for RouterLink */
+  text-decoration: none;
+  color: var(--input-text);
 }
 
 .sidebar-item:hover {

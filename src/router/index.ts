@@ -5,6 +5,12 @@ import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
 import UserBoards from '@/views/UserBoards.vue'
+import Contacts from '@/views/Contacts.vue'
+import Documents from '@/views/Documents.vue'
+import About from '@/views/About.vue'
+import ContactUs from '@/views/ContactUs.vue'
+import HowTo from '@/views/HowTo.vue'
+import PersonalAccount from '@/views/PersonalAccount.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -32,6 +38,36 @@ const router = createRouter({
           path: '',
           name: 'dashboard',
           component: UserBoards,
+        },
+        {
+          path: 'contacts',
+          name: 'contacts',
+          component: Contacts,
+        },
+        {
+          path: 'documents',
+          name: 'documents',
+          component: Documents,
+        },
+        {
+          path: 'about',
+          name: 'about',
+          component: About,
+        },
+        {
+          path: 'contact-us',
+          name: 'contact-us',
+          component: ContactUs,
+        },
+        {
+          path: 'how-to',
+          name: 'how-to',
+          component: HowTo,
+        },
+        {
+          path: 'personal-account',
+          name: 'personal-account',
+          component: PersonalAccount,
         },
         {
           path: 'boards/:boardId',
