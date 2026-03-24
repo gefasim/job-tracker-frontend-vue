@@ -1,5 +1,6 @@
 import { ref, computed, watch } from 'vue'
 
+export type ColorScheme = 'light' | 'dark' | 'system'
 const theme = ref(localStorage.getItem('theme') || 'system')
 
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -24,7 +25,7 @@ watch(
 )
 
 export const useTheme = () => {
-  const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
+  const setTheme = (newTheme: ColorScheme) => {
     theme.value = newTheme
     localStorage.setItem('theme', newTheme)
   }

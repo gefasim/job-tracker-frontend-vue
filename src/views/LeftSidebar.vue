@@ -7,9 +7,16 @@ import ContactUsIcon from '@/assets/icons/ContactUsIcon.vue'
 import HowToIcon from '@/assets/icons/HowToIcon.vue'
 import LightThemeIcon from '@/LightThemeIcon.vue'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
-import { useTheme } from '@/store/themeStore'
+import { useTheme, type ColorScheme } from '@/store/themeStore'
 
-const { isDark } = useTheme()
+const { isDark, theme, setTheme } = useTheme()
+
+const switchTheme = () => {
+  const themeOptions: Array<ColorScheme> = ['light', 'dark', 'system']
+  const currentIndex = themeOptions.indexOf(theme.value as ColorScheme)
+  const nextIndex = (currentIndex + 1) % themeOptions.length
+  setTheme(themeOptions[nextIndex]!)
+}
 </script>
 <template>
   <div class="left-sidebar">
@@ -28,7 +35,9 @@ const { isDark } = useTheme()
       <hr />
     </div>
     <div>
-      <div class="sidebar-item"><DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else /> Theme</div>
+      <div class="sidebar-item" @click="switchTheme">
+        <DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else /> {{ theme }} Theme
+      </div>
       <div class="sidebar-item">Personal Account Settings</div>
       <div class="sidebar-item">Log Out</div>
     </div>
