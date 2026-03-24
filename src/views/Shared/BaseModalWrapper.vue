@@ -41,7 +41,7 @@ const handleSave = async () => {
 }
 
 .modal-content {
-  background: white;
+  background: var(--bg-main);
   border-radius: 12px;
   width: 900px;
   max-width: 95vw;
@@ -54,13 +54,12 @@ const handleSave = async () => {
 .modal-header {
   padding: 20px;
   text-align: center;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .modal-header h2 {
   margin: 0;
   font-size: 18px;
-  color: #202124;
   font-weight: 600;
 }
 
@@ -75,11 +74,11 @@ const handleSave = async () => {
 /* Footer Actions */
 .modal-footer {
   padding: 16px 24px;
-  border-top: 1px solid #f1f3f4;
+  border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: center;
   gap: 16px;
-  background: white;
+  background: var(--bg-main);
   border-radius: 0 0 12px 12px;
 }
 </style>

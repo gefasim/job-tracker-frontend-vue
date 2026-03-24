@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// TODO: resolve duplication between DropdownList.vue and JobSelectDropdown.vue and BaseLinkDropdown.vue
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import SearchIcon from '@/assets/SearchIcon.vue'
 
@@ -111,8 +112,8 @@ onUnmounted(() => {
   justify-content: space-between;
   width: 100%;
   padding: 10px 12px;
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px dashed var(--border-color);
   border-radius: 6px;
   color: #5f6368;
   font-size: 14px;
@@ -122,8 +123,13 @@ onUnmounted(() => {
 }
 
 .dropdown-trigger:hover {
-  background-color: #f8f9fa;
-  border-color: #bdc1c6;
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
+  border-color: color-mix(in srgb, var(--border-color), black 10%);
+}
+
+html.dark .dropdown-trigger:hover {
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
+  border-color: color-mix(in srgb, var(--border-color), white 10%);
 }
 
 .dropdown-trigger.is-active {
@@ -137,8 +143,8 @@ onUnmounted(() => {
   top: calc(100% + 4px);
   left: 0;
   width: 100%;
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 100;
@@ -158,7 +164,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   padding: 0 12px;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--border-color);
   gap: 8px;
 }
 
@@ -193,7 +199,11 @@ onUnmounted(() => {
 }
 
 .list-item:hover {
-  background-color: #f1f3f4;
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
+}
+
+html.dark .list-item:hover {
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
 }
 
 .no-results {
@@ -208,7 +218,7 @@ onUnmounted(() => {
   width: 6px;
 }
 .list::-webkit-scrollbar-thumb {
-  background: #dadce0;
+  background: var(--input-border);
   border-radius: 10px;
 }
 </style>

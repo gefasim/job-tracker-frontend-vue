@@ -81,7 +81,7 @@ const handleSave = async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid #f1f3f4;
+  border-left: 1px solid var(--border-color);
   padding-left: 32px;
   gap: 32px;
 }
@@ -118,7 +118,7 @@ const handleSave = async () => {
   border: 1px solid #1a73e8;
   border-radius: 6px;
   margin-bottom: 8px;
-  background-color: white;
+  background-color: var(--bg-main);
 }
 
 .job-title {

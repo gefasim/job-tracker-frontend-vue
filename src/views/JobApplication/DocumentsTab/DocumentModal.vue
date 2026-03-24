@@ -106,6 +106,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
     @close="emit('close')"
     @save="handleSave"
   >
+    <!-- TODO: fix drag and drop a file here-->
     <template #form>
       <div class="input-group input-group-required">
         <label>Select file <span>*</span></label>
@@ -153,7 +154,6 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background-color: #f8f9fa;
   position: relative;
 }
 
