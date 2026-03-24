@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import AboutIcon from '@/assets/AboutIcon.vue'
-import BoardIcon from '@/assets/BoardIcon.vue'
-import ContactNavTabIcon from '@/assets/ContactNavTabIcon.vue'
-import DocumentNavTabIcon from '@/assets/DocumentNavTabIcon.vue'
-import ContactUsIcon from '@/assets/ContactUsIcon.vue'
-import HowToIcon from '@/assets/HowToIcon.vue'
+import AboutIcon from '@/assets/icons/AboutIcon.vue'
+import BoardIcon from '@/assets/icons/BoardIcon.vue'
+import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
+import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
+import ContactUsIcon from '@/assets/icons/ContactUsIcon.vue'
+import HowToIcon from '@/assets/icons/HowToIcon.vue'
 import LightThemeIcon from '@/LightThemeIcon.vue'
-import DarkThemeIcon from '@/assets/DarkThemeIcon.vue'
+import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
 </script>
 <template>
   <div class="left-sidebar">

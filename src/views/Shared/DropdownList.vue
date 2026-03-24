@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // TODO: resolve duplication between DropdownList.vue and JobSelectDropdown.vue and BaseLinkDropdown.vue
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import SearchIcon from '@/assets/SearchIcon.vue'
+import SearchIcon from '@/assets/icons/SearchIcon.vue'
 
 const props = defineProps<{
   list: string[]

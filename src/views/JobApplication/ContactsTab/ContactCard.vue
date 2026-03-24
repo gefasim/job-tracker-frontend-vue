@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { Contact } from '@/models/contact.dto'
-import GitHubIcon from '@/assets/external/GitHubIcon.vue'
-import TwitterIcon from '@/assets/external/TwitterIcon.vue'
-import FacebookIcon from '@/assets/external/FacebookIcon.vue'
-import LinkedInIcon from '@/assets/external/LinkedInIcon.vue'
-import AvatarIcon from '@/assets/AvatarIcon.vue'
+import GitHubIcon from '@/assets/icons/external/GitHubIcon.vue'
+import TwitterIcon from '@/assets/icons/external/TwitterIcon.vue'
+import FacebookIcon from '@/assets/icons/external/FacebookIcon.vue'
+import LinkedInIcon from '@/assets/icons/external/LinkedInIcon.vue'
+import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 
 const props = defineProps<{ contact: Contact }>()
 const emit = defineEmits(['edit', 'unlink'])

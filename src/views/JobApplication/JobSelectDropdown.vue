@@ -2,7 +2,7 @@
 // TODO: resolve duplication between DropdownList.vue and JobSelectDropdown.vue and BaseLinkDropdown.vue
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
-import SearchIcon from '@/assets/SearchIcon.vue'
+import SearchIcon from '@/assets/icons/SearchIcon.vue'
 
 const props = defineProps<{
   items: JobApplication[]

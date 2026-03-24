@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T extends BaseDto">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import SearchIcon from '@/assets/SearchIcon.vue'
+import SearchIcon from '@/assets/icons/SearchIcon.vue'
 import type { BaseDto } from '@/models/base.dto'
 
 const props = defineProps<{

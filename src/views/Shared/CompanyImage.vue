@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DefaultCompanyLogo from '@/assets/DefaultCompanyLogo.vue'
+import DefaultCompanyLogo from '@/assets/icons/DefaultCompanyLogo.vue'
 import { ref, watch } from 'vue'
 
 const props = defineProps<{

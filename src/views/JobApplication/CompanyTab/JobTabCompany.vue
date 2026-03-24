@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import DefaultCompanyLogo from '@/assets/DefaultCompanyLogo.vue'
+import DefaultCompanyLogo from '@/assets/icons/DefaultCompanyLogo.vue'
 import type { Company } from '@/models/company.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { api } from '@/api/api'
