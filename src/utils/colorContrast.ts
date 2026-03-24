@@ -1,9 +1,12 @@
 /**
- * Determines if white or black text should be used based on background HEX color
+ * Determines if white or black text should be used based on background HEX color.
+ * Uses black if no color is provided
  * @param hexColor - The background color in #RRGGBB format
  * @returns '#FFFFFF' or '#000000'
  */
 export const getContrastColor = (hexColor: string): '#FFFFFF' | '#000000' => {
+  if (!hexColor) return '#000000'
+
   // Remove the hash if it exists
   const hex = hexColor.replace('#', '')
 

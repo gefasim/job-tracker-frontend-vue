@@ -120,10 +120,10 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
         <div
           v-for="(job, index) in column.jobApplications"
           :key="job.id"
-          class="card"
+          class="card card-default-color"
           :style="{
             backgroundColor: job.color,
-            color: job.color ? getContrastColor(job.color) : 'inherit',
+            color: getContrastColor(job.color),
           }"
           v-on:click="openJobApplication(job.id)"
           draggable="true"
@@ -203,14 +203,18 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
   flex-grow: 1;
 }
 
+/* Card */
 .card {
-  background: white;
   margin-bottom: 8px;
   padding: 15px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.1s;
+}
+
+.card-default-color {
+  background-color: white;
 }
 
 .card:active {
