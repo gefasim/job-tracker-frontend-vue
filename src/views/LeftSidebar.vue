@@ -35,8 +35,10 @@ const switchTheme = () => {
       <hr />
     </div>
     <div>
-      <div class="sidebar-item" @click="switchTheme">
-        <DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else /> {{ theme }} Theme
+      <div class="sidebar-item theme-switch" @click="switchTheme">
+        <DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else />
+        <span>Theme</span>
+        <span class="theme-value">({{ theme }})</span>
       </div>
       <div class="sidebar-item">Personal Account Settings</div>
       <div class="sidebar-item">Log Out</div>
@@ -70,5 +72,16 @@ const switchTheme = () => {
 
 html.dark .sidebar-item:hover {
   background-color: color-mix(in srgb, var(--bg-main), white 10%);
+}
+
+.theme-value {
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    max-width 0.2s ease;
+}
+
+.theme-switch:hover .theme-value {
+  opacity: 1;
 }
 </style>
