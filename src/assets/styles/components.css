@@ -1,4 +1,5 @@
 /* Buttons */
+/* Button primary */
 .btn-primary {
   background-color: var(--btn-primary-bg);
   border: none;
@@ -23,6 +24,7 @@ html.dark .btn-primary:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--btn-primary-bg), white 10%);
 }
 
+/* Button outline */
 .btn-outline {
   background-color: var(--btn-outline-bg);
   border: 1px solid var(--border-color);
@@ -39,4 +41,9 @@ html.dark .btn-primary:hover:not(:disabled) {
 
 html.dark .btn-outline:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--btn-outline-bg), white 10%);
+}
+
+/* Input */
+html.dark input[type='date'] {
+  color-scheme: dark;
 }

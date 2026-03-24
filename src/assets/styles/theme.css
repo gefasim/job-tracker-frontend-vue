@@ -7,8 +7,8 @@
 
   /* Input Tokens */
   --input-bg: #ffffff;
-  --input-border: #d1d5db;
-  --input-text: #111827;
+  --input-border: #dadce0;
+  --input-text: #202124;
   --input-placeholder: #9ca3af;
 
   /* Button Tokens (Primary) */
@@ -30,7 +30,7 @@ html.dark {
 
   /* Input Tokens (Dark) */
   --input-bg: #374151;
-  --input-border: #4b5563;
+  --input-border: #dadce0;
   --input-text: #f9fafb;
   --input-placeholder: #6b7280;
 

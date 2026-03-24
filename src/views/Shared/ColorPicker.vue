@@ -165,28 +165,32 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 8px;
   padding: 6px 12px 6px 8px;
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   cursor: pointer;
   font-family: inherit;
   font-size: 14px;
-  color: #202124;
+  color: var(--input-text);
   transition:
     background-color 0.2s,
     border-color 0.2s;
 }
 
 .dropdown-trigger:hover {
-  background: #f8f9fa;
-  border-color: #bdc1c6;
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
+  border-color: color-mix(in srgb, var(--input-border), black 10%);
+}
+html.dark .dropdown-trigger:hover {
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
+  border-color: color-mix(in srgb, var(--input-border), white 10%);
 }
 
 .color-indicator {
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--input-border);
   display: inline-block;
 }
 
@@ -216,8 +220,8 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-  background: #ffffff;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--input-border);
   border-radius: 8px;
   width: stretch;
   min-width: 200px;
@@ -235,7 +239,7 @@ onUnmounted(() => {
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--input-border);
   overflow: hidden;
   cursor: pointer;
   position: relative;
@@ -260,11 +264,11 @@ onUnmounted(() => {
 .hex-input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   font-family: monospace;
   font-size: 14px;
-  color: #202124;
+  color: var(--input-text);
   outline: none;
   text-transform: uppercase;
   transition: border-color 0.2s;

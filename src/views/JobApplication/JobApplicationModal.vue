@@ -313,7 +313,6 @@ html.dark .modal-tabs {
 .input-group label {
   font-size: 13px;
   font-weight: 500;
-  color: #202124;
   display: flex;
   justify-content: space-between;
 }
@@ -335,7 +334,7 @@ select {
   border: 1px solid #dadce0;
   border-radius: 6px;
   font-size: 14px;
-  color: #202124;
+  color: var(--input-text);
   background: var(--bg-main);
   transition: border-color 0.2s;
 }
