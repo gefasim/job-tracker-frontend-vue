@@ -7,6 +7,9 @@ import ContactUsIcon from '@/assets/icons/ContactUsIcon.vue'
 import HowToIcon from '@/assets/icons/HowToIcon.vue'
 import LightThemeIcon from '@/LightThemeIcon.vue'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
+import { useTheme } from '@/store/themeStore'
+
+const { isDark } = useTheme()
 </script>
 <template>
   <div class="left-sidebar">
@@ -25,7 +28,7 @@ import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
       <hr />
     </div>
     <div>
-      <div><LightThemeIcon /> <DarkThemeIcon /> Theme</div>
+      <div><DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else /> Theme</div>
       <div>Personal Account Settings</div>
       <div>Log Out</div>
     </div>
