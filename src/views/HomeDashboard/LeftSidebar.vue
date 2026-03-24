@@ -10,8 +10,10 @@ import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
 import { useTheme, type ColorScheme } from '@/store/themeStore'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useBoards } from '@/store/boardStore'
 
 const { isDark, theme, setTheme } = useTheme()
+const { boards } = useBoards()
 const activeItem = ref<string>('contacts')
 
 const switchTheme = () => {
@@ -38,20 +40,15 @@ const handleItemClick = (item: string) => {
       <hr />
 
       <RouterLink to="/" class="hide-link-decor"> Your boards: </RouterLink>
-      <div
+      <RouterLink
+        v-for="board in boards.filter((b) => !b.isArchived)"
+        :key="board.id"
+        :to="`/boards/${board.id}`"
         class="sidebar-item"
-        :class="{ active: activeItem === 'board1' }"
-        @click="handleItemClick('board1')"
+        active-class="active"
       >
-        <BoardIcon /> Board1
-      </div>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'board2' }"
-        @click="handleItemClick('board2')"
-      >
-        <BoardIcon /> Board2
-      </div>
+        <BoardIcon /> {{ board.name }}
+      </RouterLink>
 
       <hr />
 
