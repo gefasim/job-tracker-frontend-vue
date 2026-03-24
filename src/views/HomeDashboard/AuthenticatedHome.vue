@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LeftSidebar from '@/views/LeftSidebar.vue'
+import LeftSidebar from '@/views/HomeDashboard/LeftSidebar.vue'
 </script>
 <template>
   <div class="home">
