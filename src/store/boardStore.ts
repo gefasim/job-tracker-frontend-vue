@@ -42,6 +42,8 @@ const saveToCache = (data: Board[]) => {
 const fetchBoards = async () => {
   if (isFetched) return
   try {
+    // TODO: Replace with GET /boards + GET /boards/{id}/columns to reduce payload size
+    // CreateJobApplicationModal.vue requires columns data to populate dropdown
     boards.value = await api.boards.getAllData()
     isFetched = true
     saveToCache(boards.value)

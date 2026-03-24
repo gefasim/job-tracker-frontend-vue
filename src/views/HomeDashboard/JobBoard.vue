@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { Board } from '@/models/board.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { ref, watch } from 'vue'
 import { api } from '@/api/api'
-import { CurrentBoard } from '@/current-board.service'
 import CompanyImage from '@/views/Shared/CompanyImage.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
 import { useRouter } from 'vue-router'
 import { getContrastColor } from '@/utils/colorContrast'
+import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useBoards } from '@/store/boardStore'
 
 const { boardId } = defineProps<{
   boardId?: string
@@ -16,27 +16,16 @@ const { boardId } = defineProps<{
 const router = useRouter()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
 const selectedColumnId = ref<string | null>()
-const board = ref<Board>()
-const boards = ref<Board[]>()
+
+const { boards } = useBoards()
+const { board, loadBoard } = useCurrentBoard()
 const isCreateJobModalOpen = ref<boolean>(false)
 
 watch(
   () => boardId,
-  (boardId) => fetchData(boardId as string),
+  (boardId) => loadBoard(boardId as string),
   { immediate: true },
 )
-
-async function fetchData(boardId: string) {
-  const response = await api.boards.get(boardId)
-  board.value = response
-  CurrentBoard.setBoard(response)
-  fetchAvailableBoards()
-}
-
-// TODO: move to higher level of hierarchy. Call `/boards` + `/columns` instead
-async function fetchAvailableBoards() {
-  boards.value = (await api.boards.getAllData()).filter((b) => !b.isArchived)
-}
 
 // On Job drag
 const OnDragStart = (event: DragEvent, fromColId: string, fromIndex: number) => {
