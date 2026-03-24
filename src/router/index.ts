@@ -5,9 +5,9 @@ import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
 import UserBoards from '@/views/UserBoards.vue'
-import Contacts from '@/views/Contacts.vue'
-import Documents from '@/views/Documents.vue'
-import About from '@/views/About.vue'
+import ContactsView from '@/views/ContactsView.vue'
+import DocumentsView from '@/views/DocumentsView.vue'
+import AboutView from '@/views/AboutView.vue'
 import ContactUs from '@/views/ContactUs.vue'
 import HowTo from '@/views/HowTo.vue'
 import PersonalAccount from '@/views/PersonalAccount.vue'
@@ -42,17 +42,17 @@ const router = createRouter({
         {
           path: 'contacts',
           name: 'contacts',
-          component: Contacts,
+          component: ContactsView,
         },
         {
           path: 'documents',
           name: 'documents',
-          component: Documents,
+          component: DocumentsView,
         },
         {
           path: 'about',
           name: 'about',
-          component: About,
+          component: AboutView,
         },
         {
           path: 'contact-us',
