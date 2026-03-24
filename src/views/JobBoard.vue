@@ -211,6 +211,10 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.1s;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: auto;
 }
 
 .card-default-color {
