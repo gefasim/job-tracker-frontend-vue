@@ -98,8 +98,7 @@ const uploaderName = computed(() => {
 
 <style scoped>
 .document-card {
-  background: white;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -119,7 +118,6 @@ const uploaderName = computed(() => {
 .title {
   margin: 0 0 4px 0;
   font-size: 14px;
-  color: #202124;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -179,7 +177,6 @@ const uploaderName = computed(() => {
 }
 .user-name {
   font-size: 13px;
-  color: #202124;
   font-weight: 500;
 }
 .upload-time {
@@ -239,8 +236,8 @@ const uploaderName = computed(() => {
   right: 0;
   bottom: 100%;
   margin-bottom: 4px;
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 120px;
