@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
-import RichTextEditor from '../../RichTextEditor.vue'
+import RichTextEditor from '../../Shared/RichTextEditor.vue'
 
 import CompanySelectDropdown from '@/views/Shared/CompanySelectDropdown.vue'
 import type { Company } from '@/models/company.dto'
