@@ -43,7 +43,7 @@ httpClient.interceptors.response.use(
       } catch (refreshError) {
         // TODO: verify with JWT with 1m expiration time
         console.error('Session ended. Login required.')
-        // window.location.href = '/login';
+        window.location.href = '/login'
         return Promise.reject(refreshError)
       }
     }
