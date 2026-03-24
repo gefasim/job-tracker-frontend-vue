@@ -160,9 +160,9 @@ const setLink = () => {
 
 <style scoped>
 .editor-container {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
-  background: #fffdf0;
+  background: var(--bg-main);
 }
 
 .toolbar {
@@ -170,8 +170,8 @@ const setLink = () => {
   align-items: center;
   padding: 8px;
   gap: 8px;
-  background: white;
-  border-bottom: 1px solid #dadce0;
+  background: var(--bg-main);
+  border-bottom: 1px solid var(--input-border);
   flex-wrap: wrap;
 }
 
@@ -183,7 +183,7 @@ const setLink = () => {
 .divider {
   width: 1px;
   height: 20px;
-  background: #dadce0;
+  background: var(--input-border);
 }
 
 button {
@@ -192,8 +192,16 @@ button {
   border-radius: 4px;
   padding: 6px 10px;
   cursor: pointer;
-  color: #5f6368;
+  color: var(--input-text);
   font-weight: bold;
+}
+
+button:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
+}
+
+html.dark button:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
 }
 
 button.is-active {
