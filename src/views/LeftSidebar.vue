@@ -14,23 +14,23 @@ const { isDark } = useTheme()
 <template>
   <div class="left-sidebar">
     <div>
-      <div><ContactNavTabIcon /> Contacts</div>
-      <div><DocumentNavTabIcon /> Documents</div>
+      <div class="sidebar-item"><ContactNavTabIcon /> Contacts</div>
+      <div class="sidebar-item"><DocumentNavTabIcon /> Documents</div>
       <hr />
       Your boards:
-      <div><BoardIcon /> Board1</div>
-      <div><BoardIcon /> Board2</div>
+      <div class="sidebar-item"><BoardIcon /> Board1</div>
+      <div class="sidebar-item"><BoardIcon /> Board2</div>
       <hr />
       Help
-      <div><AboutIcon /> About</div>
-      <div><ContactUsIcon /> Contact Us</div>
-      <div><HowToIcon /> How to?</div>
+      <div class="sidebar-item"><AboutIcon /> About</div>
+      <div class="sidebar-item"><ContactUsIcon /> Contact Us</div>
+      <div class="sidebar-item"><HowToIcon /> How to?</div>
       <hr />
     </div>
     <div>
-      <div><DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else /> Theme</div>
-      <div>Personal Account Settings</div>
-      <div>Log Out</div>
+      <div class="sidebar-item"><DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else /> Theme</div>
+      <div class="sidebar-item">Personal Account Settings</div>
+      <div class="sidebar-item">Log Out</div>
     </div>
   </div>
 </template>
@@ -42,5 +42,24 @@ const { isDark } = useTheme()
   justify-content: space-between;
   border-right: 1px solid var(--border-color);
   min-width: 10vw;
+  padding: 0.5rem;
+  padding-top: 20px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.sidebar-item:hover {
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
+}
+
+html.dark .sidebar-item:hover {
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
 }
 </style>
