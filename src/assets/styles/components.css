@@ -8,6 +8,7 @@
   font-weight: 500;
   cursor: pointer;
   width: fit-content;
+  color: var(--input-text);
 }
 
 .btn-primary:disabled {
@@ -33,6 +34,7 @@ html.dark .btn-primary:hover:not(:disabled) {
   font-weight: 500;
   cursor: pointer;
   width: fit-content;
+  color: var(--input-text);
 }
 
 .btn-outline:hover:not(:disabled) {
