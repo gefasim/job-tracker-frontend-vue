@@ -2,22 +2,17 @@
 import { ref, computed, onMounted } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Contact } from '@/models/contact.dto'
-import ContactCard from './ContactCard.vue'
 import ContactModal from './ContactModal.vue'
-import ContactTabIcon from '@/assets/icons/ContactTabIcon.vue'
 import LinkContactDropdown from '@/views/Shared/LinkContactDropdown.vue'
 import { api } from '@/api/api'
 import { useRoute } from 'vue-router'
+import ContactGrid from './ContactGrid.vue'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 const route = useRoute()
 
 const isModalOpen = ref(false)
 const contactToEdit = ref<Contact | null>(null)
-
-const hasContacts = computed(() => {
-  return jobApplication.value.contacts && jobApplication.value.contacts.length > 0
-})
 
 const boardId = route.params.boardId as string
 const boardContacts = ref<Contact[]>([])
@@ -32,11 +27,6 @@ onMounted(async () => {
 
 const openCreateModal = () => {
   contactToEdit.value = null
-  isModalOpen.value = true
-}
-
-const openEditModal = (contact: Contact) => {
-  contactToEdit.value = JSON.parse(JSON.stringify(contact))
   isModalOpen.value = true
 }
 
@@ -75,27 +65,14 @@ const handleUnlinkContact = async (contactId: string) => {
       ></LinkContactDropdown>
     </div>
 
-    <div v-if="!hasContacts" class="empty-state">
-      <div class="empty-icon-wrapper">
-        <ContactTabIcon />
-      </div>
-      <h2>You have not linked any contacts to this job yet.</h2>
-    </div>
-
-    <div v-else class="contacts-grid">
-      <ContactCard
-        v-for="contact in jobApplication.contacts?.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        )"
-        :key="contact.id"
-        :contact="contact"
-        :showUnlinkButton="false"
-        :showDeleteButton="true"
-        @edit="openEditModal"
-        @unlink="handleUnlinkContact"
-      />
-    </div>
-
+    <ContactGrid
+      :contacts="jobApplication.contacts || []"
+      :boardId="boardId"
+      :jobApplication="jobApplication"
+      noContactsMessage="You have not linked any contacts to this job yet."
+      @save="handleSaveContact"
+      @unlink="handleUnlinkContact"
+    ></ContactGrid>
     <Teleport to="body">
       <ContactModal
         v-if="isModalOpen"
