@@ -8,7 +8,7 @@
   font-weight: 500;
   cursor: pointer;
   width: fit-content;
-  color: var(--input-text);
+  color: var(--btn-primary-text);
 }
 
 .btn-primary:disabled {
