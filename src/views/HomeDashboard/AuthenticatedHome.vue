@@ -18,5 +18,6 @@ import LeftSidebar from '@/views/HomeDashboard/LeftSidebar.vue'
 }
 .main-content {
   flex: 5;
+  overflow-y: auto;
 }
 </style>

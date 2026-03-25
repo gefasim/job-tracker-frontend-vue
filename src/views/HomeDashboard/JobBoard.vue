@@ -105,7 +105,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
         </button>
       </div>
 
-      <div class="column-content">
+      <div class="column-content" @dragover="onDragOver" @drop="OnDrop($event, column.id)">
         <div
           v-for="(job, index) in column.jobApplications"
           :key="job.id"
@@ -126,12 +126,6 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
             <small>{{ job.company?.name }}</small>
           </p>
         </div>
-
-        <div
-          class="drop-placeholder"
-          @dragover="onDragOver"
-          @drop="OnDrop($event, column.id)"
-        ></div>
       </div>
     </div>
   </div>
@@ -227,10 +221,5 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
   flex-direction: row;
   align-items: center;
   gap: 10px;
-}
-
-.drop-placeholder {
-  flex-grow: 1;
-  height: stretch;
 }
 </style>
