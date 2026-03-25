@@ -148,7 +148,6 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 <style scoped>
 .board {
   display: flex;
-  padding: 20px;
   align-items: flex-start;
 }
 
