@@ -6,10 +6,11 @@ import ContactCard from './ContactCard.vue'
 import ContactModal from './ContactModal.vue'
 import ContactTabIcon from '@/assets/icons/ContactTabIcon.vue'
 import LinkContactDropdown from '@/views/Shared/LinkContactDropdown.vue'
-import { CurrentBoard } from '@/current-board.service'
 import { api } from '@/api/api'
+import { useRoute } from 'vue-router'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
+const route = useRoute()
 
 const isModalOpen = ref(false)
 const contactToEdit = ref<Contact | null>(null)
@@ -18,6 +19,7 @@ const hasContacts = computed(() => {
   return jobApplication.value.contacts && jobApplication.value.contacts.length > 0
 })
 
+const boardId = route.params.boardId as string
 const boardContacts = ref<Contact[]>([])
 const availableContactsToLink = computed(() => {
   const assignedContactIds = jobApplication.value.contacts?.map((c) => c.id)
@@ -25,7 +27,6 @@ const availableContactsToLink = computed(() => {
 })
 
 onMounted(async () => {
-  const boardId = CurrentBoard.getBoard()!.id
   boardContacts.value = await api.contacts.getAll(boardId)
 })
 
@@ -98,6 +99,7 @@ const handleUnlinkContact = async (contactId: string) => {
         v-if="isModalOpen"
         :contact="contactToEdit"
         :jobApplication="jobApplication"
+        :boardId="boardId"
         @close="isModalOpen = false"
         @save="handleSaveContact"
       />

@@ -11,20 +11,28 @@ import GitHubIcon from '@/assets/icons/external/GitHubIcon.vue'
 import { api } from '@/api/api'
 import { useRoute } from 'vue-router'
 import type { JobApplication } from '@/models/job-application.dto'
-import { CurrentBoard } from '@/current-board.service'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
+import { useBoards } from '@/store/boardStore'
 
 // TODO: implement multiple job assignment
-const props = defineProps<{
+/**
+  This modal is used for both creating a new contact and editing an existing contact.
+  Contact prop is required for edit mode, and null for create mode. In create mode
+  if the modal is opened from a specific job application, that job application will be pre-linked to the new contact.
+  BoardId is required to get the list of jobs that might be linked to the contact. The list of jobs will be taken from shared state (board store)
+*/
+const { contact, jobApplication, boardId } = defineProps<{
   contact: Contact | null
-  jobApplication: JobApplication
+  jobApplication: JobApplication | null
+  boardId: string
 }>()
 const emit = defineEmits(['close', 'save'])
 const route = useRoute()
+const { boards } = useBoards()
 
 const isModalOpen = ref(false)
-const isEditMode = computed(() => !!props.contact)
+const isEditMode = computed(() => !!contact)
 const linkedJobs = ref<JobApplication[]>([])
 let linkedJobIdsBeforeUpdate: string[] = []
 
@@ -41,21 +49,24 @@ const form = ref<Partial<Contact>>({
 
 onMounted(() => {
   if (isEditMode.value) {
-    form.value = JSON.parse(JSON.stringify(props.contact))
+    form.value = JSON.parse(JSON.stringify(contact))
     linkedJobs.value = getJobsLinkedToContact()
     linkedJobIdsBeforeUpdate = linkedJobs.value.map((j) => j.id)
   } else {
-    linkedJobs.value = [props.jobApplication]
+    linkedJobs.value = jobApplication ? [jobApplication] : []
   }
   isModalOpen.value = true
 })
 
 const getJobsLinkedToContact = (): JobApplication[] => {
-  return CurrentBoard.getBoard()!
-    .columns.flatMap((c) => c.jobApplications)
-    .filter((j) =>
-      j.contacts ? j.contacts.filter((c) => c.id === props.contact!.id).length > 0 : false,
-    )
+  return (
+    boards.value
+      .find((b) => b.id === boardId)
+      ?.columns.flatMap((c) => c.jobApplications)
+      .filter((j) =>
+        j.contacts ? j.contacts.filter((c) => c.id === contact!.id).length > 0 : false,
+      ) || []
+  )
 }
 
 // --- Email & Phone handlers ---
