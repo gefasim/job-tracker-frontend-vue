@@ -75,9 +75,9 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
       <div class="menu-container">
         <button class="menu-btn" @click.stop="toggleMenu">•••</button>
         <div v-if="isMenuOpen" class="dropdown-menu">
-          <button @click="editContact(contact)">✏️ Edit</button>
-          <button v-if="!props.showUnlinkButton" @click="unlinkContact(contact)">Unlink</button>
-          <button v-if="!props.showDeleteButton" @click="deleteContact(contact)">Delete</button>
+          <div @click="editContact(contact)">Edit</div>
+          <div v-if="props.showUnlinkButton" @click="unlinkContact(contact)">Unlink</div>
+          <div v-if="props.showDeleteButton" @click="deleteContact(contact)">Delete</div>
         </div>
       </div>
     </div>
@@ -216,16 +216,15 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
   flex-direction: column;
   overflow: hidden;
 }
-.dropdown-menu button {
+.dropdown-menu > div {
   background: none;
   border: none;
   padding: 10px 16px;
   text-align: left;
   font-size: 13px;
   cursor: pointer;
-  color: #3c4043;
 }
-.dropdown-menu button:hover {
+.dropdown-menu > div:hover {
   background: #f1f3f4;
 }
 

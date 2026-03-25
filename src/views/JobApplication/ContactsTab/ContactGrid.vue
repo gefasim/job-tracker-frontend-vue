@@ -11,6 +11,8 @@ const props = defineProps<{
   boardId: string
   jobApplication: JobApplication | null
   noContactsMessage: string
+  showUnlinkButton: boolean
+  showDeleteButton: boolean
 }>()
 const emit = defineEmits(['unlink', 'delete', 'save'])
 
@@ -47,10 +49,11 @@ const handleSaveContact = (savedContact: Contact) => {
       )"
       :key="contact.id"
       :contact="contact"
-      :showUnlinkButton="false"
-      :showDeleteButton="true"
+      :showUnlinkButton="props.showUnlinkButton"
+      :showDeleteButton="props.showDeleteButton"
       @edit="openEditModal"
       @unlink="emit('unlink', $event)"
+      @delete="emit('delete', $event)"
     />
   </div>
 

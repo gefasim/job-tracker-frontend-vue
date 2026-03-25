@@ -69,6 +69,8 @@ const handleUnlinkContact = async (contactId: string) => {
       :contacts="jobApplication.contacts || []"
       :boardId="boardId"
       :jobApplication="jobApplication"
+      :showUnlinkButton="true"
+      :showDeleteButton="false"
       noContactsMessage="You have not linked any contacts to this job yet."
       @save="handleSaveContact"
       @unlink="handleUnlinkContact"
