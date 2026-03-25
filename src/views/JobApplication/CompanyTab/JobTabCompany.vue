@@ -32,7 +32,7 @@ const saveChanges = async () => {
 </script>
 
 <template>
-  <div class="company-tab">
+  <div class="tab-border">
     <div v-if="!isEditMode" class="view-mode">
       <div class="company-header">
         <div class="logo-wrapper">
@@ -150,12 +150,6 @@ const saveChanges = async () => {
 </template>
 
 <style scoped>
-.company-tab {
-  border: 1px solid #dadce0;
-  border-radius: 8px;
-  padding: 24px;
-}
-
 /* --- VIEW MODE STYLES --- */
 .company-header {
   display: flex;
@@ -163,14 +157,14 @@ const saveChanges = async () => {
   gap: 16px;
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo-wrapper {
   width: 64px;
   height: 64px;
   border-radius: 8px;
-  border: 1px solid #e8eaed;
+  border: 1px solid var(--border-color);
   overflow: hidden;
   display: flex;
   align-items: center;
