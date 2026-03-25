@@ -89,6 +89,8 @@ const handleUnlinkContact = async (contactId: string) => {
         )"
         :key="contact.id"
         :contact="contact"
+        :showUnlinkButton="false"
+        :showDeleteButton="true"
         @edit="openEditModal"
         @unlink="handleUnlinkContact"
       />

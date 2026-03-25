@@ -7,8 +7,12 @@ import FacebookIcon from '@/assets/icons/external/FacebookIcon.vue'
 import LinkedInIcon from '@/assets/icons/external/LinkedInIcon.vue'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 
-const props = defineProps<{ contact: Contact }>()
-const emit = defineEmits(['edit', 'unlink'])
+const props = defineProps<{
+  contact: Contact
+  showUnlinkButton: boolean
+  showDeleteButton: boolean
+}>()
+const emit = defineEmits(['edit', 'unlink', 'delete'])
 
 const isMenuOpen = ref(false)
 
@@ -29,6 +33,11 @@ const editContact = (contact: Contact) => {
 
 const unlinkContact = (contact: Contact) => {
   emit('unlink', contact.id)
+  isMenuOpen.value = false
+}
+
+const deleteContact = (contact: Contact) => {
+  emit('delete', contact.id)
   isMenuOpen.value = false
 }
 
@@ -67,7 +76,8 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
         <button class="menu-btn" @click.stop="toggleMenu">•••</button>
         <div v-if="isMenuOpen" class="dropdown-menu">
           <button @click="editContact(contact)">✏️ Edit</button>
-          <button @click="unlinkContact(contact)" class="text-danger">🔗 Unlink</button>
+          <button v-if="!props.showUnlinkButton" @click="unlinkContact(contact)">Unlink</button>
+          <button v-if="!props.showDeleteButton" @click="deleteContact(contact)">Delete</button>
         </div>
       </div>
     </div>
@@ -114,15 +124,13 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
         ><GitHubIcon
       /></a>
     </div>
-
-    <div class="card-footer">Created by System OOO</div>
   </div>
 </template>
 
 <style scoped>
 .contact-card {
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -136,7 +144,7 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 .card-header {
   display: flex;
   padding: 16px;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--border-color);
   position: relative;
   gap: 12px;
 }
@@ -165,7 +173,6 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 .name {
   margin: 0;
   font-size: 15px;
-  color: #202124;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -174,7 +181,6 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 .title,
 .company {
   font-size: 13px;
-  color: #5f6368;
   margin-top: 2px;
 }
 
@@ -185,11 +191,11 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 }
 .menu-btn {
   background: none;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 2px 8px;
   cursor: pointer;
-  color: #5f6368;
+  color: var(--input-text);
   letter-spacing: 1px;
 }
 .menu-btn:hover {
@@ -200,8 +206,8 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
   right: 0;
   top: 100%;
   margin-top: 4px;
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 120px;
@@ -222,23 +228,19 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 .dropdown-menu button:hover {
   background: #f1f3f4;
 }
-.text-danger {
-  color: #d93025 !important;
-}
 
 .card-body {
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-bottom: 1px solid #f1f3f4;
+  border-bottom: 1px solid var(--border-color);
 }
 .info-row {
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 14px;
-  color: #5f6368;
 }
 .info-row .icon {
   font-size: 16px;
@@ -256,7 +258,6 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  border-bottom: 1px solid #f1f3f4;
 }
 .social-icon {
   color: #9aa0a6;
@@ -270,12 +271,5 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 }
 .socialIconNoLink {
   pointer-events: none;
-}
-
-.card-footer {
-  padding: 12px 16px;
-  font-size: 12px;
-  color: #9aa0a6;
-  background: #fafafa;
 }
 </style>

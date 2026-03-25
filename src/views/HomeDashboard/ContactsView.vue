@@ -51,6 +51,8 @@ const openEditModal = (contact: Contact) => {
         )"
         :key="contact.id"
         :contact="contact"
+        :showUnlinkButton="true"
+        :showDeleteButton="false"
         @edit="openEditModal"
       />
     </div>
