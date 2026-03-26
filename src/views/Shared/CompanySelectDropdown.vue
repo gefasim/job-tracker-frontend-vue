@@ -92,8 +92,8 @@ onUnmounted(() => {
   top: calc(100% + 4px);
   left: 0;
   width: 100%;
-  background: white;
-  border: 1px solid #dadce0;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 100;
