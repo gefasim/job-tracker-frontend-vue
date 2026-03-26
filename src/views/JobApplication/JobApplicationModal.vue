@@ -14,8 +14,8 @@ import NoteNavTabIcon from '@/assets/icons/NoteNavTabIcon.vue'
 import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
 import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
-import { CurrentBoard } from '@/current-board.service'
 import { useRouter } from 'vue-router'
+import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const props = defineProps<{
   jobId?: string
@@ -24,6 +24,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const { board } = useCurrentBoard()
 
 let jobApplicationBeforeUpdate: JobApplication | null = null
 const jobApplication = ref<JobApplication>()
@@ -53,7 +54,7 @@ watch(
 )
 
 onMounted(() => {
-  const result = CurrentBoard.getBoard()!.columns.map((c) => ({
+  const result = board.value!.columns.map((c) => ({
     id: c.id,
     name: c.name,
   }))

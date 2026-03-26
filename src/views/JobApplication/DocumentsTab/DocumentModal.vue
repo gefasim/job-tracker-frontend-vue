@@ -4,9 +4,9 @@ import type { Document } from '@/models/document.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { DocumentCategoryEnum, type DocumentCategoryType } from '@/models/document-category.enum'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
-import { CurrentBoard } from '@/current-board.service'
 import { useRoute } from 'vue-router'
 import { api } from '@/api/api'
+import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const props = defineProps<{
   document?: Document | null
@@ -15,6 +15,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'save'])
 const route = useRoute()
+const { board } = useCurrentBoard()
 
 const isEditMode = computed(() => !!props.document)
 const isModalOpen = ref(false)
@@ -45,8 +46,8 @@ onMounted(() => {
 
 const getJobsLinkedToDocument = (documentId: string): JobApplication[] => {
   return (
-    CurrentBoard.getBoard()!
-      .columns.flatMap((c) => c.jobApplications)
+    board
+      .value!.columns.flatMap((c) => c.jobApplications)
       .filter((j) => j.documents.some((d) => d.id == documentId)) ?? []
   )
 }

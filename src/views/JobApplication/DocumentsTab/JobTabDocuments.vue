@@ -5,10 +5,11 @@ import type { Document } from '@/models/document.dto'
 import DocumentsCard from './DocumentsCard.vue'
 import DocumentModal from './DocumentModal.vue'
 import LinkDocumentDropdown from '@/views/Shared/LinkDocumentDropdown.vue'
-import { CurrentBoard } from '@/current-board.service'
 import { api } from '@/api/api'
+import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
+const { board } = useCurrentBoard()
 
 const isModalOpen = ref(false)
 const documentToEdit = ref<Document | null>(null)
@@ -23,7 +24,7 @@ const availableDocumentsToLink = computed(() => {
 })
 
 onMounted(async () => {
-  const boardId = CurrentBoard.getBoard()!.id
+  const boardId = board.value!.id
   boardDocuments.value = await api.documents.getAll(boardId)
 })
 

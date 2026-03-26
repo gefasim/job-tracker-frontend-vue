@@ -6,15 +6,16 @@ import CompanySelectDropdown from '@/views/Shared/CompanySelectDropdown.vue'
 import type { Company } from '@/models/company.dto'
 import { api } from '@/api/api'
 import ColorPicker from '@/views/Shared/ColorPicker.vue'
-import { CurrentBoard } from '@/current-board.service'
 import { computed } from 'vue'
+import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
+const { board } = useCurrentBoard()
 const boardColors = computed(() => {
   return [
     ...new Set(
-      CurrentBoard.getBoard()!
-        .columns.flatMap((c) => c.jobApplications)
+      board
+        .value!.columns.flatMap((c) => c.jobApplications)
         .map((j) => j.color)
         .filter((color) => color) as string[],
     ),
