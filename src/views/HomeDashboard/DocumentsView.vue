@@ -89,7 +89,7 @@ const onDeleteDocument = async (documentId: string) => {
   <div class="placeholder-page">
     <h1>Documents</h1>
 
-    <div class="header">
+    <div class="select-and-filter">
       <!-- Board Selector -->
       <GenericSelector
         :items="availableBoards"
@@ -128,10 +128,8 @@ const onDeleteDocument = async (documentId: string) => {
     <div v-if="selectedBoard">
       <div class="board-header">
         <h2>{{ selectedBoard.name }}</h2>
-        <p v-if="filteredDocuments.length == 0">You don't have any documents for this board yet.</p>
       </div>
       <DocumentGrid
-        v-if="filteredDocuments.length > 0"
         :documents="filteredDocuments"
         :boardId="selectedBoard.id"
         :jobApplication="null"
@@ -150,7 +148,7 @@ const onDeleteDocument = async (documentId: string) => {
   padding: 2rem;
 }
 
-.header {
+.select-and-filter {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -211,7 +209,7 @@ const onDeleteDocument = async (documentId: string) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
 
 .board-header p {
