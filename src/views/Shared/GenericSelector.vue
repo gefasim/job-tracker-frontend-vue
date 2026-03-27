@@ -8,6 +8,7 @@ interface Props<T> {
   displayProperty: keyof T
   valueProperty: keyof T
   id?: string
+  hideLabel?: boolean
 }
 
 const props = withDefaults(defineProps<Props<T>>(), {
@@ -51,8 +52,8 @@ const onChange = (event: Event) => {
 }
 </script>
 <template>
-  <div v-if="items.length > 0" class="generic-selector">
-    <label :for="inputId">{{ label }}</label>
+  <div v-if="items.length > 0">
+    <label v-if="!hideLabel" :for="inputId">{{ label }}</label>
     <select :id="inputId" v-model="localValue" @change="onChange" class="generic-dropdown">
       <option v-for="item in items" :key="getValue(item)" :value="getValue(item)">
         {{ getDisplay(item) }}
@@ -61,30 +62,19 @@ const onChange = (event: Event) => {
   </div>
 </template>
 <style scoped>
-.generic-selector {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-
-.generic-selector label {
-  font-weight: 500;
-  color: #202124;
-}
-
 .generic-dropdown {
-  padding: 0.5rem 1rem;
-  border: 1px solid #dadce0;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 0.875rem;
-  color: #202124;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: #5f6368;
+  font-size: 14px;
+  text-align: left;
   cursor: pointer;
-  min-width: 200px;
+  transition: all 0.2s;
 }
 
 .generic-dropdown:focus {

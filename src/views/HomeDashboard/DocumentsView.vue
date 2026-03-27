@@ -89,37 +89,40 @@ const onDeleteDocument = async (documentId: string) => {
   <div class="placeholder-page">
     <h1>Documents</h1>
 
-    <!-- Board Selector -->
-    <GenericSelector
-      :items="availableBoards"
-      :selected-item="selectedBoard"
-      label="Select Board:"
-      display-property="name"
-      value-property="id"
-      id="board-select"
-      @update:selected-item="onBoardChange"
-    />
+    <div class="header">
+      <!-- Board Selector -->
+      <GenericSelector
+        :items="availableBoards"
+        :selected-item="selectedBoard"
+        label="Select Board:"
+        display-property="name"
+        value-property="id"
+        id="board-select"
+        :hideLabel="true"
+        @update:selected-item="onBoardChange"
+      />
 
-    <!-- Category Filters -->
-    <div v-if="getTotalDocumentsCount() > 0" class="category-filters">
-      <button
-        class="category-badge"
-        :class="{ active: selectedCategory === 'All' }"
-        @click="selectedCategory = 'All'"
-      >
-        <span>All</span>
-        <span class="badge-count">{{ getTotalDocumentsCount() }}</span>
-      </button>
-      <button
-        v-for="{ category, count } in getAvailableCategories()"
-        :key="category"
-        class="category-badge"
-        :class="{ active: selectedCategory === category }"
-        @click="selectedCategory = category"
-      >
-        <span>{{ category }}</span>
-        <span class="badge-count">{{ count }}</span>
-      </button>
+      <!-- Category Filters -->
+      <div v-if="getTotalDocumentsCount() > 0" class="category-filters">
+        <button
+          class="category-badge"
+          :class="{ active: selectedCategory === 'All' }"
+          @click="selectedCategory = 'All'"
+        >
+          <span>All</span>
+          <span class="badge-count">{{ getTotalDocumentsCount() }}</span>
+        </button>
+        <button
+          v-for="{ category, count } in getAvailableCategories()"
+          :key="category"
+          class="category-badge"
+          :class="{ active: selectedCategory === category }"
+          @click="selectedCategory = category"
+        >
+          <span>{{ category }}</span>
+          <span class="badge-count">{{ count }}</span>
+        </button>
+      </div>
     </div>
 
     <div v-if="selectedBoard">
@@ -147,45 +150,17 @@ const onDeleteDocument = async (documentId: string) => {
   padding: 2rem;
 }
 
-.board-selector {
+.header {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-
-.board-selector label {
-  font-weight: 500;
-  color: #202124;
-}
-
-.board-dropdown {
-  padding: 0.5rem 1rem;
-  border: 1px solid #dadce0;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 0.875rem;
-  color: #202124;
-  cursor: pointer;
-  min-width: 200px;
-}
-
-.board-dropdown:focus {
-  outline: none;
-  border-color: #1f73e6;
-  box-shadow: 0 0 0 2px rgba(31, 115, 230, 0.2);
 }
 
 .category-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  border-radius: 8px;
 }
 
 .category-badge {
