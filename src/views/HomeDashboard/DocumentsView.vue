@@ -5,10 +5,12 @@ import { api } from '@/api/api'
 import type { Document } from '@/models/document.dto'
 import type { DocumentCategoryType } from '@/models/document-category.enum'
 import DocumentGrid from '../JobApplication/DocumentsTab/DocumentGrid.vue'
+import GenericSelector from '../Shared/GenericSelector.vue'
 import type { Board } from '@/models/board.dto'
 
 const { boards, fetchBoards } = useBoards()
 const boardsWithDocuments = ref<{ board: Board; documents: Document[] }[]>([])
+const availableBoards = computed(() => boardsWithDocuments.value.map((b) => b.board))
 const selectedCategory = ref<DocumentCategoryType | 'All'>('All')
 const selectedBoard = ref<Board | null>(null)
 
@@ -88,23 +90,15 @@ const onDeleteDocument = async (documentId: string) => {
     <h1>Documents</h1>
 
     <!-- Board Selector -->
-    <div v-if="boardsWithDocuments.length > 0" class="board-selector">
-      <label for="board-select">Select Board:</label>
-      <select
-        id="board-select"
-        v-model="selectedBoard"
-        @change="onBoardChange(selectedBoard!)"
-        class="board-dropdown"
-      >
-        <option
-          v-for="boardData in boardsWithDocuments"
-          :key="boardData.board.id"
-          :value="boardData.board"
-        >
-          {{ boardData.board.name }}
-        </option>
-      </select>
-    </div>
+    <GenericSelector
+      :items="availableBoards"
+      :selected-item="selectedBoard"
+      label="Select Board:"
+      display-property="name"
+      value-property="id"
+      id="board-select"
+      @update:selected-item="onBoardChange"
+    />
 
     <!-- Category Filters -->
     <div v-if="getTotalDocumentsCount() > 0" class="category-filters">
