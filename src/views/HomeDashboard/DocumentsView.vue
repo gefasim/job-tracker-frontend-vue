@@ -10,6 +10,7 @@ import type { Board } from '@/models/board.dto'
 const { boards, fetchBoards } = useBoards()
 const boardsWithDocuments = ref<{ board: Board; documents: Document[] }[]>([])
 const selectedCategory = ref<DocumentCategoryType | 'All'>('All')
+const selectedBoard = ref<Board | null>(null)
 
 onMounted(async () => {
   await fetchBoards()
@@ -19,6 +20,10 @@ onMounted(async () => {
       board,
       documents: getDocuments(board.id),
     }))
+  // Set first board as default if available
+  if (boardsWithDocuments.value.length > 0 && boardsWithDocuments.value[0]) {
+    selectedBoard.value = boardsWithDocuments.value[0].board
+  }
 })
 
 const getDocuments = (boardId: string): Document[] => {
@@ -29,17 +34,13 @@ const getDocuments = (boardId: string): Document[] => {
     .filter((document, index, self) => self.findIndex((c) => c.id === document.id) === index)
 }
 
-const getAllDocuments = (): Document[] => {
-  return boardsWithDocuments.value.flatMap((b) => b.documents)
-}
-
 const getCategoryCount = (category: DocumentCategoryType): number => {
-  return getAllDocuments().filter((doc) => doc.category === category).length
+  return filteredDocuments.value.filter((doc) => doc.category === category).length
 }
 
 const getAvailableCategories = (): { category: DocumentCategoryType; count: number }[] => {
   const categories = new Set<DocumentCategoryType>()
-  getAllDocuments().forEach((doc) => {
+  filteredDocuments.value.forEach((doc) => {
     categories.add(doc.category)
   })
   return Array.from(categories)
@@ -50,22 +51,26 @@ const getAvailableCategories = (): { category: DocumentCategoryType; count: numb
     .sort((a, b) => a.category.localeCompare(b.category))
 }
 
-const getTotalDocumentsCount = (): number => {
-  return getAllDocuments().length
+const onBoardChange = (board: Board) => {
+  selectedBoard.value = board
+  selectedCategory.value = 'All'
 }
 
-const filteredBoardsWithDocuments = computed(() => {
+const filteredDocuments = computed(() => {
+  if (!selectedBoard.value) return []
+
+  const boardDocuments =
+    boardsWithDocuments.value.find((b) => b.board.id === selectedBoard.value!.id)?.documents || []
+
   if (selectedCategory.value === 'All') {
-    return boardsWithDocuments.value.map((b) => ({
-      ...b,
-      documents: b.documents,
-    }))
+    return boardDocuments
   }
-  return boardsWithDocuments.value.map((b) => ({
-    ...b,
-    documents: b.documents.filter((doc) => doc.category === selectedCategory.value),
-  }))
+  return boardDocuments.filter((doc) => doc.category === selectedCategory.value)
 })
+
+const getTotalDocumentsCount = (): number => {
+  return filteredDocuments.value.length
+}
 
 const onDeleteDocument = async (documentId: string) => {
   if (confirm('Are you sure you want to delete this document? This action cannot be undone.')) {
@@ -81,6 +86,25 @@ const onDeleteDocument = async (documentId: string) => {
 <template>
   <div class="placeholder-page">
     <h1>Documents</h1>
+
+    <!-- Board Selector -->
+    <div v-if="boardsWithDocuments.length > 0" class="board-selector">
+      <label for="board-select">Select Board:</label>
+      <select
+        id="board-select"
+        v-model="selectedBoard"
+        @change="onBoardChange(selectedBoard!)"
+        class="board-dropdown"
+      >
+        <option
+          v-for="boardData in boardsWithDocuments"
+          :key="boardData.board.id"
+          :value="boardData.board"
+        >
+          {{ boardData.board.name }}
+        </option>
+      </select>
+    </div>
 
     <!-- Category Filters -->
     <div v-if="getTotalDocumentsCount() > 0" class="category-filters">
@@ -104,15 +128,15 @@ const onDeleteDocument = async (documentId: string) => {
       </button>
     </div>
 
-    <div v-for="boards in filteredBoardsWithDocuments" :key="boards.board.id">
+    <div v-if="selectedBoard">
       <div class="board-header">
-        <h2>{{ boards.board.name }}</h2>
-        <p v-if="boards.documents.length == 0">You don't have any documents for this board yet.</p>
+        <h2>{{ selectedBoard.name }}</h2>
+        <p v-if="filteredDocuments.length == 0">You don't have any documents for this board yet.</p>
       </div>
       <DocumentGrid
-        v-if="boards.documents.length > 0"
-        :documents="boards.documents"
-        :boardId="boards.board.id"
+        v-if="filteredDocuments.length > 0"
+        :documents="filteredDocuments"
+        :boardId="selectedBoard.id"
         :jobApplication="null"
         :showUnlinkButton="false"
         :showDeleteButton="true"
@@ -120,7 +144,6 @@ const onDeleteDocument = async (documentId: string) => {
         @save="(_) => {}"
         @delete="onDeleteDocument"
       />
-      <hr />
     </div>
   </div>
 </template>
@@ -128,6 +151,38 @@ const onDeleteDocument = async (documentId: string) => {
 <style scoped>
 .placeholder-page {
   padding: 2rem;
+}
+
+.board-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.board-selector label {
+  font-weight: 500;
+  color: #202124;
+}
+
+.board-dropdown {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 0.875rem;
+  color: #202124;
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.board-dropdown:focus {
+  outline: none;
+  border-color: #1f73e6;
+  box-shadow: 0 0 0 2px rgba(31, 115, 230, 0.2);
 }
 
 .category-filters {
