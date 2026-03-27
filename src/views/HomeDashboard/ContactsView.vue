@@ -45,9 +45,4 @@ const onDeleteContact = async (contactId: string) => {
 .placeholder-page {
   padding: 2rem;
 }
-.contacts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-}
 </style>

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Document } from '@/models/document.dto'
 import DocumentsCard from './DocumentsCard.vue'
 import DocumentModal from './DocumentModal.vue'
-import { api } from '@/api/api'
-import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const props = defineProps<{
   documents: Document[]
@@ -15,21 +13,15 @@ const props = defineProps<{
   showUnlinkButton: boolean
   showDeleteButton: boolean
 }>()
-const documents = computed(() => props.documents || [])
+
 const emit = defineEmits(['unlink', 'delete', 'save'])
-const { board } = useCurrentBoard()
 
 const isModalOpen = ref(false)
 const documentToEdit = ref<Document | null>(null)
 
+const documents = computed(() => props.documents || [])
 const hasDocuments = computed(() => {
   return props.documents && props.documents.length > 0
-})
-const boardDocuments = ref<Document[]>([])
-
-onMounted(async () => {
-  const boardId = board.value!.id
-  boardDocuments.value = await api.documents.getAll(boardId)
 })
 
 const openEditModal = (document: Document) => {
@@ -74,8 +66,11 @@ const handleSaveDocument = (savedDocument: Document) => {
       )"
       :key="doc.id"
       :document="doc"
+      :showUnlinkButton="props.showUnlinkButton"
+      :showDeleteButton="props.showDeleteButton"
       @edit="openEditModal"
       @unlink="emit('unlink', $event)"
+      @delete="emit('delete', $event)"
     />
   </div>
 

@@ -4,8 +4,12 @@ import type { Document } from '@/models/document.dto'
 import type { User } from '@/models/user.dto'
 import DocumentCategoryBadge from '@/views/Shared/DocumentCategoryBadge.vue'
 
-const props = defineProps<{ document: Document }>()
-const emit = defineEmits(['edit', 'unlink'])
+const props = defineProps<{
+  document: Document
+  showUnlinkButton: boolean
+  showDeleteButton: boolean
+}>()
+const emit = defineEmits(['edit', 'unlink', 'delete'])
 
 const isMenuOpen = ref(false)
 
@@ -22,6 +26,10 @@ const editDocument = (document: Document) => {
 
 const unlinkDocument = (document: Document) => {
   emit('unlink', document.id)
+  isMenuOpen.value = false
+}
+const deleteDocument = (document: Document) => {
+  emit('delete', document.id)
   isMenuOpen.value = false
 }
 
@@ -88,8 +96,9 @@ const uploaderName = computed(() => {
       <div class="menu-container">
         <button class="menu-btn" @click.stop="isMenuOpen = !isMenuOpen">•••</button>
         <div v-if="isMenuOpen" class="dropdown-menu">
-          <button @click="editDocument(document)">✏️ Edit</button>
-          <button @click="unlinkDocument(document)" class="text-danger">🔗 Unlink</button>
+          <div @click="editDocument(document)">Edit</div>
+          <div v-if="showUnlinkButton" @click="unlinkDocument(document)">Unlink</div>
+          <div v-if="showDeleteButton" @click="deleteDocument(document)">Delete</div>
         </div>
       </div>
     </div>
@@ -246,19 +255,15 @@ const uploaderName = computed(() => {
   flex-direction: column;
   overflow: hidden;
 }
-.dropdown-menu button {
+.dropdown-menu > div {
   background: none;
   border: none;
   padding: 10px 16px;
   text-align: left;
   font-size: 13px;
   cursor: pointer;
-  color: #3c4043;
 }
-.dropdown-menu button:hover {
+.dropdown-menu > div:hover {
   background: #f1f3f4;
-}
-.text-danger {
-  color: #d93025 !important;
 }
 </style>
