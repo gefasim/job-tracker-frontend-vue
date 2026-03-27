@@ -173,13 +173,13 @@ const documentApi: DocumentsService = {
     })
     return response.data
   },
-  async update(file: File, document: Document): Promise<Document> {
+  async update(documentId: string, document: Document, file: File | null): Promise<Document> {
     const formData = new FormData()
     formData.append('title', document.title)
     formData.append('category', document.category)
-    formData.append('file', file)
+    if (file) formData.append('file', file)
     if (document.description) formData.append('description', document.description)
-    const response = await httpClient.put<Document>(`/documents/`, formData, {
+    const response = await httpClient.patch<Document>(`/documents/${documentId}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data

@@ -70,7 +70,7 @@ const handleFileChange = (event: Event) => {
 }
 
 const handleSave = async (linkedJobIds: string[]) => {
-  if (!form.value.title || !form.value.category || !form.value.file) {
+  if (!form.value.title || !form.value.category || (!form.value.file && !isEditMode.value)) {
     alert('File, Title, and Category are required.')
     return
   }
@@ -81,7 +81,7 @@ const handleSave = async (linkedJobIds: string[]) => {
     description: form.value.description,
   } as Document
   const savedDocument = isEditMode.value
-    ? await api.documents.update(form.value.file!, document)
+    ? await api.documents.update(props.document!.id, document, form.value.file)
     : await api.documents.create(props.boardId, form.value.file!, document)
 
   sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
