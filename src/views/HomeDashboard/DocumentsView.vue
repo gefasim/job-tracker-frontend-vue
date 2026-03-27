@@ -17,6 +17,14 @@ onMounted(async () => {
     .filter((document, index, self) => self.findIndex((c) => c.id === document.id) === index)
 })
 
+const getDocuments = (boardId: string): Document[] => {
+  return boards.value
+    .find((b) => b.id === boardId)!
+    .columns.flatMap((c) => c.jobApplications)
+    .flatMap((j) => j.documents || [])
+    .filter((document, index, self) => self.findIndex((c) => c.id === document.id) === index)
+}
+
 const onDeleteDocument = async (documentId: string) => {
   if (confirm('Are you sure you want to delete this document? This action cannot be undone.')) {
     await api.documents.delete(documentId)
@@ -28,16 +36,20 @@ const onDeleteDocument = async (documentId: string) => {
 <template>
   <div class="placeholder-page">
     <h1>Documents</h1>
-    <DocumentGrid
-      :documents="documents"
-      :boardId="boards[0]!.id"
-      :jobApplication="null"
-      :showUnlinkButton="false"
-      :showDeleteButton="true"
-      noDocumentsMessage="You don't have any documents"
-      @save="(_) => {}"
-      @delete="onDeleteDocument"
-    />
+    <div v-for="board in boards.filter((b) => !b.isArchived)" :key="board.id">
+      <h2>{{ board.name }}</h2>
+      <DocumentGrid
+        :documents="getDocuments(board.id)"
+        :boardId="board.id"
+        :jobApplication="null"
+        :showUnlinkButton="false"
+        :showDeleteButton="true"
+        noDocumentsMessage="You don't have any documents for this board yet."
+        @save="(_) => {}"
+        @delete="onDeleteDocument"
+      />
+      <hr />
+    </div>
   </div>
 </template>
 

@@ -88,6 +88,7 @@ const handleUnlinkDocument = async (documentId: string) => {
         v-if="isModalOpen"
         :document="documentToEdit"
         :job-application="jobApplication"
+        :board-id="boardId"
         @close="isModalOpen = false"
         @save="handleSaveDocument"
       />

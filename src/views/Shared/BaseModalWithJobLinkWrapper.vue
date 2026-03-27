@@ -3,22 +3,24 @@ import type { JobApplication } from '@/models/job-application.dto'
 import JobSelectDropdown from '../JobApplication/JobSelectDropdown.vue'
 import { onMounted, ref } from 'vue'
 import BaseModalWrapper from './BaseModalWrapper.vue'
-import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useBoards } from '@/store/boardStore'
 
 const props = defineProps<{
   title: string
   linkedJobsParam: JobApplication[]
+  boardId: string
 }>()
 
 const emit = defineEmits(['close', 'save'])
-const { board } = useCurrentBoard()
+const { boards } = useBoards()
 const linkedJobs = ref<JobApplication[]>([])
 const availableJobs = ref<JobApplication[]>([])
 
 onMounted(() => {
   linkedJobs.value = props.linkedJobsParam
-  availableJobs.value = board
-    .value!.columns.flatMap((c) => c.jobApplications)
+  availableJobs.value = boards.value
+    .find((b) => b.id === props.boardId)!
+    .columns.flatMap((c) => c.jobApplications)
     .filter((j) => !props.linkedJobsParam.includes(j))
 })
 

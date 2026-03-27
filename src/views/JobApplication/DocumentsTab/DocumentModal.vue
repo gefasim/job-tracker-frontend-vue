@@ -4,18 +4,23 @@ import type { Document } from '@/models/document.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { DocumentCategoryEnum, type DocumentCategoryType } from '@/models/document-category.enum'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
-import { useRoute } from 'vue-router'
 import { api } from '@/api/api'
-import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useBoards } from '@/store/boardStore'
 
+/**
+  This modal is used for both creating a new document and editing an existing document.
+  Document prop is required for edit mode, and null for create mode. In create mode
+  if the modal is opened from a specific job application, that job application will be pre-linked to the new document.
+  BoardId is required to get the list of jobs that might be linked to the document. The list of jobs will be taken from shared state (board store)
+*/
 const props = defineProps<{
   document?: Document | null
   jobApplication?: JobApplication
+  boardId: string
 }>()
 
 const emit = defineEmits(['close', 'save'])
-const route = useRoute()
-const { board } = useCurrentBoard()
+const { boards } = useBoards()
 
 const isEditMode = computed(() => !!props.document)
 const isModalOpen = ref(false)
@@ -46,8 +51,9 @@ onMounted(() => {
 
 const getJobsLinkedToDocument = (documentId: string): JobApplication[] => {
   return (
-    board
-      .value!.columns.flatMap((c) => c.jobApplications)
+    boards.value
+      .find((b) => b.id === props.boardId)
+      ?.columns.flatMap((c) => c.jobApplications)
       .filter((j) => j.documents.some((d) => d.id == documentId)) ?? []
   )
 }
@@ -69,7 +75,6 @@ const handleSave = async (linkedJobIds: string[]) => {
     return
   }
 
-  const boardId = route.params.boardId as string
   const document = {
     title: form.value.title,
     category: form.value.category,
@@ -77,7 +82,7 @@ const handleSave = async (linkedJobIds: string[]) => {
   } as Document
   const savedDocument = isEditMode.value
     ? await api.documents.update(form.value.file!, document)
-    : await api.documents.create(boardId, form.value.file!, document)
+    : await api.documents.create(props.boardId, form.value.file!, document)
 
   sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
 
@@ -104,6 +109,7 @@ const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]
     v-if="isModalOpen"
     :title="isEditMode ? 'Edit Document' : 'Upload Document'"
     :linkedJobsParam="linkedJobs"
+    :board-id="boardId"
     @close="emit('close')"
     @save="handleSave"
   >

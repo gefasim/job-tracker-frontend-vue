@@ -127,6 +127,7 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
     v-if="isModalOpen"
     :title="isEditMode ? 'Edit Contact' : 'Create Contact'"
     :linkedJobsParam="linkedJobs"
+    :board-id="boardId"
     @close="emit('close')"
     @save="handleSave"
   >

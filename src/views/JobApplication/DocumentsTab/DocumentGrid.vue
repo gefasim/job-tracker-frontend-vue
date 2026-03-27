@@ -56,7 +56,7 @@ const handleSaveDocument = (savedDocument: Document) => {
         <polyline points="10 9 9 9 8 9"></polyline>
       </svg>
     </div>
-    <h2>You have not linked any documents to this job yet.</h2>
+    <h2>{{ props.noDocumentsMessage }}</h2>
   </div>
 
   <div v-else class="documents-grid">
@@ -79,6 +79,7 @@ const handleSaveDocument = (savedDocument: Document) => {
       v-if="isModalOpen"
       :document="documentToEdit"
       :job-application="jobApplication ?? undefined"
+      :board-id="boardId"
       @close="isModalOpen = false"
       @save="handleSaveDocument"
     />
