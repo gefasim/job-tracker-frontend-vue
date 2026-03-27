@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { useBoards } from '@/store/boardStore'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { api } from '@/api/api'
 import type { Document } from '@/models/document.dto'
+import type { DocumentCategoryType } from '@/models/document-category.enum'
 import DocumentGrid from '../JobApplication/DocumentsTab/DocumentGrid.vue'
 import type { Board } from '@/models/board.dto'
 
 const { boards, fetchBoards } = useBoards()
 const boardsWithDocuments = ref<{ board: Board; documents: Document[] }[]>([])
+const selectedCategory = ref<DocumentCategoryType | 'All'>('All')
 
 onMounted(async () => {
   await fetchBoards()
@@ -27,6 +29,44 @@ const getDocuments = (boardId: string): Document[] => {
     .filter((document, index, self) => self.findIndex((c) => c.id === document.id) === index)
 }
 
+const getAllDocuments = (): Document[] => {
+  return boardsWithDocuments.value.flatMap((b) => b.documents)
+}
+
+const getCategoryCount = (category: DocumentCategoryType): number => {
+  return getAllDocuments().filter((doc) => doc.category === category).length
+}
+
+const getAvailableCategories = (): { category: DocumentCategoryType; count: number }[] => {
+  const categories = new Set<DocumentCategoryType>()
+  getAllDocuments().forEach((doc) => {
+    categories.add(doc.category)
+  })
+  return Array.from(categories)
+    .map((category) => ({
+      category,
+      count: getCategoryCount(category),
+    }))
+    .sort((a, b) => a.category.localeCompare(b.category))
+}
+
+const getTotalDocumentsCount = (): number => {
+  return getAllDocuments().length
+}
+
+const filteredBoardsWithDocuments = computed(() => {
+  if (selectedCategory.value === 'All') {
+    return boardsWithDocuments.value.map((b) => ({
+      ...b,
+      documents: b.documents,
+    }))
+  }
+  return boardsWithDocuments.value.map((b) => ({
+    ...b,
+    documents: b.documents.filter((doc) => doc.category === selectedCategory.value),
+  }))
+})
+
 const onDeleteDocument = async (documentId: string) => {
   if (confirm('Are you sure you want to delete this document? This action cannot be undone.')) {
     await api.documents.delete(documentId)
@@ -41,7 +81,30 @@ const onDeleteDocument = async (documentId: string) => {
 <template>
   <div class="placeholder-page">
     <h1>Documents</h1>
-    <div v-for="boards in boardsWithDocuments" :key="boards.board.id">
+
+    <!-- Category Filters -->
+    <div v-if="getTotalDocumentsCount() > 0" class="category-filters">
+      <button
+        class="category-badge"
+        :class="{ active: selectedCategory === 'All' }"
+        @click="selectedCategory = 'All'"
+      >
+        <span>All</span>
+        <span class="badge-count">{{ getTotalDocumentsCount() }}</span>
+      </button>
+      <button
+        v-for="{ category, count } in getAvailableCategories()"
+        :key="category"
+        class="category-badge"
+        :class="{ active: selectedCategory === category }"
+        @click="selectedCategory = category"
+      >
+        <span>{{ category }}</span>
+        <span class="badge-count">{{ count }}</span>
+      </button>
+    </div>
+
+    <div v-for="boards in filteredBoardsWithDocuments" :key="boards.board.id">
       <div class="board-header">
         <h2>{{ boards.board.name }}</h2>
         <p v-if="boards.documents.length == 0">You don't have any documents for this board yet.</p>
@@ -66,12 +129,67 @@ const onDeleteDocument = async (documentId: string) => {
 .placeholder-page {
   padding: 2rem;
 }
+
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.category-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e8e8e8;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: #202124;
+}
+
+.category-badge:hover {
+  background-color: #d8d8d8;
+  border-color: #5f6368;
+}
+
+.category-badge.active {
+  background-color: #1f73e6;
+  color: white;
+  border-color: #1f73e6;
+}
+
+.category-badge.active .badge-count {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.35rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: inherit;
+}
+
 .board-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
+
 .board-header p {
   color: #5f6368;
 }
