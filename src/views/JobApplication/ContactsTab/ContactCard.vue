@@ -182,6 +182,9 @@ const primaryPhone = computed(() => props.contact.phones?.[0]?.phone || 'none')
 .company {
   font-size: 13px;
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu-container {
