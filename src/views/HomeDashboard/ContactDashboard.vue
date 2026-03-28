@@ -5,12 +5,11 @@ import { computed, onMounted, ref } from 'vue'
 import ContactGrid from '../JobApplication/ContactsTab/ContactGrid.vue'
 import { api } from '@/api/api'
 import type { Board } from '@/models/board.dto'
-import GenericSelector from '../Shared/GenericSelector.vue'
+import { useNavbarFilter } from '@/store/navbarFilterStore'
 
 const { boards, fetchBoards } = useBoards()
+const { selectedBoard, textFilter: contactNameFilter } = useNavbarFilter()
 const boardsWithContacts = ref<{ board: Board; contacts: Contact[] }[]>([])
-const availableBoards = computed(() => boardsWithContacts.value.map((b) => b.board))
-const selectedBoard = ref<Board | null>(null)
 
 onMounted(async () => {
   await fetchBoards()
@@ -20,10 +19,6 @@ onMounted(async () => {
       board,
       contacts: getContacts(board.id),
     }))
-  // Set first board as default if available
-  if (boardsWithContacts.value.length > 0 && boardsWithContacts.value[0]) {
-    selectedBoard.value = boardsWithContacts.value[0].board
-  }
 })
 
 const getContacts = (boardId: string): Contact[] => {
@@ -34,15 +29,21 @@ const getContacts = (boardId: string): Contact[] => {
     .filter((contact, index, self) => self.findIndex((c) => c.id === contact.id) === index)
 }
 
-const onBoardChange = (board: Board) => {
-  selectedBoard.value = board
-}
-
 const filteredContacts = computed(() => {
   if (!selectedBoard.value) return []
   const boardData = boardsWithContacts.value.find((b) => b.board.id === selectedBoard.value!.id)
-  return boardData ? boardData.contacts : []
+  if (!boardData) return []
+  return boardData.contacts.filter((c) => searchFilter(c, contactNameFilter.value))
 })
+
+const searchFilter = (contact: Contact, query: string) => {
+  const fullName = `${contact.firstName} ${contact.lastName}`
+  return (
+    contact.firstName.toLowerCase().includes(query) ||
+    contact.lastName.toLowerCase().includes(query) ||
+    fullName.toLocaleLowerCase().includes(query)
+  )
+}
 
 const onDeleteContact = async (contactId: string) => {
   if (confirm('Are you sure you want to delete this contact? This action cannot be undone.')) {
@@ -57,21 +58,6 @@ const onDeleteContact = async (contactId: string) => {
 </script>
 <template>
   <div class="placeholder-page">
-    <h1>Contacts</h1>
-    <div class="select-and-filter">
-      <!-- Board Selector -->
-      <GenericSelector
-        :items="availableBoards"
-        :selected-item="selectedBoard"
-        label="Select Board:"
-        display-property="name"
-        value-property="id"
-        id="board-select"
-        :hideLabel="true"
-        @update:selected-item="onBoardChange"
-      />
-    </div>
-
     <div v-if="selectedBoard">
       <div class="board-header">
         <h2>{{ selectedBoard.name }}</h2>
