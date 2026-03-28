@@ -2,28 +2,47 @@
 import type { Board } from '@/models/board.dto'
 import { useBoards } from '@/store/boardStore'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import GenericSelector from '../Shared/GenericSelector.vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
+const route = useRoute()
+const router = useRouter()
 const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
 
-onMounted(() => {
-  if (availableBoards.value.length > 0) {
+const syncSelectedBoard = () => {
+  if (availableBoards.value.length == 0) return
+  if (route.params.boardId) {
+    const found = availableBoards.value.find((b) => b.id === route.params.boardId)
+    selectedBoard.value = found || availableBoards.value[0]!
+  } else {
     selectedBoard.value = availableBoards.value[0]!
   }
+}
+
+onMounted(() => {
+  syncSelectedBoard()
 })
+
+watch(
+  () => route.params.boardId,
+  () => {
+    syncSelectedBoard()
+  },
+)
 
 const onBoardChange = (board: Board) => {
   selectedBoard.value = board
+  // Redirects to another board page if user is currently on a board page
+  if (route.params.boardId) {
+    router.push({ name: 'board', params: { boardId: board.id } })
+  }
 }
 </script>
 <template>
   <nav class="top-navbar">
-    <div class="nav-brand">
-      <h2>Job Tracker</h2>
-    </div>
     <div class="nav-menu">
       <GenericSelector
         :items="availableBoards"
@@ -45,12 +64,7 @@ const onBoardChange = (board: Board) => {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  background-color: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
-}
-.nav-brand h2 {
-  font-size: 1.5rem;
-  color: var(--text-primary);
 }
 .nav-menu {
   display: flex;
