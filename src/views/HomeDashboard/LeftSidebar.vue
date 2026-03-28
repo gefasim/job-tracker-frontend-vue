@@ -85,7 +85,6 @@ const handleItemClick = (item: string) => {
 </template>
 <style>
 .left-sidebar {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

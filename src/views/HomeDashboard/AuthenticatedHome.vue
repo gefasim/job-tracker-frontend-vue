@@ -4,9 +4,9 @@ import TopNavbar from './TopNavbar.vue'
 </script>
 <template>
   <div class="home">
-    <TopNavbar />
-    <div class="content-with-sidebar">
-      <LeftSidebar />
+    <LeftSidebar />
+    <div class="content-with-navbar">
+      <TopNavbar />
       <main class="main-content">
         <RouterView />
       </main>
@@ -16,15 +16,14 @@ import TopNavbar from './TopNavbar.vue'
 <style>
 .home {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100vh;
   background: var(--bg-main);
 }
-.content-with-sidebar {
+.content-with-navbar {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex: 1;
-  overflow: hidden;
 }
 .main-content {
   flex: 5;
