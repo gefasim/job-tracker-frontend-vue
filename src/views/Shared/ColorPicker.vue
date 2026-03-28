@@ -166,7 +166,7 @@ onUnmounted(() => {
   gap: 8px;
   padding: 6px 12px 6px 8px;
   background: var(--bg-main);
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   cursor: pointer;
   font-family: inherit;
@@ -179,11 +179,11 @@ onUnmounted(() => {
 
 .dropdown-trigger:hover {
   background-color: color-mix(in srgb, var(--bg-main), black 10%);
-  border-color: color-mix(in srgb, var(--input-border), black 10%);
+  border-color: color-mix(in srgb, var(--border-color), black 10%);
 }
 html.dark .dropdown-trigger:hover {
   background-color: color-mix(in srgb, var(--bg-main), white 10%);
-  border-color: color-mix(in srgb, var(--input-border), white 10%);
+  border-color: color-mix(in srgb, var(--border-color), white 10%);
 }
 
 .color-indicator {

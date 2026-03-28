@@ -160,7 +160,7 @@ const setLink = () => {
 
 <style scoped>
 .editor-container {
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   background: var(--bg-main);
 }
@@ -171,7 +171,7 @@ const setLink = () => {
   padding: 8px;
   gap: 8px;
   background: var(--bg-main);
-  border-bottom: 1px solid var(--input-border);
+  border-bottom: 1px solid var(--border-color);
   flex-wrap: wrap;
 }
 
@@ -183,7 +183,7 @@ const setLink = () => {
 .divider {
   width: 1px;
   height: 20px;
-  background: var(--input-border);
+  background: var(--border-color);
 }
 
 button {
