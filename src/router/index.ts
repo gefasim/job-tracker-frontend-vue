@@ -5,8 +5,8 @@ import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/HomeDashboard/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
 import UserBoards from '@/views/HomeDashboard/UserBoards.vue'
-import ContactsView from '@/views/HomeDashboard/ContactsView.vue'
-import DocumentsView from '@/views/HomeDashboard/DocumentsView.vue'
+import ContactDashboard from '@/views/HomeDashboard/ContactDashboard.vue'
+import DocumentDashboard from '@/views/HomeDashboard/DocumentDashboard.vue'
 import AboutView from '@/views/HomeDashboard/AboutView.vue'
 import ContactUs from '@/views/HomeDashboard/ContactUs.vue'
 import HowTo from '@/views/HomeDashboard/HowTo.vue'
@@ -42,12 +42,12 @@ const router = createRouter({
         {
           path: 'contacts',
           name: 'contacts',
-          component: ContactsView,
+          component: ContactDashboard,
         },
         {
           path: 'documents',
           name: 'documents',
-          component: DocumentsView,
+          component: DocumentDashboard,
         },
         {
           path: 'about',
