@@ -4,7 +4,7 @@ import GuestHome from '@/views/GuestHome.vue'
 import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/HomeDashboard/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
-import UserBoards from '@/views/HomeDashboard/UserBoards.vue'
+import BoardDashboard from '@/views/HomeDashboard/BoardDashboard.vue'
 import ContactDashboard from '@/views/HomeDashboard/ContactDashboard.vue'
 import DocumentDashboard from '@/views/HomeDashboard/DocumentDashboard.vue'
 import AboutView from '@/views/HomeDashboard/AboutView.vue'
@@ -37,7 +37,7 @@ const router = createRouter({
         {
           path: '',
           name: 'dashboard',
-          component: UserBoards,
+          component: BoardDashboard,
         },
         {
           path: 'contacts',
