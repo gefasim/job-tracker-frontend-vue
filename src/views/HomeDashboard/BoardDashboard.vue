@@ -39,6 +39,9 @@ const openBoard = (boardId: string) => {
         <span class="board-card-title">
           {{ board.name }}
         </span>
+        <span class="board-card-created">
+          Created: {{ new Date(board.createdAt).toLocaleDateString() }}
+        </span>
       </div>
     </div>
   </div>
@@ -74,9 +77,27 @@ const openBoard = (boardId: string) => {
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  gap: 1rem;
 }
+
+.board-card:hover {
+  background-color: color-mix(in srgb, var(--bg-card), black 10%);
+  border-color: color-mix(in srgb, var(--border-color), black 10%);
+}
+
+html.dark .board-card:hover {
+  background-color: color-mix(in srgb, var(--bg-card), white 10%);
+  border-color: color-mix(in srgb, var(--border-color), white 10%);
+}
+
 .board-card-title {
   font-size: 1.25rem;
   font-weight: 600;
+}
+
+.board-card-created {
+  font-size: 0.8rem;
+  font-weight: 200;
+  color: var(--text-secondary);
 }
 </style>
