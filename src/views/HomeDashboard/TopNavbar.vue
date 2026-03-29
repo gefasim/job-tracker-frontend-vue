@@ -8,6 +8,7 @@ import { useRoute, useRouter } from 'vue-router'
 import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
 import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
 import BoardIcon from '@/assets/icons/BoardIcon.vue'
+import BaseButtonDropdown from '../Shared/BaseButtonDropdown.vue'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
@@ -49,6 +50,10 @@ const onBoardChange = (board: Board) => {
     router.push({ name: 'board', params: { boardId: board.id } })
   }
 }
+
+const onCreate = (item: string) => {
+  console.log(item)
+}
 </script>
 <template>
   <nav class="top-navbar">
@@ -75,6 +80,12 @@ const onBoardChange = (board: Board) => {
       <RouterLink to="/documents" class="sidebar-item" active-class="active">
         <DocumentNavTabIcon /> Documents
       </RouterLink>
+    </div>
+    <div class="nav-menu">
+      <BaseButtonDropdown :items="['Board', 'Job', 'Contact', 'Document']" @select="onCreate">
+        <template #buttonValue>Create new</template>
+        <template #item="{ item }">{{ item }}</template>
+      </BaseButtonDropdown>
     </div>
   </nav>
 </template>
