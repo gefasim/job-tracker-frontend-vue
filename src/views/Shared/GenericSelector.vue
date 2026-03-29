@@ -22,6 +22,14 @@ const emit = defineEmits<{
 const inputId = computed(() => props.id)
 const localValue = ref<string>('')
 
+const getDisplay = (item: T): string => {
+  return String(item[props.displayProperty])
+}
+
+const getValue = (item: T): string | number => {
+  return item[props.valueProperty] as string | number
+}
+
 // Watch for changes in selectedItem prop and update local value
 watch(
   () => props.selectedItem,
@@ -30,14 +38,6 @@ watch(
   },
   { immediate: true },
 )
-
-const getDisplay = (item: T): string => {
-  return String(item[props.displayProperty])
-}
-
-const getValue = (item: T): string | number => {
-  return item[props.valueProperty] as string | number
-}
 
 const onChange = (event: Event) => {
   const target = event.target as HTMLSelectElement
