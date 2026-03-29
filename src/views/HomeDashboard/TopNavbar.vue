@@ -71,6 +71,12 @@ const onCreate = (item: string) => {
     isDocumentModalOpen.value = true
   }
 }
+
+const onBoardCreated = (board: Board) => {
+  boards.value.push(board)
+  selectedBoard.value = board
+  isCreateBoardModalOpen.value = false
+}
 </script>
 <template>
   <nav class="top-navbar">
@@ -109,7 +115,7 @@ const onCreate = (item: string) => {
     <CreateBoardModal
       v-if="isCreateBoardModalOpen"
       @close="isCreateBoardModalOpen = false"
-      @save="isCreateBoardModalOpen = false"
+      @save="onBoardCreated"
     />
     <CreateJobApplicationModal
       v-if="isCreateJobModalOpen && selectedBoard"

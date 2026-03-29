@@ -16,4 +16,9 @@ export const boardApi = {
     const response = await httpClient.get<Board[]>(`/boards-all`)
     return response.data
   },
+
+  async createBoard(boardName: string): Promise<Board> {
+    const response = await httpClient.post<Board>(`/boards`, { name: boardName })
+    return response.data
+  },
 }

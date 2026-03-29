@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   title: string
+  width?: string
 }>()
 
 const emit = defineEmits(['close', 'save'])
@@ -12,7 +13,7 @@ const handleSave = async () => {
 
 <template>
   <div class="modal-overlay" @click.self="emit('close')">
-    <div class="modal-content">
+    <div class="modal-content" :style="width ? { width: width } : {}">
       <div class="modal-header">
         <h2>{{ title }}</h2>
       </div>
