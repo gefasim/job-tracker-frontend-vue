@@ -158,7 +158,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 }
 
 .column {
-  width: 15vw;
+  width: 20%;
   height: stretch;
   display: flex;
   flex-direction: column;
