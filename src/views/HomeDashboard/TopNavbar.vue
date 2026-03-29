@@ -20,7 +20,7 @@ const syncSelectedBoard = () => {
   if (route.params.boardId) {
     const found = availableBoards.value.find((b) => b.id === route.params.boardId)
     selectedBoard.value = found || availableBoards.value[0]!
-  } else {
+  } else if (selectedBoard.value == null) {
     selectedBoard.value = availableBoards.value[0]!
   }
 }
@@ -35,6 +35,12 @@ watch(
     syncSelectedBoard()
   },
 )
+
+const linkToSelectedBoard = computed(() => {
+  return selectedBoard.value
+    ? { name: 'board', params: { boardId: selectedBoard.value?.id } }
+    : { name: 'boards' }
+})
 
 const onBoardChange = (board: Board) => {
   selectedBoard.value = board
@@ -60,11 +66,7 @@ const onBoardChange = (board: Board) => {
       <input v-model="textFilter" type="text" placeholder="Search..." />
     </div>
     <div class="nav-menu">
-      <RouterLink
-        :to="{ name: 'board', params: { boardId: selectedBoard?.id } }"
-        class="sidebar-item"
-        active-class="active"
-      >
+      <RouterLink :to="linkToSelectedBoard" class="sidebar-item" active-class="active">
         <BoardIcon /> Board
       </RouterLink>
       <RouterLink to="/contacts" class="sidebar-item" active-class="active">
