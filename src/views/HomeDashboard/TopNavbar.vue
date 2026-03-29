@@ -5,6 +5,9 @@ import { useNavbarFilter } from '@/store/navbarFilterStore'
 import { computed, onMounted, watch } from 'vue'
 import GenericSelector from '../Shared/GenericSelector.vue'
 import { useRoute, useRouter } from 'vue-router'
+import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
+import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
+import BoardIcon from '@/assets/icons/BoardIcon.vue'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
@@ -55,6 +58,21 @@ const onBoardChange = (board: Board) => {
         @update:selected-item="onBoardChange"
       />
       <input v-model="textFilter" type="text" placeholder="Search..." />
+    </div>
+    <div class="nav-menu">
+      <RouterLink
+        :to="{ name: 'board', params: { boardId: selectedBoard?.id } }"
+        class="sidebar-item"
+        active-class="active"
+      >
+        <BoardIcon /> Board
+      </RouterLink>
+      <RouterLink to="/contacts" class="sidebar-item" active-class="active">
+        <ContactNavTabIcon /> Contacts
+      </RouterLink>
+      <RouterLink to="/documents" class="sidebar-item" active-class="active">
+        <DocumentNavTabIcon /> Documents
+      </RouterLink>
     </div>
   </nav>
 </template>
