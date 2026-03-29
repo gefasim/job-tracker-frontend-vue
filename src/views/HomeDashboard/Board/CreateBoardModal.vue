@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { api } from '@/api/api'
+import type { Board } from '@/models/board.dto'
 import BaseModalWrapper from '@/views/Shared/BaseModalWrapper.vue'
 import { ref } from 'vue'
 
-const emit = defineEmits(['close', 'save'])
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'save', board: Board): void
+}>()
 
 const boardName = ref('')
 
