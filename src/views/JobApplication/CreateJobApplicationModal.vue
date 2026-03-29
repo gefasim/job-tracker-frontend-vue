@@ -11,7 +11,7 @@ import type { CreateJobApplication } from '@/models/create-job-application.dto'
 
 const props = defineProps<{
   boardId: string
-  columnId: string
+  columnId?: string
   boards: Board[]
 }>()
 

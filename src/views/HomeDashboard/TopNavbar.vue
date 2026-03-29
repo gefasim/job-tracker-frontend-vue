@@ -2,19 +2,28 @@
 import type { Board } from '@/models/board.dto'
 import { useBoards } from '@/store/boardStore'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, watch, ref } from 'vue'
 import GenericSelector from '../Shared/GenericSelector.vue'
 import { useRoute, useRouter } from 'vue-router'
 import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
 import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
 import BoardIcon from '@/assets/icons/BoardIcon.vue'
 import BaseButtonDropdown from '../Shared/BaseButtonDropdown.vue'
+import CreateBoardModal from './Board/CreateBoardModal.vue'
+import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
+import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
+import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
 const route = useRoute()
 const router = useRouter()
 const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
+
+const isCreateBoardModalOpen = ref(false)
+const isCreateJobModalOpen = ref(false)
+const isContactModalOpen = ref(false)
+const isDocumentModalOpen = ref(false)
 
 const syncSelectedBoard = () => {
   if (availableBoards.value.length == 0) return
@@ -52,7 +61,15 @@ const onBoardChange = (board: Board) => {
 }
 
 const onCreate = (item: string) => {
-  console.log(item)
+  if (item === 'Board') {
+    isCreateBoardModalOpen.value = true
+  } else if (item === 'Job') {
+    isCreateJobModalOpen.value = true
+  } else if (item === 'Contact') {
+    isContactModalOpen.value = true
+  } else if (item === 'Document') {
+    isDocumentModalOpen.value = true
+  }
 }
 </script>
 <template>
@@ -88,6 +105,35 @@ const onCreate = (item: string) => {
       </BaseButtonDropdown>
     </div>
   </nav>
+  <Teleport to="body">
+    <CreateBoardModal
+      v-if="isCreateBoardModalOpen"
+      @close="isCreateBoardModalOpen = false"
+      @save="isCreateBoardModalOpen = false"
+    />
+    <CreateJobApplicationModal
+      v-if="isCreateJobModalOpen && selectedBoard"
+      :boardId="selectedBoard.id"
+      :boards="boards"
+      @close="isCreateJobModalOpen = false"
+      @save="isCreateJobModalOpen = false"
+    />
+    <ContactModal
+      v-if="isContactModalOpen && selectedBoard"
+      :contact="null"
+      :jobApplication="null"
+      :boardId="selectedBoard.id"
+      @close="isContactModalOpen = false"
+      @save="isContactModalOpen = false"
+    />
+    <DocumentModal
+      v-if="isDocumentModalOpen && selectedBoard"
+      :document="null"
+      :boardId="selectedBoard.id"
+      @close="isDocumentModalOpen = false"
+      @save="isDocumentModalOpen = false"
+    />
+  </Teleport>
 </template>
 <style scoped>
 .top-navbar {
