@@ -43,7 +43,7 @@ onMounted(() => {
     linkedJobs.value = getJobsLinkedToDocument(props.document!.id)
     linkedJobIdsBeforeUpdate = linkedJobs.value.map((j) => j.id)
   } else {
-    linkedJobs.value = [props.jobApplication!]
+    linkedJobs.value = props.jobApplication ? [props.jobApplication] : []
   }
 
   isModalOpen.value = true
