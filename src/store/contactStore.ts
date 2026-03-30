@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import type { Contact } from '@/models/contact.dto'
 import { api } from '@/api/api'
+import { loadFromCache, saveToCache, updateItemInStore, removeItemFromStore } from '@/utils/storeUtils'
 
 const STORAGE_KEY = 'contacts'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
@@ -8,40 +9,12 @@ const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
 const contactsPerBoard = ref<Record<string, Contact[]>>({})
 let isFetched = false
 
-const loadFromCache = (): Record<string, Contact[]> | null => {
-  try {
-    const cached = localStorage.getItem(STORAGE_KEY)
-    if (!cached) return null
-
-    const { data, timestamp } = JSON.parse(cached)
-    if (Date.now() - timestamp > CACHE_DURATION) {
-      localStorage.removeItem(STORAGE_KEY)
-      return null
-    }
-
-    return data as Record<string, Contact[]>
-  } catch (error) {
-    console.warn('Failed to load contacts from cache:', error)
-    localStorage.removeItem(STORAGE_KEY)
-    return null
-  }
-}
-
-const saveToCache = () => {
-  const contacts = contactsPerBoard.value
-  if (contacts) {
-    const cacheData = {
-      data: contacts,
-      timestamp: Date.now(),
-    }
-    localStorage.setItem(`${STORAGE_KEY}`, JSON.stringify(cacheData))
-  }
-}
+const save = () => saveToCache(STORAGE_KEY, contactsPerBoard.value)
 
 const fetchContacts = async (boardId: string) => {
   if (isFetched) return
   try {
-    const cachedContacts = loadFromCache()
+    const cachedContacts = loadFromCache<Record<string, Contact[]>>(STORAGE_KEY, CACHE_DURATION)
     if (cachedContacts && cachedContacts[boardId]) {
       contactsPerBoard.value[boardId] = cachedContacts[boardId]
     }
@@ -49,7 +22,7 @@ const fetchContacts = async (boardId: string) => {
     const contacts = await api.contacts.getAll(boardId)
     contactsPerBoard.value[boardId] = contacts
     isFetched = true
-    saveToCache()
+    save()
     return contacts
   } catch (error) {
     console.error(`Failed to fetch contacts for board ${boardId}:`, error)
@@ -58,29 +31,11 @@ const fetchContacts = async (boardId: string) => {
 }
 
 const updateContactInStore = (contact: Contact) => {
-  for (const boardId in contactsPerBoard.value) {
-    const contacts = contactsPerBoard.value[boardId]
-    if (!contacts) continue
-    const index = contacts.findIndex((c) => c.id === contact.id)
-    if (index !== -1) {
-      contacts[index] = contact
-      saveToCache()
-      break
-    }
-  }
+  updateItemInStore(contactsPerBoard.value, contact, save)
 }
 
 const removeContactFromStore = (contactId: string) => {
-  for (const boardId in contactsPerBoard.value) {
-    const contacts = contactsPerBoard.value[boardId]
-    if (!contacts) continue
-    const index = contacts.findIndex((c) => c.id === contactId)
-    if (index !== -1) {
-      contacts.splice(index, 1)
-      saveToCache()
-      break
-    }
-  }
+  removeItemFromStore(contactsPerBoard.value, contactId, save)
 }
 
 /* API methods */
@@ -91,7 +46,7 @@ const createContact = async (boardId: string, contact: Contact) => {
       contactsPerBoard.value[boardId] = []
     }
     contactsPerBoard.value[boardId].push(newContact)
-    saveToCache()
+    save()
     return newContact
   } catch (error) {
     console.error(`Failed to create contact for board ${boardId}:`, error)
@@ -143,7 +98,7 @@ const deleteContact = async (boardId: string, contactId: string) => {
 
 export const useContacts = () => {
   // Load from cache first
-  const cachedContacts = loadFromCache()
+  const cachedContacts = loadFromCache<Record<string, Contact[]>>(STORAGE_KEY, CACHE_DURATION)
   if (cachedContacts) {
     contactsPerBoard.value = cachedContacts
   }

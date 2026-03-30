@@ -1,84 +1,32 @@
 import { ref } from 'vue'
 import type { Document } from '@/models/document.dto'
 import { api } from '@/api/api'
+import {
+  loadFromCache,
+  saveToCache,
+  updateItemInStore,
+  removeItemFromStore,
+} from '@/utils/storeUtils'
 
 const STORAGE_KEY = 'documents'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
 const documentsByBoard = ref<Record<string, Document[]>>({})
 let isFetched = false
 
-const loadFromCache = (): Record<string, Document[]> | null => {
-  try {
-    const cached = localStorage.getItem(STORAGE_KEY)
-    if (!cached) return null
-
-    const { data, timestamp } = JSON.parse(cached)
-    if (Date.now() - timestamp > CACHE_DURATION) {
-      localStorage.removeItem(STORAGE_KEY)
-      return null
-    }
-
-    return data as Record<string, Document[]>
-  } catch (error) {
-    console.error('Failed to load documents from cache:', error)
-    localStorage.removeItem(STORAGE_KEY)
-    return null
-  }
-}
-
-const saveToCache = () => {
-  const docs = documentsByBoard.value
-  if (docs) {
-    const cacheData = {
-      data: docs,
-      timestamp: Date.now(),
-    }
-    localStorage.setItem(`${STORAGE_KEY}`, JSON.stringify(cacheData))
-  }
-}
+const save = () => saveToCache(STORAGE_KEY, documentsByBoard.value)
 
 const updateDocumentInStore = (document: Document) => {
-  let found = false
-  for (const boardId in documentsByBoard.value) {
-    const docs = documentsByBoard.value[boardId]
-    if (!docs) continue
-    const index = docs.findIndex((d) => d.id === document.id)
-    if (index !== -1) {
-      docs[index] = document
-      found = true
-      saveToCache()
-      break
-    }
-  }
-
-  // If not found in any existing lists, but the document has a board ID, add it
-  // Assuming the Document has a board property from dto
-  if (!found && document.board?.id) {
-    const boardId = document.board.id
-    if (documentsByBoard.value[boardId]) {
-      documentsByBoard.value[boardId].push(document)
-      saveToCache()
-    }
-  }
+  updateItemInStore(documentsByBoard.value, document, save)
 }
 
 const removeDocumentFromStore = (documentId: string) => {
-  for (const boardId in documentsByBoard.value) {
-    const docs = documentsByBoard.value[boardId]
-    if (!docs) continue
-    const index = docs.findIndex((d) => d.id === documentId)
-    if (index !== -1) {
-      docs.splice(index, 1)
-      saveToCache()
-      break
-    }
-  }
+  removeItemFromStore(documentsByBoard.value, documentId, save)
 }
 
 const fetchDocuments = async (boardId: string) => {
   if (isFetched) return
   try {
-    const cachedDocs = loadFromCache()
+    const cachedDocs = loadFromCache<Record<string, Document[]>>(STORAGE_KEY, CACHE_DURATION)
     if (cachedDocs && cachedDocs[boardId]) {
       documentsByBoard.value[boardId] = cachedDocs[boardId]
     }
@@ -86,7 +34,7 @@ const fetchDocuments = async (boardId: string) => {
     const docs = await api.documents.getAll(boardId)
     documentsByBoard.value[boardId] = docs
     isFetched = true
-    saveToCache()
+    save()
     return docs
   } catch (error) {
     console.error(`Failed to fetch documents for board ${boardId}:`, error)
@@ -112,7 +60,7 @@ const createDocument = async (boardId: string, file: File, document: Document) =
       documentsByBoard.value[boardId] = []
     }
     documentsByBoard.value[boardId].push(newDoc)
-    saveToCache()
+    save()
     return newDoc
   } catch (error) {
     console.error('Failed to create document:', error)
@@ -164,7 +112,7 @@ const unassignJobApplication = async (documentId: string, jobId: string) => {
 }
 
 export const useDocumentStore = () => {
-  const cachedDocuments = loadFromCache()
+  const cachedDocuments = loadFromCache<Record<string, Document[]>>(STORAGE_KEY, CACHE_DURATION)
   if (cachedDocuments) {
     documentsByBoard.value = cachedDocuments
   }
