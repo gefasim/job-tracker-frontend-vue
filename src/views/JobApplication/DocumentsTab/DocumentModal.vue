@@ -4,8 +4,8 @@ import type { Document } from '@/models/document.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { DocumentCategoryEnum, type DocumentCategoryType } from '@/models/document-category.enum'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
-import { api } from '@/api/api'
 import { useBoards } from '@/store/boardStore'
+import { useDocumentStore } from '@/store/documentStore'
 
 /**
   This modal is used for both creating a new document and editing an existing document.
@@ -21,6 +21,8 @@ const { document, jobApplication, boardId } = defineProps<{
 
 const emit = defineEmits(['close', 'save'])
 const { boards } = useBoards()
+const { createDocument, updateDocument, assignJobApplication, unassignJobApplication } =
+  useDocumentStore()
 
 const isEditMode = computed(() => !!document)
 const isModalOpen = ref(false)
@@ -81,8 +83,8 @@ const handleSave = async (linkedJobIds: string[]) => {
     description: form.value.description,
   } as Document
   const savedDocument = isEditMode.value
-    ? await api.documents.update(document!.id, document, form.value.file)
-    : await api.documents.create(boardId, form.value.file!, document)
+    ? await updateDocument(document!.id, document, form.value.file)
+    : await createDocument(boardId, form.value.file!, document)
 
   sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
 
@@ -90,16 +92,16 @@ const handleSave = async (linkedJobIds: string[]) => {
 }
 
 // Filters which JobApplication where linked and which where unlinked during Save/Update
-const sendAssignOrUnassignJobRequests = (boardId: string, linkedJobIds: string[]) => {
+const sendAssignOrUnassignJobRequests = (documentId: string, linkedJobIds: string[]) => {
   const jobIdsToLink = linkedJobIds.filter((id) => !linkedJobIdsBeforeUpdate.includes(id))
   const jobIdsToUnLink = linkedJobIdsBeforeUpdate.filter((id) => !linkedJobIds.includes(id))
 
   jobIdsToLink.forEach(async (jobId) => {
-    await api.documents.assignJobApplication(boardId, jobId)
+    await assignJobApplication(documentId, jobId)
   })
 
   jobIdsToUnLink.forEach(async (jobId) => {
-    await api.documents.unassignJobApplication(boardId, jobId)
+    await unassignJobApplication(documentId, jobId)
   })
 }
 </script>

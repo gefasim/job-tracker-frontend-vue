@@ -1,31 +1,28 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Document } from '@/models/document.dto'
 import DocumentModal from './DocumentModal.vue'
 import LinkDocumentDropdown from '@/views/Shared/LinkDocumentDropdown.vue'
-import { api } from '@/api/api'
-import { useCurrentBoard } from '@/store/currentBoardStore'
 import DocumentGrid from './DocumentGrid.vue'
 import { useRoute } from 'vue-router'
+import { useDocumentStore } from '@/store/documentStore'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
-const { board } = useCurrentBoard()
+
+const { documentsByBoard, assignJobApplication, unassignJobApplication } = useDocumentStore()
 const route = useRoute()
 const boardId = route.params.boardId as string
 
 const isModalOpen = ref(false)
 const documentToEdit = ref<Document | null>(null)
 
-const boardDocuments = ref<Document[]>([])
 const availableDocumentsToLink = computed(() => {
+  if (!documentsByBoard.value[boardId]) return []
   const assignedDocumentIds = jobApplication.value.documents?.map((c) => c.id)
-  return boardDocuments.value.filter((d) => !assignedDocumentIds!.some((id) => d!.id == id))
-})
-
-onMounted(async () => {
-  const boardId = board.value!.id
-  boardDocuments.value = await api.documents.getAll(boardId)
+  return documentsByBoard.value[boardId].filter(
+    (d) => !assignedDocumentIds!.some((id) => d!.id == id),
+  )
 })
 
 const openUploadModal = () => {
@@ -46,13 +43,13 @@ const handleSaveDocument = (savedDocument: Document) => {
 }
 
 const handleLinkDocument = async (document: Document) => {
-  await api.documents.assignJobApplication(document.id, jobApplication.value.id)
+  await assignJobApplication(document.id, jobApplication.value.id)
   jobApplication.value.documents.unshift(document)
 }
 
 const handleUnlinkDocument = async (documentId: string) => {
   if (confirm('Are you sure you want to unlink this document from the job?')) {
-    await api.documents.unassignJobApplication(documentId, jobApplication.value.id)
+    await unassignJobApplication(documentId, jobApplication.value.id)
     jobApplication.value.documents = jobApplication.value.documents!.filter(
       (d) => d.id !== documentId,
     )
