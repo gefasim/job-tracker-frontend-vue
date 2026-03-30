@@ -13,9 +13,11 @@ import CreateBoardModal from './Board/CreateBoardModal.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
 import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
 import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
+import { useDocumentStore } from '@/store/documentStore'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
+const { fetchDocuments } = useDocumentStore()
 const route = useRoute()
 const router = useRouter()
 const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
@@ -35,8 +37,17 @@ const syncSelectedBoard = () => {
   }
 }
 
+const loadDocuments = async () => {
+  boards.value
+    .filter((b) => !b.isArchived)
+    .forEach(async (board) => {
+      await fetchDocuments(board.id)
+    })
+}
+
 onMounted(() => {
   syncSelectedBoard()
+  loadDocuments()
 })
 
 watch(
