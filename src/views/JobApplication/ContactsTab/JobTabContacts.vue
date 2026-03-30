@@ -1,28 +1,27 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Contact } from '@/models/contact.dto'
 import ContactModal from './ContactModal.vue'
 import LinkContactDropdown from '@/views/Shared/LinkContactDropdown.vue'
-import { api } from '@/api/api'
 import { useRoute } from 'vue-router'
 import ContactGrid from './ContactGrid.vue'
+import { useContacts } from '@/store/contactStore'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
+const { contactsPerBoard, assignJobApplication, unassignJobApplication } = useContacts()
 const route = useRoute()
 
 const isModalOpen = ref(false)
 const contactToEdit = ref<Contact | null>(null)
 
 const boardId = route.params.boardId as string
-const boardContacts = ref<Contact[]>([])
 const availableContactsToLink = computed(() => {
+  if (!contactsPerBoard.value[boardId]) return []
   const assignedContactIds = jobApplication.value.contacts?.map((c) => c.id)
-  return boardContacts.value.filter((c) => !assignedContactIds!.some((id) => c!.id == id))
-})
-
-onMounted(async () => {
-  boardContacts.value = await api.contacts.getAll(boardId)
+  return contactsPerBoard.value[boardId].filter(
+    (c) => !assignedContactIds!.some((id) => c!.id == id),
+  )
 })
 
 const openCreateModal = () => {
@@ -43,13 +42,13 @@ const handleSaveContact = (savedContact: Contact) => {
 }
 
 const handleLinkContact = async (contact: Contact) => {
-  await api.contacts.assignJobApplication(contact.id, jobApplication.value.id)
+  await assignJobApplication(contact.id, jobApplication.value.id)
   jobApplication.value.contacts?.push(contact)
 }
 
 const handleUnlinkContact = async (contactId: string) => {
   if (confirm('Are you sure you want to unlink this contact from the job?')) {
-    await api.contacts.unassignJobApplication(contactId, jobApplication.value.id)
+    await unassignJobApplication(contactId, jobApplication.value.id)
     jobApplication.value.contacts = jobApplication.value.contacts!.filter((c) => c.id !== contactId)
   }
 }
