@@ -9,7 +9,6 @@ import FacebookIcon from '@/assets/icons/external/FacebookIcon.vue'
 import LinkedInIcon from '@/assets/icons/external/LinkedInIcon.vue'
 import GitHubIcon from '@/assets/icons/external/GitHubIcon.vue'
 import { api } from '@/api/api'
-import { useRoute } from 'vue-router'
 import type { JobApplication } from '@/models/job-application.dto'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
@@ -28,7 +27,6 @@ const { contact, jobApplication, boardId } = defineProps<{
   boardId: string
 }>()
 const emit = defineEmits(['close', 'save'])
-const route = useRoute()
 const { boards } = useBoards()
 
 const isModalOpen = ref(false)
@@ -97,7 +95,6 @@ const handleSave = async (linkedJobIds: string[]) => {
   if (form.value.phones) form.value.phones = form.value.phones.filter((p) => p.phone.trim() !== '')
 
   // TODO: implement Company save
-  const boardId = route.params.boardId
   const contact = { ...form.value, boardId } as Contact
   const savedContact = isEditMode.value
     ? await api.contacts.update(contact)
