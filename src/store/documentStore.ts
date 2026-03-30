@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import type { Document } from '@/models/document.dto'
 import { api } from '@/api/api'
 
-const STORAGE_KEY = 'documents-per-board'
+const STORAGE_KEY = 'documents'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
 const documentsByBoard = ref<Record<string, Document[]>>({})
 let isFetched = false
@@ -29,7 +29,11 @@ const loadFromCache = (): Record<string, Document[]> | null => {
 const saveToCache = () => {
   const docs = documentsByBoard.value
   if (docs) {
-    localStorage.setItem(`${STORAGE_KEY}`, JSON.stringify(docs))
+    const cacheData = {
+      data: docs,
+      timestamp: Date.now(),
+    }
+    localStorage.setItem(`${STORAGE_KEY}`, JSON.stringify(cacheData))
   }
 }
 
@@ -74,9 +78,9 @@ const removeDocumentFromStore = (documentId: string) => {
 const fetchDocuments = async (boardId: string) => {
   if (isFetched) return
   try {
-    const cachedDocs = localStorage.getItem(`${STORAGE_KEY}${boardId}`)
-    if (cachedDocs) {
-      documentsByBoard.value[boardId] = JSON.parse(cachedDocs)
+    const cachedDocs = loadFromCache()
+    if (cachedDocs && cachedDocs[boardId]) {
+      documentsByBoard.value[boardId] = cachedDocs[boardId]
     }
 
     const docs = await api.documents.getAll(boardId)
