@@ -5,14 +5,13 @@ import { api } from '@/api/api'
 import type { Document } from '@/models/document.dto'
 import type { DocumentCategoryType } from '@/models/document-category.enum'
 import DocumentGrid from '../JobApplication/DocumentsTab/DocumentGrid.vue'
-import GenericSelector from '../Shared/GenericSelector.vue'
 import type { Board } from '@/models/board.dto'
+import { useNavbarFilter } from '@/store/navbarFilterStore'
 
 const { boards, fetchBoards } = useBoards()
+const { selectedBoard, textFilter: documentTitleFilter } = useNavbarFilter()
 const boardsWithDocuments = ref<{ board: Board; documents: Document[] }[]>([])
-const availableBoards = computed(() => boardsWithDocuments.value.map((b) => b.board))
 const selectedCategory = ref<DocumentCategoryType | 'All'>('All')
-const selectedBoard = ref<Board | null>(null)
 
 onMounted(async () => {
   await fetchBoards()
@@ -22,10 +21,6 @@ onMounted(async () => {
       board,
       documents: getDocuments(board.id),
     }))
-  // Set first board as default if available
-  if (boardsWithDocuments.value.length > 0 && boardsWithDocuments.value[0]) {
-    selectedBoard.value = boardsWithDocuments.value[0].board
-  }
 })
 
 const getDocuments = (boardId: string): Document[] => {
@@ -53,21 +48,20 @@ const getAvailableCategories = (): { category: DocumentCategoryType; count: numb
     .sort((a, b) => a.category.localeCompare(b.category))
 }
 
-const onBoardChange = (board: Board) => {
-  selectedBoard.value = board
-  selectedCategory.value = 'All'
-}
-
 const filteredDocuments = computed(() => {
   if (!selectedBoard.value) return []
 
   const boardDocuments =
     boardsWithDocuments.value.find((b) => b.board.id === selectedBoard.value!.id)?.documents || []
 
+  const filteredByTitle = boardDocuments.filter((doc) =>
+    doc.title.toLowerCase().includes(documentTitleFilter.value.toLowerCase()),
+  )
+
   if (selectedCategory.value === 'All') {
-    return boardDocuments
+    return filteredByTitle
   }
-  return boardDocuments.filter((doc) => doc.category === selectedCategory.value)
+  return filteredByTitle.filter((doc) => doc.category === selectedCategory.value)
 })
 
 const getTotalDocumentsCount = (): number => {
@@ -87,21 +81,7 @@ const onDeleteDocument = async (documentId: string) => {
 </script>
 <template>
   <div class="placeholder-page">
-    <h1>Documents</h1>
-
-    <div class="select-and-filter">
-      <!-- Board Selector -->
-      <GenericSelector
-        :items="availableBoards"
-        :selected-item="selectedBoard"
-        label="Select Board:"
-        display-property="name"
-        value-property="id"
-        id="board-select"
-        :hideLabel="true"
-        @update:selected-item="onBoardChange"
-      />
-
+    <div class="filter">
       <!-- Category Filters -->
       <div v-if="getTotalDocumentsCount() > 0" class="category-filters">
         <button
@@ -148,7 +128,7 @@ const onDeleteDocument = async (documentId: string) => {
   padding: 2rem;
 }
 
-.select-and-filter {
+.filter {
   display: flex;
   flex-direction: row;
   align-items: center;

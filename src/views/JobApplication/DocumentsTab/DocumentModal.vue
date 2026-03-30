@@ -13,7 +13,7 @@ import { useBoards } from '@/store/boardStore'
   if the modal is opened from a specific job application, that job application will be pre-linked to the new document.
   BoardId is required to get the list of jobs that might be linked to the document. The list of jobs will be taken from shared state (board store)
 */
-const props = defineProps<{
+const { document, jobApplication, boardId } = defineProps<{
   document?: Document | null
   jobApplication?: JobApplication
   boardId: string
@@ -22,7 +22,7 @@ const props = defineProps<{
 const emit = defineEmits(['close', 'save'])
 const { boards } = useBoards()
 
-const isEditMode = computed(() => !!props.document)
+const isEditMode = computed(() => !!document)
 const isModalOpen = ref(false)
 const linkedJobs = ref<JobApplication[]>([])
 let linkedJobIdsBeforeUpdate: string[] = []
@@ -37,13 +37,13 @@ const categories = Object.values(DocumentCategoryEnum)
 
 onMounted(() => {
   if (isEditMode.value) {
-    form.value.title = props.document!.title
-    form.value.category = props.document!.category
-    form.value.description = props.document!.description || ''
-    linkedJobs.value = getJobsLinkedToDocument(props.document!.id)
+    form.value.title = document!.title
+    form.value.category = document!.category
+    form.value.description = document!.description || ''
+    linkedJobs.value = getJobsLinkedToDocument(document!.id)
     linkedJobIdsBeforeUpdate = linkedJobs.value.map((j) => j.id)
   } else {
-    linkedJobs.value = [props.jobApplication!]
+    linkedJobs.value = jobApplication ? [jobApplication] : []
   }
 
   isModalOpen.value = true
@@ -52,7 +52,7 @@ onMounted(() => {
 const getJobsLinkedToDocument = (documentId: string): JobApplication[] => {
   return (
     boards.value
-      .find((b) => b.id === props.boardId)
+      .find((b) => b.id === boardId)
       ?.columns.flatMap((c) => c.jobApplications)
       .filter((j) => j.documents.some((d) => d.id == documentId)) ?? []
   )
@@ -81,8 +81,8 @@ const handleSave = async (linkedJobIds: string[]) => {
     description: form.value.description,
   } as Document
   const savedDocument = isEditMode.value
-    ? await api.documents.update(props.document!.id, document, form.value.file)
-    : await api.documents.create(props.boardId, form.value.file!, document)
+    ? await api.documents.update(document!.id, document, form.value.file)
+    : await api.documents.create(boardId, form.value.file!, document)
 
   sendAssignOrUnassignJobRequests(savedDocument.id, linkedJobIds)
 

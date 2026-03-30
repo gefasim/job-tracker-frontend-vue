@@ -324,7 +324,7 @@ input,
 textarea,
 select {
   padding: 10px 12px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 14px;
   color: var(--input-text);

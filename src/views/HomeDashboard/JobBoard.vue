@@ -8,12 +8,14 @@ import { useRouter } from 'vue-router'
 import { getContrastColor } from '@/utils/colorContrast'
 import { useCurrentBoard } from '@/store/currentBoardStore'
 import { useBoards } from '@/store/boardStore'
+import { useNavbarFilter } from '@/store/navbarFilterStore'
 
 const { boardId } = defineProps<{
   boardId?: string
   jobId?: string // fix the warning Extraneous non-props attributes (jobId) were passed ...
 }>()
 const router = useRouter()
+const { textFilter } = useNavbarFilter()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
 const selectedColumnId = ref<string | null>()
 
@@ -107,7 +109,11 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 
       <div class="column-content" @dragover="onDragOver" @drop="OnDrop($event, column.id)">
         <div
-          v-for="(job, index) in column.jobApplications"
+          v-for="(job, index) in textFilter
+            ? column.jobApplications.filter((j) =>
+                j.title.toLowerCase().includes(textFilter.toLowerCase()),
+              )
+            : column.jobApplications"
           :key="job.id"
           class="card card-default-color"
           :style="{
@@ -152,7 +158,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 }
 
 .column {
-  width: 15vw;
+  width: 20%;
   height: stretch;
   display: flex;
   flex-direction: column;
