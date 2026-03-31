@@ -42,13 +42,12 @@ const saveToCache = (board: Board) => {
 }
 
 const loadBoard = async (boardId: string) => {
-  // Try cache first
   const cachedBoard = loadFromCache(boardId)
   if (cachedBoard) {
     board.value = cachedBoard
   }
 
-  // Fetch fresh data
+  if (isLoaded) return
   try {
     const boardResponse = await api.boards.get(boardId)
     board.value = boardResponse
@@ -56,6 +55,30 @@ const loadBoard = async (boardId: string) => {
     saveToCache(boardResponse)
   } catch (error) {
     console.error('Failed to load board:', error)
+  }
+}
+
+const updateJobApplicationInCache = (jobApplication: JobApplication) => {
+  if (board.value) {
+    for (const column of board.value.columns) {
+      const jobIndex = column.jobApplications.findIndex((j) => j.id === jobApplication.id)
+      if (jobIndex !== -1) {
+        column.jobApplications[jobIndex] = jobApplication
+        saveToCache(board.value)
+        break
+      }
+    }
+  }
+}
+
+const loadJobApplication = async (jobId: string): Promise<JobApplication> => {
+  try {
+    const jobApplication = await api.jobs.get(jobId)
+    updateJobApplicationInCache(jobApplication)
+    return jobApplication
+  } catch (error) {
+    console.error('Failed to load job application:', error)
+    throw error
   }
 }
 
@@ -79,20 +102,7 @@ const createJobApplication = async (boardId: string, data: CreateJobApplication)
 const updateJobApplication = async (jobId: string, updates: UpdateJobApplication) => {
   try {
     const updated = await api.jobs.updatePartial(jobId, updates)
-    if (board.value) {
-      let found = false
-      for (const column of board.value.columns) {
-        const jobIndex = column.jobApplications.findIndex((j) => j.id === jobId)
-        if (jobIndex !== -1) {
-          column.jobApplications[jobIndex] = { ...column.jobApplications[jobIndex], ...updated }
-          found = true
-          break
-        }
-      }
-      if (found) {
-        saveToCache(board.value)
-      }
-    }
+    updateJobApplicationInCache(updated)
     return updated
   } catch (error) {
     console.error('Failed to update job application:', error)
@@ -178,6 +188,7 @@ export const useCurrentBoard = () => {
   return {
     board,
     loadBoard,
+    loadJobApplication,
     createJobApplication,
     updateJobApplication,
     moveJobApplication,

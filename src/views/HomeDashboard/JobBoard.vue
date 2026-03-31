@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { api } from '@/api/api'
 import CompanyImage from '@/views/Shared/CompanyImage.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
@@ -20,14 +20,8 @@ const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
 const selectedColumnId = ref<string | null>()
 
 const { boards } = useBoards()
-const { board, loadBoard } = useCurrentBoard()
+const { board } = useCurrentBoard()
 const isCreateJobModalOpen = ref<boolean>(false)
-
-watch(
-  () => boardId,
-  (boardId) => loadBoard(boardId as string),
-  { immediate: true },
-)
 
 // On Job drag
 const OnDragStart = (event: DragEvent, fromColId: string, fromIndex: number) => {

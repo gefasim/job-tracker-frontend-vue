@@ -8,7 +8,7 @@ import type { JobApplicationStatusType } from './job-application-status.enum'
 export interface JobApplication extends BaseDto {
   title: string
   description: string | null
-  columnId: string
+  columnId: string // TODO: delete this field.
   postUrl: string
   salary: string
   location: string

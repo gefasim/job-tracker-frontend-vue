@@ -15,9 +15,11 @@ import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
 import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
 import { useDocumentStore } from '@/store/documentStore'
 import { useContacts } from '@/store/contactStore'
+import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
+const { loadBoard } = useCurrentBoard()
 const { fetchDocuments } = useDocumentStore()
 const { fetchContacts } = useContacts()
 const route = useRoute()
@@ -29,14 +31,15 @@ const isCreateJobModalOpen = ref(false)
 const isContactModalOpen = ref(false)
 const isDocumentModalOpen = ref(false)
 
-const syncSelectedBoard = () => {
-  if (availableBoards.value.length == 0) return
+const syncSelectedBoard = (): Board | null => {
+  if (availableBoards.value.length == 0) return null
   if (route.params.boardId) {
     const found = availableBoards.value.find((b) => b.id === route.params.boardId)
     selectedBoard.value = found || availableBoards.value[0]!
   } else if (selectedBoard.value == null) {
     selectedBoard.value = availableBoards.value[0]!
   }
+  return selectedBoard.value
 }
 
 const loadDocuments = async () => {
@@ -55,16 +58,19 @@ const loadContacts = async () => {
     })
 }
 
-onMounted(() => {
-  syncSelectedBoard()
+onMounted(async () => {
+  const selectedBoard = syncSelectedBoard()
   loadDocuments()
   loadContacts()
+  if (!selectedBoard) return
+  await loadBoard(selectedBoard.id)
 })
 
 watch(
   () => route.params.boardId,
-  () => {
+  async () => {
     syncSelectedBoard()
+    await loadBoard(route.params.boardId as string)
   },
 )
 
@@ -74,8 +80,9 @@ const linkToSelectedBoard = computed(() => {
     : { name: 'boards' }
 })
 
-const onBoardChange = (board: Board) => {
+const onBoardChange = async (board: Board) => {
   selectedBoard.value = board
+  await loadBoard(board.id)
   // Redirects to another board page if user is currently on a board page
   if (route.params.boardId) {
     router.push({ name: 'board', params: { boardId: board.id } })
