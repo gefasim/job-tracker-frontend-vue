@@ -8,11 +8,11 @@ import TwitterIcon from '@/assets/icons/external/TwitterIcon.vue'
 import FacebookIcon from '@/assets/icons/external/FacebookIcon.vue'
 import LinkedInIcon from '@/assets/icons/external/LinkedInIcon.vue'
 import GitHubIcon from '@/assets/icons/external/GitHubIcon.vue'
-import { api } from '@/api/api'
 import type { JobApplication } from '@/models/job-application.dto'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
 import { useBoards } from '@/store/boardStore'
+import { useContacts } from '@/store/contactStore'
 
 // TODO: implement multiple job assignment
 /**
@@ -28,6 +28,7 @@ const { contact, jobApplication, boardId } = defineProps<{
 }>()
 const emit = defineEmits(['close', 'save'])
 const { boards } = useBoards()
+const { createContact, updateContact, assignJobApplication, unassignJobApplication } = useContacts()
 
 const isModalOpen = ref(false)
 const isEditMode = computed(() => !!contact)
@@ -47,7 +48,7 @@ const form = ref<Partial<Contact>>({
 
 onMounted(() => {
   if (isEditMode.value) {
-    form.value = JSON.parse(JSON.stringify(contact))
+    form.value = { ...contact }
     linkedJobs.value = getJobsLinkedToContact()
     linkedJobIdsBeforeUpdate = linkedJobs.value.map((j) => j.id)
   } else {
@@ -97,8 +98,8 @@ const handleSave = async (linkedJobIds: string[]) => {
   // TODO: implement Company save
   const contact = { ...form.value, boardId } as Contact
   const savedContact = isEditMode.value
-    ? await api.contacts.update(contact)
-    : await api.contacts.create(contact)
+    ? await updateContact(boardId, contact)
+    : await createContact(boardId, contact)
 
   sendAssignOrUnassignJobRequests(savedContact.id, linkedJobIds)
 
@@ -110,11 +111,11 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
   const jobIdsToUnLink = linkedJobIdsBeforeUpdate.filter((id) => !linkedJobIds.includes(id))
 
   jobIdsToLink.forEach(async (jobId) => {
-    await api.contacts.assignJobApplication(contactId, jobId)
+    await assignJobApplication(contactId, jobId)
   })
 
   jobIdsToUnLink.forEach(async (jobId) => {
-    await api.contacts.unassignJobApplication(contactId, jobId)
+    await unassignJobApplication(contactId, jobId)
   })
 }
 </script>

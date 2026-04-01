@@ -8,7 +8,6 @@ import JobTabContacts from './ContactsTab/JobTabContacts.vue'
 import JobTabDocuments from './DocumentsTab/JobTabDocuments.vue'
 import JobTabCompany from './CompanyTab/JobTabCompany.vue'
 import { JobApplicationTabEnum, type JobApplicationTabType } from './tabs'
-import { api } from '@/api/api'
 import JobInfoNavTabIcon from '@/assets/icons/JobInfoNavTabIcon.vue'
 import NoteNavTabIcon from '@/assets/icons/NoteNavTabIcon.vue'
 import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
@@ -16,15 +15,20 @@ import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
 import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
 import { useRouter } from 'vue-router'
 import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useContacts } from '@/store/contactStore'
+import { useDocumentStore } from '@/store/documentStore'
+import type { UpdateJobApplication } from '@/models/update-job-application.dto'
 
 const props = defineProps<{
-  jobId?: string
-  boardId?: string
-  dick?: string
+  jobId: string
+  boardId: string
 }>()
 
 const router = useRouter()
-const { board } = useCurrentBoard()
+const { board, getJobApplication, loadJobApplication, updateJobApplication, moveJobApplication } =
+  useCurrentBoard()
+const { contactsPerBoard } = useContacts()
+const { documentsByBoard } = useDocumentStore()
 
 let jobApplicationBeforeUpdate: JobApplication | null = null
 const jobApplication = ref<JobApplication>()
@@ -42,12 +46,28 @@ const tabComponents: Record<JobApplicationTabEnum, { icon: unknown; component: u
 }
 const currentComponent = computed(() => tabComponents[activeTab.value].component)
 
+const getJobApplicationFromCasheOrLoad = async (jobId: string): Promise<JobApplication> => {
+  const job = getJobApplication(jobId)
+  if (!job) {
+    return await loadJobApplication(jobId)
+  }
+  job!.contacts =
+    contactsPerBoard.value[props.boardId]?.filter((c) =>
+      c.jobApplications.find((j) => j.id === jobId),
+    ) || []
+  job!.documents =
+    documentsByBoard.value[props.boardId]?.filter((d) =>
+      d.jobApplications.find((j) => j.id === jobId),
+    ) || []
+  return job!
+}
+
 // Every time a new modal is opened, we copy the data from the props
 watch(
   () => props.jobId,
   async (newJobId) => {
     if (!newJobId) return
-    jobApplicationBeforeUpdate = await api.jobs.get(newJobId as string)
+    jobApplicationBeforeUpdate = await getJobApplicationFromCasheOrLoad(newJobId)
     jobApplication.value = { ...jobApplicationBeforeUpdate }
   },
   { immediate: true },
@@ -82,7 +102,10 @@ const saveChanges = async () => {
 
   if (hasChanged && jobApplication.value) {
     try {
-      await api.jobs.update(jobApplication.value)
+      await updateJobApplication(
+        jobApplication.value.id,
+        jobApplication.value as UpdateJobApplication,
+      )
       router.push({ name: 'board', params: { boardId: props.boardId } })
     } catch (error) {
       console.error('Failed to save:', error)
@@ -94,9 +117,7 @@ const handleColumnChange = async (event: Event) => {
   // TODO: replace with dropdown. emit update back to Board to update on UI
   // @ts-expect-error ts-plugin(2339) says .value doesn't exists
   const columnId = event.target!.value
-  jobApplication.value = await api.jobs.updatePartial(jobApplication.value!.id, {
-    columnId: columnId,
-  })
+  await moveJobApplication(jobApplication.value!.id, columnId)
 }
 
 const handleClose = async () => {

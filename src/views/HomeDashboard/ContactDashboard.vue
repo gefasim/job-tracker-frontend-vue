@@ -1,39 +1,18 @@
 <script setup lang="ts">
 import type { Contact } from '@/models/contact.dto'
-import { useBoards } from '@/store/boardStore'
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import ContactGrid from '../JobApplication/ContactsTab/ContactGrid.vue'
-import { api } from '@/api/api'
-import type { Board } from '@/models/board.dto'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
+import { useContacts } from '@/store/contactStore'
 
-const { boards, fetchBoards } = useBoards()
 const { selectedBoard, textFilter: contactNameFilter } = useNavbarFilter()
-const boardsWithContacts = ref<{ board: Board; contacts: Contact[] }[]>([])
-
-onMounted(async () => {
-  await fetchBoards()
-  boardsWithContacts.value = boards.value
-    .filter((b) => !b.isArchived)
-    .map((board) => ({
-      board,
-      contacts: getContacts(board.id),
-    }))
-})
-
-const getContacts = (boardId: string): Contact[] => {
-  return boards.value
-    .find((b) => b.id === boardId)!
-    .columns.flatMap((c) => c.jobApplications)
-    .flatMap((j) => j.contacts || [])
-    .filter((contact, index, self) => self.findIndex((c) => c.id === contact.id) === index)
-}
+const { contactsPerBoard, deleteContact } = useContacts()
 
 const filteredContacts = computed(() => {
   if (!selectedBoard.value) return []
-  const boardData = boardsWithContacts.value.find((b) => b.board.id === selectedBoard.value!.id)
+  const boardData = contactsPerBoard.value[selectedBoard.value.id]
   if (!boardData) return []
-  return boardData.contacts.filter((c) => searchFilter(c, contactNameFilter.value))
+  return boardData.filter((c) => searchFilter(c, contactNameFilter.value))
 })
 
 const searchFilter = (contact: Contact, query: string) => {
@@ -47,12 +26,7 @@ const searchFilter = (contact: Contact, query: string) => {
 
 const onDeleteContact = async (contactId: string) => {
   if (confirm('Are you sure you want to delete this contact? This action cannot be undone.')) {
-    await api.contacts.delete(contactId)
-    // TODO: Remove the deleted contact from all job applications in the store to avoid showing stale data until the next fetch
-    boardsWithContacts.value = boardsWithContacts.value.map((board) => ({
-      ...board,
-      contacts: board.contacts.filter((doc) => doc.id !== contactId),
-    }))
+    await deleteContact(selectedBoard.value!.id, contactId)
   }
 }
 </script>

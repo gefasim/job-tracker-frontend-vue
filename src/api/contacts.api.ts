@@ -22,17 +22,19 @@ export const contactApi = {
     return response.data
   },
 
-  async assignJobApplication(contactId: string, jobApplicationId: string): Promise<void> {
-    await httpClient.post(`/contacts/jobApplication/assign`, {
+  async assignJobApplication(contactId: string, jobApplicationId: string): Promise<Contact> {
+    const response = await httpClient.post<Contact>(`/contacts/jobApplication/assign`, {
       contactId,
       jobApplicationId,
     })
+    return response.data
   },
 
-  async unassignJobApplication(contactId: string, jobApplicationId: string): Promise<void> {
-    await httpClient.delete(`/contacts/jobApplication/unassign`, {
+  async unassignJobApplication(contactId: string, jobApplicationId: string): Promise<Contact> {
+    const response = await httpClient.delete<Contact>(`/contacts/jobApplication/unassign`, {
       data: { contactId, jobApplicationId },
     })
+    return response.data
   },
 
   // TODO: implement photo update

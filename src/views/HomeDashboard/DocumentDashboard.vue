@@ -1,35 +1,13 @@
 <script setup lang="ts">
-import { useBoards } from '@/store/boardStore'
-import { onMounted, ref, computed } from 'vue'
-import { api } from '@/api/api'
-import type { Document } from '@/models/document.dto'
+import { ref, computed } from 'vue'
 import type { DocumentCategoryType } from '@/models/document-category.enum'
 import DocumentGrid from '../JobApplication/DocumentsTab/DocumentGrid.vue'
-import type { Board } from '@/models/board.dto'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
+import { useDocumentStore } from '@/store/documentStore'
 
-const { boards, fetchBoards } = useBoards()
+const { documentsByBoard, deleteDocument } = useDocumentStore()
 const { selectedBoard, textFilter: documentTitleFilter } = useNavbarFilter()
-const boardsWithDocuments = ref<{ board: Board; documents: Document[] }[]>([])
 const selectedCategory = ref<DocumentCategoryType | 'All'>('All')
-
-onMounted(async () => {
-  await fetchBoards()
-  boardsWithDocuments.value = boards.value
-    .filter((b) => !b.isArchived)
-    .map((board) => ({
-      board,
-      documents: getDocuments(board.id),
-    }))
-})
-
-const getDocuments = (boardId: string): Document[] => {
-  return boards.value
-    .find((b) => b.id === boardId)!
-    .columns.flatMap((c) => c.jobApplications)
-    .flatMap((j) => j.documents || [])
-    .filter((document, index, self) => self.findIndex((c) => c.id === document.id) === index)
-}
 
 const getCategoryCount = (category: DocumentCategoryType): number => {
   return filteredDocuments.value.filter((doc) => doc.category === category).length
@@ -51,10 +29,10 @@ const getAvailableCategories = (): { category: DocumentCategoryType; count: numb
 const filteredDocuments = computed(() => {
   if (!selectedBoard.value) return []
 
-  const boardDocuments =
-    boardsWithDocuments.value.find((b) => b.board.id === selectedBoard.value!.id)?.documents || []
+  const documents = documentsByBoard.value[selectedBoard.value.id]
+  if (!documents) return []
 
-  const filteredByTitle = boardDocuments.filter((doc) =>
+  const filteredByTitle = documents.filter((doc) =>
     doc.title.toLowerCase().includes(documentTitleFilter.value.toLowerCase()),
   )
 
@@ -70,12 +48,7 @@ const getTotalDocumentsCount = (): number => {
 
 const onDeleteDocument = async (documentId: string) => {
   if (confirm('Are you sure you want to delete this document? This action cannot be undone.')) {
-    await api.documents.delete(documentId)
-    // TODO: Remove the deleted document from all job applications in the store to avoid showing stale data until the next fetch
-    boardsWithDocuments.value = boardsWithDocuments.value.map((board) => ({
-      ...board,
-      documents: board.documents.filter((doc) => doc.id !== documentId),
-    }))
+    await deleteDocument(documentId)
   }
 }
 </script>

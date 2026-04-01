@@ -18,10 +18,11 @@ const availableJobs = ref<JobApplication[]>([])
 
 onMounted(() => {
   linkedJobs.value = props.linkedJobsParam
+  const linkedJobIds = props.linkedJobsParam.map((j) => j.id)
   availableJobs.value = boards.value
     .find((b) => b.id === props.boardId)!
     .columns.flatMap((c) => c.jobApplications)
-    .filter((j) => !props.linkedJobsParam.includes(j))
+    .filter((j) => !linkedJobIds.includes(j.id))
 })
 
 const assignJob = (job: JobApplication) => {

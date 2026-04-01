@@ -13,9 +13,13 @@ import CreateBoardModal from './Board/CreateBoardModal.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
 import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
 import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
+import { useDocumentStore } from '@/store/documentStore'
+import { useContacts } from '@/store/contactStore'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
+const { fetchDocuments } = useDocumentStore()
+const { fetchContacts } = useContacts()
 const route = useRoute()
 const router = useRouter()
 const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
@@ -25,9 +29,11 @@ const isCreateJobModalOpen = ref(false)
 const isContactModalOpen = ref(false)
 const isDocumentModalOpen = ref(false)
 
-const syncSelectedBoard = () => {
+const setSelectBoardDropdownValue = () => {
   if (availableBoards.value.length == 0) return
-  if (route.params.boardId) {
+  const isBoardChangedOusideBoardSelector =
+    route.params.boardId && selectedBoard.value?.id !== route.params.boardId
+  if (isBoardChangedOusideBoardSelector) {
     const found = availableBoards.value.find((b) => b.id === route.params.boardId)
     selectedBoard.value = found || availableBoards.value[0]!
   } else if (selectedBoard.value == null) {
@@ -35,14 +41,33 @@ const syncSelectedBoard = () => {
   }
 }
 
-onMounted(() => {
-  syncSelectedBoard()
+const loadDocuments = async () => {
+  boards.value
+    .filter((b) => !b.isArchived)
+    .forEach(async (board) => {
+      await fetchDocuments(board.id)
+    })
+}
+
+const loadContacts = async () => {
+  boards.value
+    .filter((b) => !b.isArchived)
+    .forEach(async (board) => {
+      await fetchContacts(board.id)
+    })
+}
+
+onMounted(async () => {
+  setSelectBoardDropdownValue()
+  loadDocuments()
+  loadContacts()
 })
 
 watch(
   () => route.params.boardId,
-  () => {
-    syncSelectedBoard()
+  async () => {
+    if (!route.params.boardId) return
+    setSelectBoardDropdownValue()
   },
 )
 
@@ -52,7 +77,7 @@ const linkToSelectedBoard = computed(() => {
     : { name: 'boards' }
 })
 
-const onBoardChange = (board: Board) => {
+const onBoardChange = async (board: Board) => {
   selectedBoard.value = board
   // Redirects to another board page if user is currently on a board page
   if (route.params.boardId) {
@@ -72,10 +97,10 @@ const onCreate = (item: string) => {
   }
 }
 
-const onBoardCreated = (board: Board) => {
-  boards.value.push(board)
+const onBoardCreated = async (board: Board) => {
   selectedBoard.value = board
   isCreateBoardModalOpen.value = false
+  router.push({ name: 'board', params: { boardId: board.id } })
 }
 </script>
 <template>
