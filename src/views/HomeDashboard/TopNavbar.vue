@@ -69,6 +69,7 @@ onMounted(async () => {
 watch(
   () => route.params.boardId,
   async () => {
+    if (!route.params.boardId) return
     syncSelectedBoard()
     await loadBoard(route.params.boardId as string)
   },
@@ -101,10 +102,12 @@ const onCreate = (item: string) => {
   }
 }
 
-const onBoardCreated = (board: Board) => {
+const onBoardCreated = async (board: Board) => {
   boards.value.push(board)
-  selectedBoard.value = board
   isCreateBoardModalOpen.value = false
+  selectedBoard.value = board
+  await loadBoard(board.id)
+  router.push({ name: 'board', params: { boardId: board.id } })
 }
 </script>
 <template>

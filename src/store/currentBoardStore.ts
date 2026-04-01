@@ -47,7 +47,7 @@ const loadBoard = async (boardId: string) => {
     board.value = cachedBoard
   }
 
-  if (isLoaded) return
+  if (isLoaded && cachedBoard) return
   try {
     const boardResponse = await api.boards.get(boardId)
     board.value = boardResponse
