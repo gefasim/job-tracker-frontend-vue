@@ -29,9 +29,11 @@ const isCreateJobModalOpen = ref(false)
 const isContactModalOpen = ref(false)
 const isDocumentModalOpen = ref(false)
 
-const syncSelectedBoard = () => {
+const setSelectBoardDropdownValue = () => {
   if (availableBoards.value.length == 0) return
-  if (route.params.boardId) {
+  const isBoardChangedOusideBoardSelector =
+    route.params.boardId && selectedBoard.value?.id !== route.params.boardId
+  if (isBoardChangedOusideBoardSelector) {
     const found = availableBoards.value.find((b) => b.id === route.params.boardId)
     selectedBoard.value = found || availableBoards.value[0]!
   } else if (selectedBoard.value == null) {
@@ -56,7 +58,7 @@ const loadContacts = async () => {
 }
 
 onMounted(async () => {
-  syncSelectedBoard()
+  setSelectBoardDropdownValue()
   loadDocuments()
   loadContacts()
 })
@@ -65,7 +67,7 @@ watch(
   () => route.params.boardId,
   async () => {
     if (!route.params.boardId) return
-    syncSelectedBoard()
+    setSelectBoardDropdownValue()
   },
 )
 
