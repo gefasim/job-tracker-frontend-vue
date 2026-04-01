@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { JobApplication } from '@/models/job-application.dto'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { api } from '@/api/api'
 import CompanyImage from '@/views/Shared/CompanyImage.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getContrastColor } from '@/utils/colorContrast'
 import { useCurrentBoard } from '@/store/currentBoardStore'
 import { useBoards } from '@/store/boardStore'
@@ -14,14 +14,24 @@ const { boardId } = defineProps<{
   boardId?: string
   jobId?: string // fix the warning Extraneous non-props attributes (jobId) were passed ...
 }>()
+const route = useRoute()
 const router = useRouter()
 const { textFilter } = useNavbarFilter()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
 const selectedColumnId = ref<string | null>()
 
 const { boards } = useBoards()
-const { board } = useCurrentBoard()
+const { board, loadBoard } = useCurrentBoard()
 const isCreateJobModalOpen = ref<boolean>(false)
+
+watch(
+  () => route.params.boardId,
+  async () => {
+    if (!route.params.boardId) return
+    await loadBoard(route.params.boardId as string)
+  },
+  { immediate: true },
+)
 
 // On Job drag
 const OnDragStart = (event: DragEvent, fromColId: string, fromIndex: number) => {

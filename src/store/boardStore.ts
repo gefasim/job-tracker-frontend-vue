@@ -52,6 +52,18 @@ const fetchBoards = async () => {
   }
 }
 
+const createBoard = async (name: string): Promise<Board> => {
+  try {
+    const createdBoard = await api.boards.createBoard(name)
+    boards.value.push(createdBoard)
+    saveToCache(boards.value)
+    return createdBoard
+  } catch (error) {
+    console.error('Failed to create board:', error)
+    throw error
+  }
+}
+
 export const useBoards = () => {
   // Load from cache first
   const cachedBoards = loadFromCache()
@@ -67,5 +79,6 @@ export const useBoards = () => {
   return {
     boards,
     fetchBoards,
+    createBoard,
   }
 }

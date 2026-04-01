@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { api } from '@/api/api'
 import type { Board } from '@/models/board.dto'
+import { useBoards } from '@/store/boardStore'
 import BaseModalWrapper from '@/views/Shared/BaseModalWrapper.vue'
 import { ref } from 'vue'
 
@@ -10,9 +10,10 @@ const emit = defineEmits<{
 }>()
 
 const boardName = ref('')
+const { createBoard } = useBoards()
 
 const handleSave = async () => {
-  const board = await api.boards.createBoard(boardName.value)
+  const board = await createBoard(boardName.value)
   emit('save', board)
 }
 </script>
