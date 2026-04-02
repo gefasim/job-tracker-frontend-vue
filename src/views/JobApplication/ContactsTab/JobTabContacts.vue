@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Contact } from '@/models/contact.dto'
 import ContactModal from './ContactModal.vue'
@@ -9,11 +9,20 @@ import ContactGrid from './ContactGrid.vue'
 import { useContacts } from '@/store/contactStore'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
-const { contactsPerBoard, assignJobApplication, unassignJobApplication } = useContacts()
+const { contactsPerBoard, fetchContacts, assignJobApplication, unassignJobApplication } =
+  useContacts()
 const route = useRoute()
 
 const isModalOpen = ref(false)
 const contactToEdit = ref<Contact | null>(null)
+
+watch(
+  () => route.params.boardId,
+  async () => {
+    await fetchContacts(route.params.boardId as string)
+  },
+  { immediate: true },
+)
 
 const boardId = route.params.boardId as string
 const availableContactsToLink = computed(() => {
