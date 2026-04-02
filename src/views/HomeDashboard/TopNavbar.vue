@@ -13,12 +13,10 @@ import CreateBoardModal from './Board/CreateBoardModal.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
 import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
 import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
-import { useDocumentStore } from '@/store/documentStore'
 import { useContacts } from '@/store/contactStore'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
-const { fetchDocuments } = useDocumentStore()
 const { fetchContacts } = useContacts()
 const route = useRoute()
 const router = useRouter()
@@ -41,14 +39,6 @@ const setSelectBoardDropdownValue = () => {
   }
 }
 
-const loadDocuments = async () => {
-  boards.value
-    .filter((b) => !b.isArchived)
-    .forEach(async (board) => {
-      await fetchDocuments(board.id)
-    })
-}
-
 const loadContacts = async () => {
   boards.value
     .filter((b) => !b.isArchived)
@@ -59,7 +49,6 @@ const loadContacts = async () => {
 
 onMounted(async () => {
   setSelectBoardDropdownValue()
-  loadDocuments()
   loadContacts()
 })
 

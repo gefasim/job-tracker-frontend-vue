@@ -11,7 +11,6 @@ import {
 const STORAGE_KEY = 'documents'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
 const documentsByBoard = ref<Record<string, Document[]>>({})
-let isFetched = false
 
 const save = () => saveToCache(STORAGE_KEY, documentsByBoard.value)
 
@@ -24,16 +23,16 @@ const removeDocumentFromStore = (documentId: string) => {
 }
 
 const fetchDocuments = async (boardId: string) => {
-  if (isFetched) return
   try {
     const cachedDocs = loadFromCache<Record<string, Document[]>>(STORAGE_KEY, CACHE_DURATION)
     if (cachedDocs && cachedDocs[boardId]) {
       documentsByBoard.value[boardId] = cachedDocs[boardId]
     }
 
+    if (documentsByBoard.value[boardId]) return
+
     const docs = await api.documents.getAll(boardId)
     documentsByBoard.value[boardId] = docs
-    isFetched = true
     save()
     return docs
   } catch (error) {

@@ -1,13 +1,22 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { DocumentCategoryType } from '@/models/document-category.enum'
 import DocumentGrid from '../JobApplication/DocumentsTab/DocumentGrid.vue'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
 import { useDocumentStore } from '@/store/documentStore'
 
-const { documentsByBoard, deleteDocument } = useDocumentStore()
+const { documentsByBoard, fetchDocuments, deleteDocument } = useDocumentStore()
 const { selectedBoard, textFilter: documentTitleFilter } = useNavbarFilter()
 const selectedCategory = ref<DocumentCategoryType | 'All'>('All')
+
+watch(
+  selectedBoard,
+  async () => {
+    if (!selectedBoard.value) return
+    await fetchDocuments(selectedBoard.value.id)
+  },
+  { immediate: true },
+)
 
 const getCategoryCount = (category: DocumentCategoryType): number => {
   return filteredDocuments.value.filter((doc) => doc.category === category).length
