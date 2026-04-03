@@ -11,8 +11,8 @@ import GitHubIcon from '@/assets/icons/external/GitHubIcon.vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
-import { useBoards } from '@/store/boardStore'
 import { useContacts } from '@/store/contactStore'
+import { useCurrentBoard } from '@/store/currentBoardStore'
 
 // TODO: implement multiple job assignment
 /**
@@ -27,7 +27,7 @@ const { contact, jobApplication, boardId } = defineProps<{
   boardId: string
 }>()
 const emit = defineEmits(['close', 'save'])
-const { boards } = useBoards()
+const { board } = useCurrentBoard()
 const { createContact, updateContact, assignJobApplication, unassignJobApplication } = useContacts()
 
 const isModalOpen = ref(false)
@@ -59,9 +59,8 @@ onMounted(() => {
 
 const getJobsLinkedToContact = (): JobApplication[] => {
   return (
-    boards.value
-      .find((b) => b.id === boardId)
-      ?.columns.flatMap((c) => c.jobApplications)
+    board.value?.columns
+      .flatMap((c) => c.jobApplications)
       .filter((j) =>
         j.contacts ? j.contacts.filter((c) => c.id === contact!.id).length > 0 : false,
       ) || []

@@ -1,20 +1,9 @@
 <script setup lang="ts">
-import { api } from '@/api/api'
-import type { Board } from '@/models/board.dto'
-import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useBoards } from '@/store/boardStore'
 
 const router = useRouter()
-const boards = ref<Board[]>()
-
-const fetchData = async () => {
-  const response = await api.boards.getAll()
-  boards.value = response.filter((b) => !b.isArchived)
-}
-
-onMounted(() => {
-  fetchData()
-})
+const { boards } = useBoards()
 
 const openBoard = (boardId: string) => {
   router.push({ name: 'board', params: { boardId } })

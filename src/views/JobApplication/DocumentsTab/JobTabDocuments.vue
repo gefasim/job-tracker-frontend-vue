@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { JobApplication } from '@/models/job-application.dto'
 import type { Document } from '@/models/document.dto'
 import DocumentModal from './DocumentModal.vue'
@@ -10,12 +10,21 @@ import { useDocumentStore } from '@/store/documentStore'
 
 const jobApplication = defineModel<JobApplication>({ required: true })
 
-const { documentsByBoard, assignJobApplication, unassignJobApplication } = useDocumentStore()
+const { documentsByBoard, fetchDocuments, assignJobApplication, unassignJobApplication } =
+  useDocumentStore()
 const route = useRoute()
 const boardId = route.params.boardId as string
 
 const isModalOpen = ref(false)
 const documentToEdit = ref<Document | null>(null)
+
+watch(
+  () => route.params.boardId,
+  async () => {
+    await fetchDocuments(route.params.boardId as string)
+  },
+  { immediate: true },
+)
 
 const availableDocumentsToLink = computed(() => {
   if (!documentsByBoard.value[boardId]) return []

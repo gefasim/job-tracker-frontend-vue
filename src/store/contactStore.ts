@@ -1,27 +1,31 @@
 import { ref } from 'vue'
 import type { Contact } from '@/models/contact.dto'
 import { api } from '@/api/api'
-import { loadFromCache, saveToCache, updateItemInStore, removeItemFromStore } from '@/utils/storeUtils'
+import {
+  loadFromCache,
+  saveToCache,
+  updateItemInStore,
+  removeItemFromStore,
+} from '@/utils/storeUtils'
 
 const STORAGE_KEY = 'contacts'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
 
 const contactsPerBoard = ref<Record<string, Contact[]>>({})
-let isFetched = false
 
 const save = () => saveToCache(STORAGE_KEY, contactsPerBoard.value)
 
 const fetchContacts = async (boardId: string) => {
-  if (isFetched) return
   try {
     const cachedContacts = loadFromCache<Record<string, Contact[]>>(STORAGE_KEY, CACHE_DURATION)
     if (cachedContacts && cachedContacts[boardId]) {
       contactsPerBoard.value[boardId] = cachedContacts[boardId]
     }
 
+    if (contactsPerBoard.value[boardId]) return
+
     const contacts = await api.contacts.getAll(boardId)
     contactsPerBoard.value[boardId] = contacts
-    isFetched = true
     save()
     return contacts
   } catch (error) {

@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import type { Contact } from '@/models/contact.dto'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import ContactGrid from '../JobApplication/ContactsTab/ContactGrid.vue'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
 import { useContacts } from '@/store/contactStore'
 
 const { selectedBoard, textFilter: contactNameFilter } = useNavbarFilter()
-const { contactsPerBoard, deleteContact } = useContacts()
+const { contactsPerBoard, fetchContacts, deleteContact } = useContacts()
+
+watch(
+  selectedBoard,
+  async () => {
+    if (!selectedBoard.value) return
+    await fetchContacts(selectedBoard.value.id)
+  },
+  { immediate: true },
+)
 
 const filteredContacts = computed(() => {
   if (!selectedBoard.value) return []

@@ -6,7 +6,8 @@ const BOARDS_KEY = 'boards'
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
 
 const boards = ref<Board[]>([])
-let isFetched = false
+const isLoading = ref(false) // prevents multiple simultaneous requests
+let isFetched = false // prevents multiple fetches
 
 const loadFromCache = (): Board[] | null => {
   try {
@@ -40,15 +41,16 @@ const saveToCache = (data: Board[]) => {
 }
 
 const fetchBoards = async () => {
-  if (isFetched) return
+  if (isFetched || isLoading.value) return
   try {
-    // TODO: Replace with GET /boards + GET /boards/{id}/columns to reduce payload size
-    // CreateJobApplicationModal.vue requires columns data to populate dropdown
-    boards.value = await api.boards.getAllData()
+    isLoading.value = true
+    boards.value = await api.boards.getAll()
     isFetched = true
     saveToCache(boards.value)
   } catch (error) {
     console.error('Failed to fetch boards:', error)
+  } finally {
+    isLoading.value = false
   }
 }
 
