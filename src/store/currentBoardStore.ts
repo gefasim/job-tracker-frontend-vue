@@ -9,7 +9,7 @@ const STORAGE_KEY_PREFIX = 'current-board-'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour
 
 const board = ref<Board | null>(null)
-let isLoaded = false
+const isLoading = ref(false) // prevents multiple simultaneous requests
 
 const loadFromCache = (boardId: string): Board | null => {
   try {
@@ -42,19 +42,22 @@ const saveToCache = (board: Board) => {
 }
 
 const loadBoard = async (boardId: string) => {
+  if (isLoading.value) return
   const cachedBoard = loadFromCache(boardId)
   if (cachedBoard) {
     board.value = cachedBoard
   }
 
-  if (isLoaded && cachedBoard) return
+  if (cachedBoard) return
   try {
+    isLoading.value = true
     const boardResponse = await api.boards.get(boardId)
     board.value = boardResponse
-    isLoaded = true
     saveToCache(boardResponse)
   } catch (error) {
     console.error('Failed to load board:', error)
+  } finally {
+    isLoading.value = false
   }
 }
 
