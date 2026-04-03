@@ -4,7 +4,6 @@ import type { Document } from '@/models/document.dto'
 import type { JobApplication } from '@/models/job-application.dto'
 import { DocumentCategoryEnum, type DocumentCategoryType } from '@/models/document-category.enum'
 import BaseModalWithJobLinkWrapper from '@/views/Shared/BaseModalWithJobLinkWrapper.vue'
-import { useBoards } from '@/store/boardStore'
 import { useDocumentStore } from '@/store/documentStore'
 
 /**
@@ -20,9 +19,13 @@ const { document, jobApplication, boardId } = defineProps<{
 }>()
 
 const emit = defineEmits(['close', 'save'])
-const { boards } = useBoards()
-const { createDocument, updateDocument, assignJobApplication, unassignJobApplication } =
-  useDocumentStore()
+const {
+  documentsByBoard,
+  createDocument,
+  updateDocument,
+  assignJobApplication,
+  unassignJobApplication,
+} = useDocumentStore()
 
 const isEditMode = computed(() => !!document)
 const isModalOpen = ref(false)
@@ -37,7 +40,7 @@ const form = ref({
 })
 const categories = Object.values(DocumentCategoryEnum)
 
-onMounted(() => {
+onMounted(async () => {
   if (isEditMode.value) {
     form.value.title = document!.title
     form.value.category = document!.category
@@ -52,12 +55,7 @@ onMounted(() => {
 })
 
 const getJobsLinkedToDocument = (documentId: string): JobApplication[] => {
-  return (
-    boards.value
-      .find((b) => b.id === boardId)
-      ?.columns.flatMap((c) => c.jobApplications)
-      .filter((j) => j.documents.some((d) => d.id == documentId)) ?? []
-  )
+  return documentsByBoard.value[boardId]?.find((d) => d.id == documentId)?.jobApplications ?? []
 }
 
 const handleFileChange = (event: Event) => {
