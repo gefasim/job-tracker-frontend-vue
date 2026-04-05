@@ -10,6 +10,7 @@ const { boards, updateBoard } = useBoards()
 const { textFilter: boardNameFilter } = useNavbarFilter()
 const showArchived = ref(false)
 const editModeForBoardId = ref<string | null>(null)
+const boardMenuOptions = ['Edit', 'Archive']
 
 const filteredBoards = computed(() => {
   if (!boardNameFilter.value)
@@ -26,11 +27,13 @@ const handleOnBoardClick = (boardId: string) => {
   router.push({ name: 'board', params: { boardId } })
 }
 
-const handleMenuItemClick = (boardId: string, item: string) => {
+const handleMenuItemClick = async (boardId: string, item: string) => {
   if (item === 'Edit') {
     editModeForBoardId.value = boardId
-  } else if (item === 'Delete') {
-    console.log(boardId, item)
+  } else if (item === 'Archive') {
+    if (confirm('Are you sure you want to archive this board?')) {
+      await updateBoard(boardId, { isArchived: true })
+    }
   }
 }
 
@@ -38,9 +41,9 @@ const handleClose = () => {
   editModeForBoardId.value = null
 }
 
-const handleSave = (boardId: string, boardName: string | undefined) => {
+const handleSave = async (boardId: string, boardName: string | undefined) => {
   if (!boardName) return
-  updateBoard(boardId, { name: boardName })
+  await updateBoard(boardId, { name: boardName })
   editModeForBoardId.value = null
 }
 </script>
@@ -59,7 +62,7 @@ const handleSave = (boardId: string, boardName: string | undefined) => {
       <BaseCardWithMenu
         v-for="board in filteredBoards"
         :key="board.name"
-        :menuItems="['Edit', 'Delete']"
+        :menuItems="boardMenuOptions"
         @menu-item-click="handleMenuItemClick(board.id, $event)"
         @open="handleOnBoardClick(board.id)"
       >
