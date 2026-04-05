@@ -6,9 +6,10 @@ import { computed, ref } from 'vue'
 import BaseCardWithMenu from '../Shared/BaseCardWithMenu.vue'
 
 const router = useRouter()
-const { boards } = useBoards()
+const { boards, updateBoard } = useBoards()
 const { textFilter: boardNameFilter } = useNavbarFilter()
 const showArchived = ref(false)
+const editModeForBoardId = ref<string | null>(null)
 
 const filteredBoards = computed(() => {
   if (!boardNameFilter.value)
@@ -20,12 +21,27 @@ const filteredBoards = computed(() => {
   )
 })
 
-const openBoard = (boardId: string) => {
+const handleOnBoardClick = (boardId: string) => {
+  if (editModeForBoardId.value) return
   router.push({ name: 'board', params: { boardId } })
 }
 
-const handleMenuItemClick = (item: string) => {
-  console.log(item)
+const handleMenuItemClick = (boardId: string, item: string) => {
+  if (item === 'Edit') {
+    editModeForBoardId.value = boardId
+  } else if (item === 'Delete') {
+    console.log(boardId, item)
+  }
+}
+
+const handleClose = () => {
+  editModeForBoardId.value = null
+}
+
+const handleSave = (boardId: string, boardName: string | undefined) => {
+  if (!boardName) return
+  updateBoard(boardId, { name: boardName })
+  editModeForBoardId.value = null
 }
 </script>
 
@@ -44,13 +60,21 @@ const handleMenuItemClick = (item: string) => {
         v-for="board in filteredBoards"
         :key="board.name"
         :menuItems="['Edit', 'Delete']"
-        @menu-item-click="handleMenuItemClick"
-        @open="openBoard(board.id)"
+        @menu-item-click="handleMenuItemClick(board.id, $event)"
+        @open="handleOnBoardClick(board.id)"
       >
         <div class="board-card">
-          <span class="board-card-title">
+          <span v-if="editModeForBoardId !== board.id" class="board-card-title">
             {{ board.name }}
           </span>
+          <input
+            v-else
+            type="text"
+            :value="board.name"
+            @keyup.enter="handleSave(board.id, ($event.target as HTMLInputElement).value)"
+            @keyup.escape="handleClose"
+            @blur="handleClose"
+          />
           <span class="board-card-created">
             Created: {{ new Date(board.createdAt).toLocaleDateString() }}
           </span>

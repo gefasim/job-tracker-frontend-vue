@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import type { Board } from '@/models/board.dto'
 import { api } from '@/api/api'
+import type { UpdateBoard } from '@/models/update-board.dto'
 
 const BOARDS_KEY = 'boards'
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
@@ -66,6 +67,18 @@ const createBoard = async (name: string): Promise<Board> => {
   }
 }
 
+const updateBoard = async (boardId: string, boardData: UpdateBoard): Promise<Board> => {
+  try {
+    const updatedBoard = await api.boards.updateBoard(boardId, boardData)
+    boards.value = boards.value.map((board) => (board.id === boardId ? updatedBoard : board))
+    saveToCache(boards.value)
+    return updatedBoard
+  } catch (error) {
+    console.error('Failed to update board:', error)
+    throw error
+  }
+}
+
 export const useBoards = () => {
   // Load from cache first
   const cachedBoards = loadFromCache()
@@ -82,5 +95,6 @@ export const useBoards = () => {
     boards,
     fetchBoards,
     createBoard,
+    updateBoard,
   }
 }
