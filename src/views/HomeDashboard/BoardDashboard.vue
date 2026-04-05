@@ -2,16 +2,20 @@
 import { useRouter } from 'vue-router'
 import { useBoards } from '@/store/boardStore'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const router = useRouter()
 const { boards } = useBoards()
 const { textFilter: boardNameFilter } = useNavbarFilter()
+const showArchived = ref(false)
 
 const filteredBoards = computed(() => {
-  if (!boardNameFilter.value) return boards.value
-  return boards.value.filter((board) =>
-    board.name.toLowerCase().includes(boardNameFilter.value.toLowerCase()),
+  if (!boardNameFilter.value)
+    return boards.value.filter((board) => board.isArchived === showArchived.value)
+  return boards.value.filter(
+    (board) =>
+      board.isArchived === showArchived.value &&
+      board.name.toLowerCase().includes(boardNameFilter.value.toLowerCase()),
   )
 })
 
@@ -24,7 +28,9 @@ const openBoard = (boardId: string) => {
   <div class="boards-view">
     <div class="boards-view-header">
       <h3>My Job Tracking Boards</h3>
-      <p class="boards-view-archived">view archived</p>
+      <p class="boards-view-archived" @click="showArchived = !showArchived">
+        {{ showArchived ? 'Hide archived' : 'View archived' }}
+      </p>
       <hr />
     </div>
 
