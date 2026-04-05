@@ -12,6 +12,10 @@ const showArchived = ref(false)
 const editModeForBoardId = ref<string | null>(null)
 const boardMenuOptions = ['Edit', 'Archive']
 
+const vFocus = {
+  mounted: (el: HTMLElement) => el.focus(),
+}
+
 const filteredBoards = computed(() => {
   if (!boardNameFilter.value)
     return boards.value.filter((board) => board.isArchived === showArchived.value)
@@ -72,6 +76,7 @@ const handleSave = async (boardId: string, boardName: string | undefined) => {
           </span>
           <input
             v-else
+            v-focus
             type="text"
             :value="board.name"
             @keyup.enter="handleSave(board.id, ($event.target as HTMLInputElement).value)"
