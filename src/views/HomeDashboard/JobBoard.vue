@@ -9,6 +9,7 @@ import { getContrastColor } from '@/utils/colorContrast'
 import { useCurrentBoard } from '@/store/currentBoardStore'
 import { useBoards } from '@/store/boardStore'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
+import DeleteIcon from '@/assets/icons/DeleteIcon.vue'
 
 const { boardId } = defineProps<{
   boardId?: string
@@ -92,6 +93,13 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
   selectedColumnId.value = null
   isCreateJobModalOpen.value = false
 }
+
+const deleteJob = async (jobId: string, columnId: string, index: number) => {
+  if (confirm('Are you sure you want to delete this job?')) {
+    await api.jobs.delete(jobId)
+    board.value?.columns.find((c) => c.id === columnId)!.jobApplications.splice(index, 1)
+  }
+}
 </script>
 
 <template>
@@ -135,6 +143,9 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
             <CompanyImage :src="job.company!.logo" :alt="job.company!.name"></CompanyImage>
             <small>{{ job.company?.name }}</small>
           </p>
+          <button class="delete-job-btn" @click.stop="deleteJob(job.id, column.id, index)">
+            <DeleteIcon size="1.1rem" />
+          </button>
         </div>
       </div>
     </div>
@@ -197,6 +208,7 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
 
 /* Card */
 .card {
+  position: relative;
   margin-bottom: 8px;
   padding: 15px;
   border-radius: 6px;
@@ -230,5 +242,28 @@ const onCreateJobApplicationModalSaved = (job: JobApplication) => {
   flex-direction: row;
   align-items: center;
   gap: 10px;
+}
+
+.delete-job-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: var(--btn-outline-bg);
+  border: none;
+  color: var(--input-text);
+  cursor: pointer;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+.delete-job-btn:hover {
+  background-color: var(--border-color);
+  color: #dc2626;
+}
+.card:hover .delete-job-btn {
+  opacity: 1;
 }
 </style>

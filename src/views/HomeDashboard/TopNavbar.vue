@@ -13,11 +13,9 @@ import CreateBoardModal from './Board/CreateBoardModal.vue'
 import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicationModal.vue'
 import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
 import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
-import { useCurrentBoard } from '@/store/currentBoardStore'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
 const { boards } = useBoards()
-const { loadBoard } = useCurrentBoard()
 const route = useRoute()
 const router = useRouter()
 const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
@@ -41,9 +39,6 @@ const setSelectBoardDropdownValue = () => {
 
 onMounted(async () => {
   setSelectBoardDropdownValue()
-  if (selectedBoard.value) {
-    await loadBoard(selectedBoard.value.id)
-  }
 })
 
 watch(
@@ -51,7 +46,6 @@ watch(
   async () => {
     if (!route.params.boardId) return
     setSelectBoardDropdownValue()
-    await loadBoard(route.params.boardId as string)
   },
 )
 
@@ -63,7 +57,6 @@ const linkToSelectedBoard = computed(() => {
 
 const onBoardChange = async (board: Board) => {
   selectedBoard.value = board
-  await loadBoard(board.id)
   // Redirects to another board page if user is currently on a board page
   if (route.params.boardId) {
     router.push({ name: 'board', params: { boardId: board.id } })

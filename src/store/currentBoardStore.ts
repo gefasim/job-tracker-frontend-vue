@@ -10,6 +10,7 @@ const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour
 
 const board = ref<Board | null>(null)
 const isLoading = ref(false) // prevents multiple simultaneous requests
+const loadedBoardsInThisSession = ref(new Set<string>())
 
 const loadFromCache = (boardId: string): Board | null => {
   try {
@@ -48,12 +49,14 @@ const loadBoard = async (boardId: string) => {
     board.value = cachedBoard
   }
 
-  if (cachedBoard) return
+  if (cachedBoard && loadedBoardsInThisSession.value.has(boardId)) return
+
   try {
     isLoading.value = true
     const boardResponse = await api.boards.get(boardId)
     board.value = boardResponse
     saveToCache(boardResponse)
+    loadedBoardsInThisSession.value.add(boardId)
   } catch (error) {
     console.error('Failed to load board:', error)
   } finally {
