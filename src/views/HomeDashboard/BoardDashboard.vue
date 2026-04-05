@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useBoards } from '@/store/boardStore'
+import { useNavbarFilter } from '@/store/navbarFilterStore'
+import { computed } from 'vue'
 
 const router = useRouter()
 const { boards } = useBoards()
+const { textFilter: boardNameFilter } = useNavbarFilter()
+
+const filteredBoards = computed(() => {
+  if (!boardNameFilter.value) return boards.value
+  return boards.value.filter((board) =>
+    board.name.toLowerCase().includes(boardNameFilter.value.toLowerCase()),
+  )
+})
 
 const openBoard = (boardId: string) => {
   router.push({ name: 'board', params: { boardId } })
@@ -20,7 +30,7 @@ const openBoard = (boardId: string) => {
 
     <div class="board-card-grid">
       <div
-        v-for="board in boards"
+        v-for="board in filteredBoards"
         :key="board.name"
         class="board-card"
         @click="openBoard(board.id)"
