@@ -13,9 +13,10 @@ import { RouterLink, useRouter } from 'vue-router'
 import { useBoards } from '@/store/boardStore'
 import CreateBoardModal from './Board/CreateBoardModal.vue'
 import type { Board } from '@/models/board.dto'
+import DeleteIcon from '@/assets/icons/DeleteIcon.vue'
 
 const { isDark, theme, setTheme } = useTheme()
-const { boards } = useBoards()
+const { boards, updateBoard } = useBoards()
 const router = useRouter()
 const activeItem = ref<string>('contacts')
 const isCreateBoardModalOpen = ref(false)
@@ -34,6 +35,12 @@ const handleItemClick = (item: string) => {
 const onBoardCreated = (board: Board) => {
   isCreateBoardModalOpen.value = false
   router.push({ name: 'board', params: { boardId: board.id } })
+}
+
+const handleArchive = async (boardId: string) => {
+  if (confirm('Are you sure you want to archive this board?')) {
+    await updateBoard(boardId, { isArchived: true })
+  }
 }
 </script>
 <template>
@@ -56,10 +63,15 @@ const onBoardCreated = (board: Board) => {
         v-for="board in boards.filter((b) => !b.isArchived).slice(0, 5)"
         :key="board.id"
         :to="`/boards/${board.id}`"
-        class="sidebar-item"
+        class="sidebar-item board-sidebar-item"
         active-class="active"
       >
-        <BoardIcon /> {{ board.name }}
+        <div class="board-item-content">
+          <BoardIcon /> <span class="board-name">{{ board.name }}</span>
+        </div>
+        <button class="archive-board-btn" @click.prevent="handleArchive(board.id)">
+          <DeleteIcon />
+        </button>
       </RouterLink>
       <RouterLink v-if="boards.filter((b) => !b.isArchived).length > 5" to="/" class="sidebar-item">
         See all boards
@@ -143,6 +155,40 @@ html.dark .sidebar-item:hover {
   background-color: #2563eb66;
 }
 
+.board-sidebar-item {
+  justify-content: space-between;
+}
+.board-item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+.board-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.archive-board-btn {
+  background: transparent;
+  border: none;
+  color: var(--input-text);
+  cursor: pointer;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+.archive-board-btn:hover {
+  background-color: var(--border-color);
+  color: #dc2626;
+}
+.board-sidebar-item:hover .archive-board-btn {
+  opacity: 1;
+}
+
 /* Boards header */
 .boards-header {
   display: flex;
@@ -156,6 +202,7 @@ html.dark .sidebar-item:hover {
   border-radius: 8px;
   padding: 0.5rem;
   cursor: pointer;
+  color: var(--input-text);
 }
 
 .add-board-btn:hover {
