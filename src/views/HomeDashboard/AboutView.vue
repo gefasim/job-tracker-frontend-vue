@@ -91,7 +91,11 @@
             </div>
           </div>
           <div class="extension-action">
-            <button class="btn-primary btn-purple">Learn How to Use the Extension</button>
+            <RouterLink
+              :to="{ path: '/how-to', hash: '#browser-extension' }"
+              class="btn-primary btn-purple"
+              >Learn How to Use the Extension</RouterLink
+            >
           </div>
         </div>
       </section>
@@ -119,7 +123,7 @@
         </p>
         <div class="cta-buttons">
           <button class="btn-primary">Sign Up Free</button>
-          <button class="btn-secondary">Contact Us</button>
+          <RouterLink to="contact-us" class="btn-secondary">Contact Us</RouterLink>
         </div>
       </section>
     </div>
@@ -350,6 +354,7 @@ html.dark .ext-feature-card p {
   background-color: #9333ea !important;
   color: white !important;
   border: none;
+  text-decoration: none;
 }
 
 .btn-purple:hover {
@@ -435,6 +440,7 @@ html.dark .cta-section p {
   color: #0f172a;
   transition: background-color 0.2s;
   font-size: 0.95rem;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
