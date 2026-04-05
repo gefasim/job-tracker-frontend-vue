@@ -23,4 +23,8 @@ export const jobApplicationApi = {
     const response = await httpClient.put<JobApplication>(`/job-applications/${id}`, data)
     return response.data
   },
+
+  async delete(id: string): Promise<void> {
+    await httpClient.delete(`/job-applications/${id}`)
+  },
 }

@@ -1,8 +1,18 @@
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    size?: string
+  }>(),
+  {
+    size: '14px',
+  },
+)
+</script>
 <template>
   <svg
     viewBox="0 0 24 24"
-    width="14"
-    height="14"
+    :width="size"
+    :height="size"
     stroke="currentColor"
     stroke-width="2"
     fill="none"
