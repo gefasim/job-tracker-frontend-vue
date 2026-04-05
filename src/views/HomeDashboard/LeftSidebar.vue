@@ -197,7 +197,7 @@ html.dark .sidebar-item:hover {
 }
 
 .add-board-btn {
-  background-color: var(--bg-card);
+  background-color: var(--bg-main);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 0.5rem;
@@ -206,12 +206,12 @@ html.dark .sidebar-item:hover {
 }
 
 .add-board-btn:hover {
-  background-color: color-mix(in srgb, var(--bg-card), black 10%);
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
   border-color: color-mix(in srgb, var(--border-color), black 10%);
 }
 
 html.dark .add-board-btn:hover {
-  background-color: color-mix(in srgb, var(--bg-card), white 10%);
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
   border-color: color-mix(in srgb, var(--border-color), white 10%);
 }
 
