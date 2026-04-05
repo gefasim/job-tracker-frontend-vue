@@ -12,6 +12,7 @@ const STORAGE_KEY = 'contacts'
 const CACHE_DURATION = 1 * 60 * 60 * 1000 // 1 hour in milliseconds
 
 const contactsPerBoard = ref<Record<string, Contact[]>>({})
+const loadedBoardsInThisSession = ref(new Set<string>())
 
 const save = () => saveToCache(STORAGE_KEY, contactsPerBoard.value)
 
@@ -22,10 +23,11 @@ const fetchContacts = async (boardId: string) => {
       contactsPerBoard.value[boardId] = cachedContacts[boardId]
     }
 
-    if (contactsPerBoard.value[boardId]) return
+    if (contactsPerBoard.value[boardId] && loadedBoardsInThisSession.value.has(boardId)) return
 
     const contacts = await api.contacts.getAll(boardId)
     contactsPerBoard.value[boardId] = contacts
+    loadedBoardsInThisSession.value.add(boardId)
     save()
     return contacts
   } catch (error) {
