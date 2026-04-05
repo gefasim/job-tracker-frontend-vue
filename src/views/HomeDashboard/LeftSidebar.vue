@@ -9,12 +9,16 @@ import LightThemeIcon from '@/LightThemeIcon.vue'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
 import { useTheme, type ColorScheme } from '@/store/themeStore'
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useBoards } from '@/store/boardStore'
+import CreateBoardModal from './Board/CreateBoardModal.vue'
+import type { Board } from '@/models/board.dto'
 
 const { isDark, theme, setTheme } = useTheme()
 const { boards } = useBoards()
+const router = useRouter()
 const activeItem = ref<string>('contacts')
+const isCreateBoardModalOpen = ref(false)
 
 const switchTheme = () => {
   const themeOptions: Array<ColorScheme> = ['light', 'dark', 'system']
@@ -25,6 +29,11 @@ const switchTheme = () => {
 
 const handleItemClick = (item: string) => {
   activeItem.value = item
+}
+
+const onBoardCreated = (board: Board) => {
+  isCreateBoardModalOpen.value = false
+  router.push({ name: 'board', params: { boardId: board.id } })
 }
 </script>
 <template>
@@ -39,7 +48,10 @@ const handleItemClick = (item: string) => {
 
       <hr />
 
-      <RouterLink to="/" class="hide-link-decor"> Your boards: </RouterLink>
+      <div class="boards-header">
+        <RouterLink to="/" class="hide-link-decor"> Your boards: </RouterLink>
+        <button class="add-board-btn" @click="isCreateBoardModalOpen = true"><b>+</b></button>
+      </div>
       <RouterLink
         v-for="board in boards.filter((b) => !b.isArchived).slice(0, 5)"
         :key="board.id"
@@ -85,6 +97,13 @@ const handleItemClick = (item: string) => {
       </div>
     </div>
   </div>
+
+  <Teleport to="body">
+    <CreateBoardModal
+      v-if="isCreateBoardModalOpen"
+      @close="isCreateBoardModalOpen = false"
+      @save="onBoardCreated"
+  /></Teleport>
 </template>
 <style>
 .left-sidebar {
@@ -97,6 +116,7 @@ const handleItemClick = (item: string) => {
   padding-top: 20px;
 }
 
+/* Sidebar items */
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -123,6 +143,32 @@ html.dark .sidebar-item:hover {
   background-color: #2563eb66;
 }
 
+/* Boards header */
+.boards-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-board-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.add-board-btn:hover {
+  background-color: color-mix(in srgb, var(--bg-card), black 10%);
+  border-color: color-mix(in srgb, var(--border-color), black 10%);
+}
+
+html.dark .add-board-btn:hover {
+  background-color: color-mix(in srgb, var(--bg-card), white 10%);
+  border-color: color-mix(in srgb, var(--border-color), white 10%);
+}
+
+/* Hide link decor */
 .hide-link-decor {
   text-decoration: none;
   color: var(--input-text);
@@ -131,6 +177,7 @@ html.dark .sidebar-item:hover {
   text-decoration: underline;
 }
 
+/* Theme value */
 .theme-value {
   opacity: 0;
   transition:
