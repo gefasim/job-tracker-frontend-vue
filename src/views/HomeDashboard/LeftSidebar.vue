@@ -41,13 +41,16 @@ const handleItemClick = (item: string) => {
 
       <RouterLink to="/" class="hide-link-decor"> Your boards: </RouterLink>
       <RouterLink
-        v-for="board in boards.filter((b) => !b.isArchived)"
+        v-for="board in boards.filter((b) => !b.isArchived).slice(0, 5)"
         :key="board.id"
         :to="`/boards/${board.id}`"
         class="sidebar-item"
         active-class="active"
       >
         <BoardIcon /> {{ board.name }}
+      </RouterLink>
+      <RouterLink v-if="boards.filter((b) => !b.isArchived).length > 5" to="/" class="sidebar-item">
+        See all boards
       </RouterLink>
 
       <hr />
