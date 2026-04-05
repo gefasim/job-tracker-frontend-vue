@@ -11,6 +11,7 @@ const { textFilter: boardNameFilter } = useNavbarFilter()
 const showArchived = ref(false)
 const editModeForBoardId = ref<string | null>(null)
 const boardMenuOptions = ['Edit', 'Archive']
+const archivedBoardMenuOptions = ['Unarchive']
 
 const vFocus = {
   mounted: (el: HTMLElement) => el.focus(),
@@ -37,6 +38,10 @@ const handleMenuItemClick = async (boardId: string, item: string) => {
   } else if (item === 'Archive') {
     if (confirm('Are you sure you want to archive this board?')) {
       await updateBoard(boardId, { isArchived: true })
+    }
+  } else if (item === 'Unarchive') {
+    if (confirm('Are you sure you want to unarchive this board?')) {
+      await updateBoard(boardId, { isArchived: false })
     }
   }
 }
@@ -66,7 +71,7 @@ const handleSave = async (boardId: string, boardName: string | undefined) => {
       <BaseCardWithMenu
         v-for="board in filteredBoards"
         :key="board.name"
-        :menuItems="boardMenuOptions"
+        :menuItems="showArchived ? archivedBoardMenuOptions : boardMenuOptions"
         @menu-item-click="handleMenuItemClick(board.id, $event)"
         @open="handleOnBoardClick(board.id)"
       >
