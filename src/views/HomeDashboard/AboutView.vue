@@ -10,7 +10,7 @@
       </header>
 
       <section class="mission-section">
-        <div class="mission-card">
+        <div class="mission-card section-card">
           <h2>Our Mission</h2>
           <p>
             JobTracker was created to simplify the job search process. We understand that managing
@@ -24,28 +24,28 @@
       <section class="offer-section">
         <h2 class="section-title">What We Offer</h2>
         <div class="features-grid">
-          <div class="feature-card">
+          <div class="feature-card section-card">
             <h3>📋 Application Tracking</h3>
             <p>
               Keep track of all your job applications with our intuitive Kanban board. Move
               applications through different stages from Applied to Offer.
             </p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card section-card">
             <h3>📄 Document Management</h3>
             <p>
               Upload and organize your resumes, cover letters, and other important documents. Access
               them whenever you need them.
             </p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card section-card">
             <h3>👥 Contact Management</h3>
             <p>
               Maintain a database of recruiters, hiring managers, and professional contacts. Never
               lose track of important connections.
             </p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card section-card">
             <h3>🔍 Smart Organization</h3>
             <p>
               Filter, search, and organize your applications by company, status, date, and more.
@@ -56,7 +56,7 @@
       </section>
 
       <section class="extension-section">
-        <div class="extension-card">
+        <div class="extension-card section-card">
           <div class="extension-header">
             <h2>🔌 Browser Extension <span class="badge">NEW</span></h2>
             <p>
@@ -97,7 +97,7 @@
       </section>
 
       <section class="tech-section">
-        <div class="tech-card">
+        <div class="tech-card section-card">
           <h2>Built with Modern Technology</h2>
           <p>
             JobTracker is built using cutting-edge web technologies to ensure a fast, secure, and
@@ -167,6 +167,15 @@ html.dark .about-header .subtitle {
   color: #9ca3af;
 }
 
+/* Section Card */
+.section-card {
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
 /* Mission Section */
 .mission-card {
   background-color: #fffaf0; /* Light cream/yellow */
@@ -221,9 +230,6 @@ html.dark .mission-card p {
 .feature-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .feature-card h3 {
@@ -251,9 +257,6 @@ html.dark .feature-card p {
 /* Extension Section */
 .extension-card {
   background-color: #faf5ff; /* Light purple */
-  border: 1px solid #f3e8ff;
-  border-radius: 12px;
-  padding: 2.5rem;
   text-align: center;
 }
 
@@ -356,8 +359,6 @@ html.dark .ext-feature-card p {
 /* Tech Section */
 .tech-card {
   background-color: #f0f6ff; /* Light blue */
-  border-radius: 12px;
-  padding: 2.5rem;
 }
 
 html.dark .tech-card {
