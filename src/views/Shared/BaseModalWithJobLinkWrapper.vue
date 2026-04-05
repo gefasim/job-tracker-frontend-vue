@@ -12,13 +12,21 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['close', 'save'])
-const { board } = useCurrentBoard()
+const { board, loadBoard } = useCurrentBoard()
 const linkedJobs = ref<JobApplication[]>([])
 const availableJobs = ref<JobApplication[]>([])
 
-onMounted(() => {
+const loadBoardJobsIfNeeded = async (boardId: string) => {
+  if (!board.value) {
+    await loadBoard(boardId)
+  }
+}
+
+onMounted(async () => {
   linkedJobs.value = props.linkedJobsParam
   const linkedJobIds = props.linkedJobsParam.map((j) => j.id)
+
+  await loadBoardJobsIfNeeded(props.boardId)
   availableJobs.value =
     board.value?.columns
       .flatMap((c) => c.jobApplications)
