@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useBoards } from '@/store/boardStore'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
 import { computed, ref } from 'vue'
+import BaseCardWithMenu from '../Shared/BaseCardWithMenu.vue'
 
 const router = useRouter()
 const { boards } = useBoards()
@@ -22,6 +23,10 @@ const filteredBoards = computed(() => {
 const openBoard = (boardId: string) => {
   router.push({ name: 'board', params: { boardId } })
 }
+
+const handleMenuItemClick = (item: string) => {
+  console.log(item)
+}
 </script>
 
 <template>
@@ -35,19 +40,22 @@ const openBoard = (boardId: string) => {
     </div>
 
     <div class="board-card-grid">
-      <div
+      <BaseCardWithMenu
         v-for="board in filteredBoards"
         :key="board.name"
-        class="board-card"
-        @click="openBoard(board.id)"
+        :menuItems="['Edit', 'Delete']"
+        @menu-item-click="handleMenuItemClick"
+        @open="openBoard(board.id)"
       >
-        <span class="board-card-title">
-          {{ board.name }}
-        </span>
-        <span class="board-card-created">
-          Created: {{ new Date(board.createdAt).toLocaleDateString() }}
-        </span>
-      </div>
+        <div class="board-card">
+          <span class="board-card-title">
+            {{ board.name }}
+          </span>
+          <span class="board-card-created">
+            Created: {{ new Date(board.createdAt).toLocaleDateString() }}
+          </span>
+        </div>
+      </BaseCardWithMenu>
     </div>
   </div>
 </template>
