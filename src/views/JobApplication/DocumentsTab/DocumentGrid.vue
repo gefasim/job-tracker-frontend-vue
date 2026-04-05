@@ -5,6 +5,7 @@ import type { Document } from '@/models/document.dto'
 import DocumentsCard from './DocumentsCard.vue'
 import DocumentModal from './DocumentModal.vue'
 
+// TODO: add download document button
 const props = defineProps<{
   documents: Document[]
   boardId: string
