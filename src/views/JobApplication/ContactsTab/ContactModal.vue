@@ -261,7 +261,7 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
 }
 
 .external-url {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 12px;
 }
@@ -276,7 +276,7 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
 
 /* Emails/Phones dynamic list */
 .dynamic-list {
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 12px;
   display: flex;
@@ -287,7 +287,7 @@ const sendAssignOrUnassignJobRequests = (contactId: string, linkedJobIds: string
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 4px 8px;
 }

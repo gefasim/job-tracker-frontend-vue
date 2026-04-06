@@ -201,10 +201,9 @@ label {
 
 .note-card {
   position: relative;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 16px;
-  background: #fff;
   min-height: 120px;
   display: flex;
   flex-direction: column;
@@ -223,7 +222,6 @@ label {
 }
 
 .note-preview {
-  color: #3c4043;
   font-size: 14px;
   line-height: 1.5;
   display: -webkit-box;
@@ -240,8 +238,6 @@ label {
   bottom: 12px;
   right: 16px;
   font-size: 11px;
-  color: #70757a;
-  background: #fff; /* prevents note text from overlapping with the date */
   padding-left: 4px;
 }
 

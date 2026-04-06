@@ -18,6 +18,7 @@ import { useCurrentBoard } from '@/store/currentBoardStore'
 import { useContacts } from '@/store/contactStore'
 import { useDocumentStore } from '@/store/documentStore'
 import type { UpdateJobApplication } from '@/models/update-job-application.dto'
+import CompanyImage from '../Shared/CompanyImage.vue'
 
 const props = defineProps<{
   jobId: string
@@ -69,6 +70,9 @@ watch(
     if (!newJobId) return
     jobApplicationBeforeUpdate = await getJobApplicationFromCasheOrLoad(newJobId)
     jobApplication.value = { ...jobApplicationBeforeUpdate }
+    selectedColumnId.value = board.value!.columns.find((c) =>
+      c.jobApplications.some((j) => j.id === newJobId),
+    )!.id
   },
   { immediate: true },
 )
@@ -136,7 +140,11 @@ useKeydown('Escape', handleClose)
           <div class="header-left">
             <h1>{{ jobApplication.title }}</h1>
             <div class="subtitle">
-              <span class="icon-office">🏢</span> {{ jobApplication.company?.name }}
+              <CompanyImage
+                :src="jobApplication.company?.logo || ''"
+                :alt="jobApplication.company?.name || ''"
+              />
+              {{ jobApplication.company?.name }}
             </div>
           </div>
           <div class="header-right">
