@@ -7,7 +7,6 @@ import CreateJobApplicationModal from '@/views/JobApplication/CreateJobApplicati
 import { useRoute, useRouter } from 'vue-router'
 import { getContrastColor } from '@/utils/colorContrast'
 import { useCurrentBoard } from '@/store/currentBoardStore'
-import { useBoards } from '@/store/boardStore'
 import { useNavbarFilter } from '@/store/navbarFilterStore'
 import DeleteIcon from '@/assets/icons/DeleteIcon.vue'
 
@@ -21,7 +20,6 @@ const { textFilter } = useNavbarFilter()
 const dragInfo = ref<{ fromColId: string; fromIndex: number } | null>(null)
 const selectedColumnId = ref<string | null>()
 
-const { boards } = useBoards()
 const { board, loadBoard } = useCurrentBoard()
 const isCreateJobModalOpen = ref<boolean>(false)
 
@@ -159,7 +157,6 @@ const deleteJob = async (jobId: string, columnId: string, index: number) => {
       v-if="isCreateJobModalOpen"
       :boardId="board!.id"
       :columnId="selectedColumnId!"
-      :boards="boards!"
       @save="onCreateJobApplicationModalSaved"
       @close="onCreateJobApplicationModalClosed"
     />

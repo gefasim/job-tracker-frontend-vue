@@ -123,7 +123,6 @@ const onBoardCreated = async (board: Board) => {
     <CreateJobApplicationModal
       v-if="isCreateJobModalOpen && selectedBoard"
       :boardId="selectedBoard.id"
-      :boards="boards"
       @close="isCreateJobModalOpen = false"
       @save="isCreateJobModalOpen = false"
     />

@@ -1,40 +1,41 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import BaseModalWrapper from '../Shared/BaseModalWrapper.vue'
-import DropdownList from '../Shared/DropdownList.vue'
 import type { Board } from '@/models/board.dto'
 import type { BoardColumn } from '@/models/board-column.dto'
 import CompanySelectDropdown from '../Shared/CompanySelectDropdown.vue'
 import type { Company } from '@/models/company.dto'
 import { api } from '@/api/api'
 import type { CreateJobApplication } from '@/models/create-job-application.dto'
+import GenericSelector from '../Shared/GenericSelector.vue'
+import { useBoards } from '@/store/boardStore'
 
 const props = defineProps<{
   boardId: string
   columnId?: string
-  boards: Board[]
 }>()
 
 const emit = defineEmits(['close', 'save'])
 
-let selectedCompany: Company | null = null
+const { boards } = useBoards()
+const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
+
 const jobTitle = ref<string>('')
-const selectedBoard = ref<Board>(props.boards.filter((b) => b.id == props.boardId)[0]!)
+let selectedCompany: Company | null = null
+const selectedBoard = ref<Board>(availableBoards.value.filter((b) => b.id == props.boardId)[0]!)
 const selectedColumn = ref<BoardColumn>(selectedBoard.value.columns.filter((c) => c.name)[0]!)
-const boardNames = computed(() => props.boards.map((b) => b.name))
-const columnNames = computed(() => selectedBoard.value!.columns.map((c) => c.name))
 
 const handleCompanySelect = (company: Company) => {
   selectedCompany = company
 }
 
-const handleBoardSelect = (boardName: string) => {
-  selectedBoard.value = props.boards.filter((b) => b.name == boardName)[0]!
+const handleBoardSelect = (board: Board) => {
+  selectedBoard.value = board
   selectedColumn.value = selectedBoard.value.columns[0]!
 }
 
-const handleColumnSelect = (columnName: string) => {
-  selectedColumn.value = selectedBoard.value!.columns.filter((c) => c.name == columnName)[0]!
+const handleColumnSelect = (column: BoardColumn) => {
+  selectedColumn.value = column
 }
 
 const handleSave = async () => {
@@ -67,21 +68,29 @@ async function getOrCreateCompany(company: Company) {
         <div class="modal-row">
           <div class="input-group">
             <label>Board</label>
-            <DropdownList
-              :list="boardNames"
-              :default-value="selectedBoard.name"
-              :show-list-above="true"
-              @select="handleBoardSelect"
-            ></DropdownList>
+            <GenericSelector
+              :items="availableBoards"
+              :selected-item="selectedBoard"
+              label="Select Board:"
+              display-property="name"
+              value-property="id"
+              id="create-job-board-select"
+              :hideLabel="true"
+              @update:selected-item="handleBoardSelect"
+            />
           </div>
           <div class="input-group">
             <label>Column</label>
-            <DropdownList
-              :list="columnNames"
-              :default-value="selectedColumn.name"
-              :show-list-above="true"
-              @select="handleColumnSelect"
-            ></DropdownList>
+            <GenericSelector
+              :items="selectedBoard.columns"
+              :selected-item="selectedColumn"
+              label="Select Column:"
+              display-property="name"
+              value-property="id"
+              id="create-job-column-select"
+              :hideLabel="true"
+              @update:selected-item="handleColumnSelect"
+            ></GenericSelector>
           </div>
         </div>
       </div>
