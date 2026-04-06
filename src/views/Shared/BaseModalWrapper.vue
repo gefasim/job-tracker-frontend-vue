@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useKeydown } from '@/composables/useKeydown'
+
 defineProps<{
   title: string
   width?: string
@@ -9,6 +11,10 @@ const emit = defineEmits(['close', 'save'])
 const handleSave = async () => {
   emit('save')
 }
+
+useKeydown('Escape', () => {
+  emit('close')
+})
 </script>
 
 <template>
