@@ -86,7 +86,6 @@ const saveChanges = async () => {
             id="company-logo"
             name="companyLogo"
             type="text"
-            class="form-control"
             placeholder="https://example.com/logo.png"
           />
         </div>
@@ -98,7 +97,6 @@ const saveChanges = async () => {
             id="company-name"
             name="companyName"
             type="text"
-            class="form-control"
             placeholder="Enter company name"
           />
         </div>
@@ -110,7 +108,6 @@ const saveChanges = async () => {
             id="company-industry"
             name="companyIndustry"
             type="text"
-            class="form-control"
             placeholder="e.g. Technology, Healthcare"
           />
         </div>
@@ -122,7 +119,6 @@ const saveChanges = async () => {
             id="company-url"
             name="companyUrl"
             type="url"
-            class="form-control"
             placeholder="https://..."
           />
         </div>
@@ -133,7 +129,6 @@ const saveChanges = async () => {
             v-model="formData.description"
             id="company-description"
             name="companyDescription"
-            class="form-control textarea"
             placeholder="About the company..."
           ></textarea>
         </div>
@@ -259,21 +254,6 @@ const saveChanges = async () => {
 
 .required {
   color: #d93025;
-}
-
-.form-control {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #dadce0;
-  border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
-}
-
-.form-control:focus {
-  border-color: #1a73e8;
 }
 
 .textarea {
