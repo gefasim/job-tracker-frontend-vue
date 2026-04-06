@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { Board } from '@/models/board.dto'
 import { api } from '@/api/api'
 import type { UpdateBoard } from '@/models/update-board.dto'
@@ -7,6 +7,7 @@ const BOARDS_KEY = 'boards'
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
 
 const boards = ref<Board[]>([])
+const activeBoards = computed(() => boards.value.filter((b) => !b.isArchived))
 const isLoading = ref(false) // prevents multiple simultaneous requests
 let isFetched = false // prevents multiple fetches
 
@@ -93,6 +94,7 @@ export const useBoards = () => {
 
   return {
     boards,
+    activeBoards,
     fetchBoards,
     createBoard,
     updateBoard,

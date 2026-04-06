@@ -15,10 +15,9 @@ import ContactModal from '@/views/JobApplication/ContactsTab/ContactModal.vue'
 import DocumentModal from '@/views/JobApplication/DocumentsTab/DocumentModal.vue'
 
 const { textFilter, selectedBoard } = useNavbarFilter()
-const { boards } = useBoards()
+const { activeBoards } = useBoards()
 const route = useRoute()
 const router = useRouter()
-const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
 
 const isCreateBoardModalOpen = ref(false)
 const isCreateJobModalOpen = ref(false)
@@ -26,14 +25,14 @@ const isContactModalOpen = ref(false)
 const isDocumentModalOpen = ref(false)
 
 const setSelectBoardDropdownValue = () => {
-  if (availableBoards.value.length == 0) return
+  if (activeBoards.value.length == 0) return
   const isBoardChangedOusideBoardSelector =
     route.params.boardId && selectedBoard.value?.id !== route.params.boardId
   if (isBoardChangedOusideBoardSelector) {
-    const found = availableBoards.value.find((b) => b.id === route.params.boardId)
-    selectedBoard.value = found || availableBoards.value[0]!
+    const found = activeBoards.value.find((b) => b.id === route.params.boardId)
+    selectedBoard.value = found || activeBoards.value[0]!
   } else if (selectedBoard.value == null) {
-    selectedBoard.value = availableBoards.value[0]!
+    selectedBoard.value = activeBoards.value[0]!
   }
 }
 
@@ -85,7 +84,7 @@ const onBoardCreated = async (board: Board) => {
   <nav class="top-navbar">
     <div class="nav-menu">
       <GenericSelector
-        :items="availableBoards"
+        :items="activeBoards"
         :selected-item="selectedBoard"
         label="Select Board:"
         display-property="name"

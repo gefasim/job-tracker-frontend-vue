@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import BaseModalWrapper from '../Shared/BaseModalWrapper.vue'
 import type { Board } from '@/models/board.dto'
 import type { BoardColumn } from '@/models/board-column.dto'
@@ -17,12 +17,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['close', 'save'])
 
-const { boards } = useBoards()
-const availableBoards = computed(() => boards.value.filter((b) => !b.isArchived))
+const { activeBoards } = useBoards()
 
 const jobTitle = ref<string>('')
 let selectedCompany: Company | null = null
-const selectedBoard = ref<Board>(availableBoards.value.filter((b) => b.id == props.boardId)[0]!)
+const selectedBoard = ref<Board>(activeBoards.value.filter((b) => b.id == props.boardId)[0]!)
 const selectedColumn = ref<BoardColumn>(selectedBoard.value.columns.filter((c) => c.name)[0]!)
 
 const handleCompanySelect = (company: Company) => {
@@ -69,7 +68,7 @@ async function getOrCreateCompany(company: Company) {
           <div class="input-group">
             <label>Board</label>
             <GenericSelector
-              :items="availableBoards"
+              :items="activeBoards"
               :selected-item="selectedBoard"
               label="Select Board:"
               display-property="name"
