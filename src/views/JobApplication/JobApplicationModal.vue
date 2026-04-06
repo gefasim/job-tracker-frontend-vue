@@ -69,6 +69,9 @@ watch(
     if (!newJobId) return
     jobApplicationBeforeUpdate = await getJobApplicationFromCasheOrLoad(newJobId)
     jobApplication.value = { ...jobApplicationBeforeUpdate }
+    selectedColumnId.value = board.value!.columns.find((c) =>
+      c.jobApplications.some((j) => j.id === newJobId),
+    )!.id
   },
   { immediate: true },
 )
