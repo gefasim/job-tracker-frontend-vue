@@ -87,6 +87,7 @@ const handleSave = async () => {
   flex-direction: column;
   overflow-y: auto;
   gap: 24px;
+  padding-right: 32px;
 }
 
 .form-sidebar {

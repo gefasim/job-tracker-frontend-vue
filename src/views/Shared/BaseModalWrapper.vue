@@ -68,7 +68,6 @@ const handleSave = async () => {
   display: flex;
   flex: 1;
   padding: 24px;
-  gap: 32px;
   overflow: hidden;
 }
 
