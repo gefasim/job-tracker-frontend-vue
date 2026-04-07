@@ -17,8 +17,7 @@ const currentComponent = computed(() => tabComponents[activeTab.value].component
 </script>
 
 <template>
-  <div class="placeholder-page">
-    <h1>Personal Account</h1>
+  <div>
     <nav class="modal-tabs">
       <button
         v-for="tab in Object.values(AccountTabEnum)"
@@ -38,9 +37,6 @@ const currentComponent = computed(() => tabComponents[activeTab.value].component
 </template>
 
 <style scoped>
-.placeholder-page {
-  padding: 2rem;
-}
 /* Tabs */
 .modal-tabs {
   display: flex;
