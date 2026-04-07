@@ -5,6 +5,7 @@ import { contactApi } from './contacts.api'
 import { documentApi } from './documents.api'
 import { jobApplicationApi } from './job-applications.api'
 import { jobApplicationNoteApi } from './job-notes.api'
+import { notificationApi } from './notifications.api'
 import { userApi } from './user.api'
 
 export const api = {
@@ -15,5 +16,6 @@ export const api = {
   documents: documentApi,
   jobNotes: jobApplicationNoteApi,
   jobs: jobApplicationApi,
+  notifications: notificationApi,
   users: userApi,
 }
