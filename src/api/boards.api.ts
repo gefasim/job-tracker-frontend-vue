@@ -4,7 +4,7 @@ import type { UpdateBoard } from '@/models/update-board.dto'
 
 export const boardApi = {
   async getAll(): Promise<Board[]> {
-    const response = await httpClient.get<Board[]>(`/boards`)
+    const response = await httpClient.get<Board[]>(`/boards`, { params: { include: 'columns' } })
     return response.data
   },
 
