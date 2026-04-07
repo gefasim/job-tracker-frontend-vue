@@ -1,4 +1,3 @@
-import { CurrentUserService } from '@/current-user.service'
 import AuthenticatedHome from '@/views/HomeDashboard/AuthenticatedHome.vue'
 import GuestHome from '@/views/GuestHome.vue'
 import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
@@ -12,6 +11,9 @@ import ContactUs from '@/views/HomeDashboard/ContactUs.vue'
 import HowTo from '@/views/HomeDashboard/HowTo.vue'
 import PersonalAccount from '@/views/HomeDashboard/PersonalAccount.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUser } from '@/store/userStore'
+
+const { isAuthenticated } = useUser()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,8 +32,7 @@ const router = createRouter({
       path: '/',
       component: AuthenticatedHome,
       beforeEnter: (to, from) => {
-        const isLoggedIn = !!CurrentUserService.getUser()
-        if (!isLoggedIn) return '/welcome'
+        if (!isAuthenticated.value) return '/welcome'
       },
       children: [
         {
