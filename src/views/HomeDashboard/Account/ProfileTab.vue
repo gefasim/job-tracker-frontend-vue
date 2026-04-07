@@ -3,6 +3,7 @@ import { useUser } from '@/store/userStore'
 import { ref } from 'vue'
 import type { User } from '@/models/user.dto'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
+import { api } from '@/api/api'
 
 const { user } = useUser()
 const formData = ref<Partial<User>>({})
@@ -41,9 +42,7 @@ const saveChanges = async () => {
     ...formData.value,
   } as User
 
-  // TODO: implement api call
-  console.log(updatedUser)
-  //user.value = await api.users.update(updatedUser.id, updatedUser)
+  user.value = await api.users.update(updatedUser)
   isEditMode.value = false
 }
 </script>
