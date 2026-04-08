@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { useUser } from '@/store/userStore'
 import { ref } from 'vue'
-import type { User } from '@/models/user.dto'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import { api } from '@/api/api'
+import type { UpdateUser } from '@/models/update-user.dto'
 
 const { user } = useUser()
-const formData = ref<Partial<User>>({})
+const formData = ref<UpdateUser>({})
 const isEditMode = ref(false)
 const selectedFileName = ref('')
 
 const enterEditMode = () => {
-  formData.value = { ...user.value }
+  formData.value = {
+    firstName: user.value!.firstName,
+    lastName: user.value!.lastName,
+    email: user.value!.email,
+  }
   selectedFileName.value = ''
   isEditMode.value = true
 }
@@ -26,21 +30,18 @@ const handleFileChange = (event: Event) => {
     const file = target.files[0]
     if (file) {
       selectedFileName.value = file.name
-
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        formData.value.profilePicUrl = e.target?.result as string
-      }
-      reader.readAsDataURL(file)
+      formData.value.profilePic = file
     }
   }
 }
 
 const saveChanges = async () => {
-  const updatedUser = {
-    ...user.value,
-    ...formData.value,
-  } as User
+  const updatedUser: UpdateUser = {
+    firstName: formData.value.firstName,
+    lastName: formData.value.lastName,
+    email: formData.value.email,
+    profilePic: formData.value.profilePic,
+  }
 
   user.value = await api.users.update(updatedUser)
   isEditMode.value = false
@@ -91,7 +92,7 @@ const saveChanges = async () => {
             <div v-if="selectedFileName" class="selected-file-name">
               Selected: {{ selectedFileName }}
             </div>
-            <div v-else-if="formData.profilePicUrl" class="selected-file-name">
+            <div v-else-if="formData.profilePic" class="selected-file-name">
               Current Image Loaded
             </div>
           </div>

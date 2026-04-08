@@ -1,9 +1,14 @@
 import type { User } from '@/models/user.dto'
 import { httpClient } from './http-client'
+import type { UpdateUser } from '@/models/update-user.dto'
 
 export const userApi = {
-  async update(user: Partial<User>): Promise<User> {
-    const response = await httpClient.patch<User>(`/users`, user)
+  async update(user: UpdateUser): Promise<User> {
+    const response = await httpClient.patch<User>(`/users`, user, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     return response.data
   },
   async createVerificationCodeForDelete(): Promise<void> {
