@@ -160,16 +160,6 @@ const saveChanges = async () => {
 </template>
 
 <style scoped>
-.header {
-  margin-bottom: 24px;
-}
-
-.header h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 8px 0;
-}
-
 .subtitle {
   font-size: 14px;
   margin: 0;

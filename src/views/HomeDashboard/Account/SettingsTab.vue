@@ -85,8 +85,10 @@ const clearPasswordFileds = () => {
 
 <template>
   <div class="tab-border">
-    <div>
-      <h2>Password update</h2>
+    <div class="section">
+      <div class="header">
+        <h2>Password update</h2>
+      </div>
       <div class="password-update-container">
         <div class="input-group">
           <label for="currentPassword">Current Passwor</label>
@@ -142,8 +144,10 @@ const clearPasswordFileds = () => {
       </div>
     </div>
     <hr />
-    <div>
-      <h2>Delete Account</h2>
+    <div class="section">
+      <div class="header">
+        <h2>Delete Account</h2>
+      </div>
       <p class="warning-text">
         Warning: Deleting your account will permanently remove all your data, including job
         applications, contacts, and documents.
@@ -183,6 +187,16 @@ const clearPasswordFileds = () => {
 </template>
 
 <style scoped>
+.section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.section:first-child {
+  margin-top: 0;
+}
+.section:last-child {
+  margin-bottom: 0;
+}
 .password-update-container {
   display: flex;
   flex-direction: column;
