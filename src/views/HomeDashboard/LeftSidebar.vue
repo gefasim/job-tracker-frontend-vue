@@ -15,10 +15,16 @@ import CreateBoardModal from './Board/CreateBoardModal.vue'
 import type { Board } from '@/models/board.dto'
 import DeleteIcon from '@/assets/icons/DeleteIcon.vue'
 import { useUser } from '@/store/userStore'
+import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useDocumentStore } from '@/store/documentStore'
+import { useContacts } from '@/store/contactStore'
 
-const { isDark, theme, setTheme } = useTheme()
-const { boards, updateBoard } = useBoards()
-const { logout } = useUser()
+const { isDark, theme, setTheme, clearTheme } = useTheme()
+const { boards, updateBoard, clearBoards } = useBoards()
+const { logout, clearUser } = useUser()
+const { clearCurrentBoard } = useCurrentBoard()
+const { clearDocuments } = useDocumentStore()
+const { clearContacts } = useContacts()
 const router = useRouter()
 const isCreateBoardModalOpen = ref(false)
 
@@ -41,9 +47,18 @@ const handleArchive = async (boardId: string) => {
 }
 
 const handleLogout = () => {
-  debugger
   logout()
+  clearAllData()
   router.push({ name: 'login' })
+}
+
+const clearAllData = () => {
+  clearUser()
+  clearBoards()
+  clearCurrentBoard()
+  clearDocuments()
+  clearContacts()
+  clearTheme()
 }
 </script>
 <template>
