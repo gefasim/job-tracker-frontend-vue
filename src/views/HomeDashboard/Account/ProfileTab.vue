@@ -89,51 +89,55 @@ const saveChanges = async () => {
       </div>
 
       <div class="form-grid">
-        <div style="position: relative; width: fit-content">
-          <input
-            type="file"
-            id="file-upload"
-            class="file-input"
-            accept="image/*"
-            @change="handleFileChange"
-          />
-          <ProfileImage :src="tempProfilePicUrl" :alt="formData.firstName" size="128px" />
-          <div v-if="selectedFileName" class="selected-file-name">
-            Selected: {{ selectedFileName }}
+        <div class="profile-image-with-name-row">
+          <div class="profile-image-container">
+            <input
+              type="file"
+              id="file-upload"
+              class="file-input"
+              accept="image/*"
+              @change="handleFileChange"
+            />
+            <ProfileImage :src="tempProfilePicUrl" :alt="formData.firstName" size="128px" />
+            <div v-if="selectedFileName" class="selected-file-name">
+              Selected: {{ selectedFileName }}
+            </div>
+            <div :style="profilePictureButtonStyles">
+              <BaseButtonDropdown
+                :items="['Upload Image', 'Remove Image']"
+                @select="handleMenuItemClick"
+                ><template #buttonValue>✎</template>
+                <template #item="{ item }">{{ item }}</template>
+              </BaseButtonDropdown>
+            </div>
           </div>
-          <div :style="profilePictureButtonStyles">
-            <BaseButtonDropdown
-              :items="['Upload Image', 'Remove Image']"
-              @select="handleMenuItemClick"
-              ><template #buttonValue>✎</template>
-              <template #item="{ item }">{{ item }}</template>
-            </BaseButtonDropdown>
+
+          <div class="name-inputs">
+            <div class="input-group-required input-group">
+              <label for="firstName">First Name <span>*</span></label>
+              <input
+                v-model="formData.firstName"
+                id="firstName"
+                name="firstName"
+                type="text"
+                placeholder="First Name"
+              />
+            </div>
+
+            <div class="input-group-required input-group">
+              <label for="lastName">Last Name <span>*</span></label>
+              <input
+                v-model="formData.lastName"
+                id="lastName"
+                name="lastName"
+                type="text"
+                placeholder="Last Name"
+              />
+            </div>
           </div>
         </div>
 
         <div class="input-group-required input-group">
-          <label for="firstName">First Name <span>*</span></label>
-          <input
-            v-model="formData.firstName"
-            id="firstName"
-            name="firstName"
-            type="text"
-            placeholder="First Name"
-          />
-        </div>
-
-        <div class="input-group-required input-group">
-          <label for="lastName">Last Name <span>*</span></label>
-          <input
-            v-model="formData.lastName"
-            id="lastName"
-            name="lastName"
-            type="text"
-            placeholder="Last Name"
-          />
-        </div>
-
-        <div class="input-group-required input-group full-width">
           <label for="email">Email <span>*</span></label>
           <input
             v-model="formData.email"
@@ -190,11 +194,29 @@ const saveChanges = async () => {
 }
 
 /* Profile Picture */
+.profile-image-with-name-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.profile-image-container {
+  position: relative;
+  width: fit-content;
+}
+
 .file-input {
   position: absolute;
   width: 0;
   height: 0;
   opacity: 0;
+}
+
+.name-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
 }
 
 .selected-file-name {
@@ -215,13 +237,9 @@ const saveChanges = async () => {
 }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-}
-
-.full-width {
-  grid-column: span 2;
 }
 
 .input-group-required label span {
