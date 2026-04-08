@@ -6,4 +6,12 @@ export const userApi = {
     const response = await httpClient.patch<User>(`/users`, user)
     return response.data
   },
+  async createVerificationCodeForDelete(): Promise<void> {
+    await httpClient.post(`/users/delete/create-verification-code`)
+  },
+  async delete(verificationCode: string): Promise<void> {
+    await httpClient.delete(`/users`, {
+      data: { code: verificationCode },
+    })
+  },
 }
