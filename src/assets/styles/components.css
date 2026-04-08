@@ -49,3 +49,11 @@ html.dark .btn-outline:hover:not(:disabled) {
 html.dark input[type='date'] {
   color-scheme: dark;
 }
+
+/* Form */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}

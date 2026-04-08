@@ -84,7 +84,7 @@ const clearPasswordFileds = () => {
 </script>
 
 <template>
-  <div class="tab-border settings-container">
+  <div class="tab-border">
     <div>
       <h2>Password update</h2>
       <div class="password-update-container">
@@ -183,10 +183,6 @@ const clearPasswordFileds = () => {
 </template>
 
 <style scoped>
-.settings-container {
-  padding: 24px;
-}
-
 .password-update-container {
   display: flex;
   flex-direction: column;
@@ -271,13 +267,6 @@ const clearPasswordFileds = () => {
   outline: none;
   border-color: #d93025;
   box-shadow: 0 0 0 2px rgba(217, 48, 37, 0.2);
-}
-
-.form-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 20px;
 }
 
 .confirm-btn {

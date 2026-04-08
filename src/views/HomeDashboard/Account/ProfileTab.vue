@@ -245,11 +245,4 @@ const saveChanges = async () => {
 .input-group-required label span {
   color: #d93025;
 }
-
-.form-actions {
-  margin-top: 24px;
-  display: flex;
-  gap: 12px;
-  padding-top: 16px;
-}
 </style>

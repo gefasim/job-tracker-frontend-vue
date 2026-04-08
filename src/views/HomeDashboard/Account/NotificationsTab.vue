@@ -213,12 +213,6 @@ const saveChanges = async () => {
   border-top: 1px solid var(--border-color);
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 32px;
-}
-
 /* Toggle Switch Styles */
 .switch {
   position: relative;

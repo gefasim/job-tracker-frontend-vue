@@ -260,11 +260,4 @@ const saveChanges = async () => {
   min-height: 100px;
   resize: vertical;
 }
-
-.form-actions {
-  margin-top: 24px;
-  display: flex;
-  gap: 12px;
-  padding-top: 16px;
-}
 </style>
