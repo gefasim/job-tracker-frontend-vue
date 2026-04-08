@@ -56,8 +56,8 @@ const clearAllData = () => {
 
 <template>
   <div class="tab-border settings-container">
-    <div class="delete-section">
-      <h3>Delete Account</h3>
+    <div>
+      <h2>Delete Account</h2>
       <p class="warning-text">
         Warning: Deleting your account will permanently remove all your data, including job
         applications, contacts, and documents.
@@ -101,13 +101,7 @@ const clearAllData = () => {
   padding: 24px;
 }
 
-.delete-section {
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 24px;
-}
-
-.delete-section h3 {
+.delete-section h2 {
   margin-top: 0;
   color: #d93025;
   font-size: 18px;
