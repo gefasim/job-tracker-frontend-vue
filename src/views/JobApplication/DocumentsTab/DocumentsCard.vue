@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { Document } from '@/models/document.dto'
-import type { User } from '@/models/user.dto'
+import type { User } from '@/models/user/user.dto'
 import DocumentCategoryBadge from '@/views/Shared/DocumentCategoryBadge.vue'
 
 const props = defineProps<{

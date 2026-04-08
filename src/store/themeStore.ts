@@ -24,6 +24,11 @@ watch(
   { immediate: true },
 )
 
+const clearTheme = () => {
+  theme.value = 'system'
+  localStorage.removeItem('theme')
+}
+
 export const useTheme = () => {
   const setTheme = (newTheme: ColorScheme) => {
     theme.value = newTheme
@@ -34,5 +39,6 @@ export const useTheme = () => {
     theme,
     isDark,
     setTheme,
+    clearTheme,
   }
 }

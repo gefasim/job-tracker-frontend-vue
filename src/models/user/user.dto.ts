@@ -1,4 +1,4 @@
-import type { BaseDto } from './base.dto'
+import type { BaseDto } from '../base.dto'
 
 export interface User extends BaseDto {
   email: string

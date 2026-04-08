@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { CurrentUserService } from '@/current-user.service.ts'
-import { api } from '@/api/api'
+import { useUser } from '@/store/userStore'
 
 const credentials = ref({
   email: '',
@@ -10,13 +9,12 @@ const credentials = ref({
 })
 const errorMessage = ref()
 const router = useRouter()
+const { login: loginUser } = useUser()
 
 const login = async () => {
   errorMessage.value = '' // Clear previous errors
   try {
-    //const response = await api.post('/auth/login', JSON.stringify(credentials.value))
-    const response = await api.auth.login(credentials.value.email, credentials.value.password)
-    CurrentUserService.setUser(response)
+    await loginUser(credentials.value.email, credentials.value.password)
     router.push('/')
   } catch (error) {
     errorMessage.value = error

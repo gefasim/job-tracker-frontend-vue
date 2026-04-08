@@ -80,6 +80,12 @@ const updateBoard = async (boardId: string, boardData: UpdateBoard): Promise<Boa
   }
 }
 
+const clearBoards = () => {
+  boards.value = []
+  isFetched = false
+  localStorage.removeItem(BOARDS_KEY)
+}
+
 export const useBoards = () => {
   // Load from cache first
   const cachedBoards = loadFromCache()
@@ -98,5 +104,6 @@ export const useBoards = () => {
     fetchBoards,
     createBoard,
     updateBoard,
+    clearBoards,
   }
 }

@@ -36,6 +36,7 @@ html.dark {
 
   /* Button Tokens (Primary Dark) */
   --btn-primary-bg: #3b82f6;
+  --btn-primary-bg-disabled: #3c4043;
   --btn-primary-hover: #60a5fa;
   --btn-primary-text: #ffffff;
 

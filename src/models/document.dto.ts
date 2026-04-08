@@ -2,7 +2,7 @@ import type { BaseDto } from './base.dto'
 import type { Board } from './board.dto'
 import type { DocumentCategoryType } from './document-category.enum'
 import type { JobApplication } from './job-application.dto'
-import type { User } from './user.dto'
+import type { User } from './user/user.dto'
 
 export interface Document extends BaseDto {
   user: User
