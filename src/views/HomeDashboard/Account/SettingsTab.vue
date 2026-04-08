@@ -162,10 +162,11 @@ const clearPasswordFileds = () => {
           <strong>This action cannot be undone.</strong> Your account and all related data will be
           deleted immediately and permanently.
         </p>
-        <div class="input-group-danger full-width">
+        <div class="input-group input-group-danger full-width">
           <label for="confirmCode">Please type your verification code from email to confirm</label>
           <input
             id="confirmCode"
+            name="confirmCode"
             v-model="confirmationCode"
             type="text"
             placeholder="Verification Code"
@@ -251,8 +252,6 @@ const clearPasswordFileds = () => {
 
 .confirmation-box {
   margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-color);
   animation: fadeIn 0.3s ease;
 }
 

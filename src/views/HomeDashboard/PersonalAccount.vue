@@ -22,7 +22,7 @@ const navigateToTab = (tab: AccountTabEnum) => {
 
 <template>
   <div>
-    <nav class="modal-tabs">
+    <nav class="tabs">
       <button
         v-for="tab in Object.values(AccountTabEnum)"
         :key="tab"
@@ -32,7 +32,7 @@ const navigateToTab = (tab: AccountTabEnum) => {
         {{ tab }}
       </button>
     </nav>
-    <main class="modal-body">
+    <main class="body">
       <RouterView v-slot="{ Component }">
         <KeepAlive>
           <component :is="Component" />
@@ -44,13 +44,13 @@ const navigateToTab = (tab: AccountTabEnum) => {
 
 <style scoped>
 /* Tabs */
-.modal-tabs {
+.tabs {
   display: flex;
   background: #f1f4f9;
   padding: 8px 32px;
   gap: 8px;
 }
-html.dark .modal-tabs {
+html.dark .tabs {
   background: #1e293b;
 }
 
@@ -90,10 +90,10 @@ html.dark .modal-tabs {
 }
 
 /* Form Layout */
-.modal-body {
+.body {
   padding: 32px;
   background: var(--bg-main);
   overflow-y: auto;
-  max-height: 70vh;
+  max-height: 100vh;
 }
 </style>

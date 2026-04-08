@@ -97,7 +97,7 @@ const handleArchive = async (boardId: string) => {
         <span>Theme</span>
         <span class="theme-value">({{ theme }})</span>
       </div>
-      <RouterLink to="/account/profile" class="sidebar-item" active-class="active">
+      <RouterLink to="/account" class="sidebar-item" active-class="active">
         Personal Account
       </RouterLink>
       <div
