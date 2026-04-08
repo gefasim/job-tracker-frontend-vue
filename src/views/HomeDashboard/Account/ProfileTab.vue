@@ -2,10 +2,9 @@
 import { useUser } from '@/store/userStore'
 import { ref } from 'vue'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
-import { api } from '@/api/api'
 import type { UpdateUser } from '@/models/user/update-user.dto'
 
-const { user } = useUser()
+const { user, updateUser } = useUser()
 const formData = ref<UpdateUser>({})
 const isEditMode = ref(false)
 const selectedFileName = ref('')
@@ -43,7 +42,7 @@ const saveChanges = async () => {
     profilePic: formData.value.profilePic,
   }
 
-  user.value = await api.users.update(updatedUser)
+  await updateUser(updatedUser)
   isEditMode.value = false
 }
 </script>

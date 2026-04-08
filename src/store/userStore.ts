@@ -1,6 +1,7 @@
 import { computed, ref } from 'vue'
 import type { User } from '@/models/user/user.dto'
 import { api } from '@/api/api'
+import type { UpdateUser } from '@/models/user/update-user.dto'
 
 const USER_KEY = 'user'
 const user = ref<User | null>(null)
@@ -21,6 +22,16 @@ const setUser = (userData: User) => {
   localStorage.setItem(USER_KEY, JSON.stringify(userData))
 }
 
+const updateUser = async (updatedUser: UpdateUser) => {
+  try {
+    const response = await api.users.update(updatedUser)
+    setUser(response)
+  } catch (error) {
+    console.error('Failed to update user:', error)
+    throw error
+  }
+}
+
 const clearUser = () => {
   user.value = null
   localStorage.removeItem(USER_KEY)
@@ -37,6 +48,7 @@ export const useUser = () => {
     isAuthenticated,
     login,
     setUser,
+    updateUser,
     clearUser,
   }
 }
