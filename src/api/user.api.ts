@@ -9,7 +9,7 @@ export const userApi = {
     return response.data
   },
   async createEmailVerificationCode(email: string): Promise<void> {
-    await httpClient.post(`/users//verification/create-email-verification-code`, {
+    await httpClient.post(`/users/verification/create-email-verification-code`, {
       email,
     })
   },

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/store/userStore'
+import { api } from '@/api/api'
 
 const email = ref('')
 const password = ref('')
@@ -12,11 +13,23 @@ const { login: loginUser } = useUser()
 const login = async () => {
   errorMessage.value = ''
   try {
-    await loginUser(email.value, password.value)
+    await loginUser(email.value, password.value).catch(async (error) => {
+      if (error.response.status === 403) {
+        await redirectToEmailVerificationAfterError()
+      }
+      throw error
+    })
+
     router.push('/')
   } catch {
     errorMessage.value = 'Invalid credentials or user not found.'
   }
+}
+
+const redirectToEmailVerificationAfterError = async () => {
+  errorMessage.value = 'Please verify your email'
+  await api.users.createEmailVerificationCode(email.value)
+  router.push({ path: '/verify-email', query: { email: email.value } })
 }
 </script>
 
