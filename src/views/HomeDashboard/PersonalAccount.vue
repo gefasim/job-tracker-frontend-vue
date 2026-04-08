@@ -1,19 +1,23 @@
 <script setup lang="ts">
 import { AccountTabEnum } from './Account/account-tabs'
-import { computed, ref } from 'vue'
-import NotificationsTab from './Account/NotificationsTab.vue'
-import ProfileTab from './Account/ProfileTab.vue'
-import SettingsTab from './Account/SettingsTab.vue'
+import { computed } from 'vue'
+import { useRoute, useRouter, RouterView } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
 
 // Tab navigation
-const activeTab = ref<AccountTabEnum>(AccountTabEnum.Profile)
+const activeTab = computed<AccountTabEnum>(() => {
+  if (route.name === 'account-settings') return AccountTabEnum.Settings
+  if (route.name === 'account-notifications') return AccountTabEnum.Notifications
+  return AccountTabEnum.Profile
+})
 
-const tabComponents: Record<AccountTabEnum, { icon: unknown; component: unknown }> = {
-  [AccountTabEnum.Profile]: { icon: null, component: ProfileTab },
-  [AccountTabEnum.Settings]: { icon: null, component: SettingsTab },
-  [AccountTabEnum.Notifications]: { icon: null, component: NotificationsTab },
+const navigateToTab = (tab: AccountTabEnum) => {
+  if (tab === AccountTabEnum.Profile) router.push({ name: 'account-profile' })
+  else if (tab === AccountTabEnum.Settings) router.push({ name: 'account-settings' })
+  else if (tab === AccountTabEnum.Notifications) router.push({ name: 'account-notifications' })
 }
-const currentComponent = computed(() => tabComponents[activeTab.value].component)
 </script>
 
 <template>
@@ -23,15 +27,17 @@ const currentComponent = computed(() => tabComponents[activeTab.value].component
         v-for="tab in Object.values(AccountTabEnum)"
         :key="tab"
         :class="['tab-item', { active: activeTab === tab }]"
-        @click="activeTab = tab"
+        @click="navigateToTab(tab)"
       >
         {{ tab }}
       </button>
     </nav>
     <main class="modal-body">
-      <KeepAlive>
-        <component :is="currentComponent" />
-      </KeepAlive>
+      <RouterView v-slot="{ Component }">
+        <KeepAlive>
+          <component :is="Component" />
+        </KeepAlive>
+      </RouterView>
     </main>
   </div>
 </template>

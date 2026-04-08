@@ -10,6 +10,9 @@ import AboutView from '@/views/HomeDashboard/AboutView.vue'
 import ContactUs from '@/views/HomeDashboard/ContactUs.vue'
 import HowTo from '@/views/HomeDashboard/HowTo.vue'
 import PersonalAccount from '@/views/HomeDashboard/PersonalAccount.vue'
+import ProfileTab from '@/views/HomeDashboard/Account/ProfileTab.vue'
+import SettingsTab from '@/views/HomeDashboard/Account/SettingsTab.vue'
+import NotificationsTab from '@/views/HomeDashboard/Account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from '@/store/userStore'
 
@@ -66,9 +69,26 @@ const router = createRouter({
           component: HowTo,
         },
         {
-          path: 'personal-account',
-          name: 'personal-account',
+          path: 'account',
           component: PersonalAccount,
+          redirect: { name: 'account-profile' },
+          children: [
+            {
+              path: 'profile',
+              name: 'account-profile',
+              component: ProfileTab,
+            },
+            {
+              path: 'settings',
+              name: 'account-settings',
+              component: SettingsTab,
+            },
+            {
+              path: 'notifications',
+              name: 'account-notifications',
+              component: NotificationsTab,
+            },
+          ],
         },
         {
           path: 'boards/:boardId',
