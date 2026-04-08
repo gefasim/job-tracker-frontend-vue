@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import { useUser } from '@/store/userStore'
-import { ref } from 'vue'
+import { ref, computed, type CSSProperties } from 'vue'
 import type { UpdateUser } from '@/models/user/update-user.dto'
 import ProfileImage from '@/views/Shared/ProfileImage.vue'
+import BaseButtonDropdown from '@/views/Shared/BaseButtonDropdown.vue'
 
 const { user, updateUser } = useUser()
 const formData = ref<UpdateUser>({})
+const tempProfilePicUrl = ref<string | null>(null)
 const isEditMode = ref(false)
 const selectedFileName = ref('')
+
+const profilePictureButtonStyles = computed<CSSProperties>(() => {
+  return {
+    position: 'absolute',
+    bottom: selectedFileName.value ? '1rem' : '0',
+    right: '0',
+  }
+})
 
 const enterEditMode = () => {
   formData.value = {
@@ -15,6 +25,7 @@ const enterEditMode = () => {
     lastName: user.value!.lastName,
     email: user.value!.email,
   }
+  tempProfilePicUrl.value = user.value!.profilePicUrl
   selectedFileName.value = ''
   isEditMode.value = true
 }
@@ -31,6 +42,16 @@ const handleFileChange = (event: Event) => {
       selectedFileName.value = file.name
       formData.value.profilePic = file
     }
+  }
+}
+
+const handleMenuItemClick = (item: string) => {
+  if (item === 'Upload Image') {
+    document.getElementById('file-upload')?.click()
+  } else if (item === 'Remove Image') {
+    formData.value.profilePic = null
+    tempProfilePicUrl.value = null
+    selectedFileName.value = ''
   }
 }
 
@@ -68,24 +89,25 @@ const saveChanges = async () => {
       </div>
 
       <div class="form-grid">
-        <div class="input-group full-width">
-          <label>Profile Picture</label>
-          <div class="file-drop-zone">
-            <input
-              type="file"
-              id="file-upload"
-              class="file-input"
-              accept="image/*"
-              @change="handleFileChange"
-            />
-            <label for="file-upload" class="upload-btn">Upload Image</label>
-            <span class="drop-text">or click to select</span>
-            <div v-if="selectedFileName" class="selected-file-name">
-              Selected: {{ selectedFileName }}
-            </div>
-            <div v-else-if="formData.profilePic" class="selected-file-name">
-              Current Image Loaded
-            </div>
+        <div style="position: relative; width: fit-content">
+          <input
+            type="file"
+            id="file-upload"
+            class="file-input"
+            accept="image/*"
+            @change="handleFileChange"
+          />
+          <ProfileImage :src="tempProfilePicUrl" :alt="formData.firstName" size="128px" />
+          <div v-if="selectedFileName" class="selected-file-name">
+            Selected: {{ selectedFileName }}
+          </div>
+          <div :style="profilePictureButtonStyles">
+            <BaseButtonDropdown
+              :items="['Upload Image', 'Remove Image']"
+              @select="handleMenuItemClick"
+              ><template #buttonValue>✎</template>
+              <template #item="{ item }">{{ item }}</template>
+            </BaseButtonDropdown>
           </div>
         </div>
 
@@ -167,19 +189,7 @@ const saveChanges = async () => {
   margin-left: auto;
 }
 
-/* File Drop Zone */
-.file-drop-zone {
-  border: 1px dashed var(--border-color);
-  border-radius: 8px;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  position: relative;
-}
-
+/* Profile Picture */
 .file-input {
   position: absolute;
   width: 0;
@@ -187,27 +197,8 @@ const saveChanges = async () => {
   opacity: 0;
 }
 
-.upload-btn {
-  color: var(--text-primary);
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid var(--border-color);
-  transition: background-color 0.2s;
-}
-
-.upload-btn:hover {
-  background-color: var(--border-color);
-}
-
-.drop-text {
-  font-size: 13px;
-}
-
 .selected-file-name {
-  font-size: 13px;
+  font-size: 0.8rem;
   color: #1a73e8;
   margin-top: 8px;
   font-weight: 500;
