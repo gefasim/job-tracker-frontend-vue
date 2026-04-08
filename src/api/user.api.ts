@@ -8,6 +8,17 @@ export const userApi = {
     const response = await httpClient.post(`/users`, data)
     return response.data
   },
+  async createEmailVerificationCode(email: string): Promise<void> {
+    await httpClient.post(`/users//verification/create-email-verification-code`, {
+      email,
+    })
+  },
+  async verifyEmail(email: string, verificationCode: string): Promise<void> {
+    await httpClient.post(`/users/verification/verify-email-code`, {
+      email,
+      code: verificationCode,
+    })
+  },
   async update(user: UpdateUser): Promise<User> {
     const response = await httpClient.patch<User>(`/users`, user, {
       headers: {

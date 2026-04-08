@@ -55,7 +55,7 @@ const login = async () => {
         </button>
         <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
       </div>
-      <p>Don't have an account? <router-link to="/register" class="link">Sign up</router-link></p>
+      <p>Don't have an account? <router-link to="/signup" class="link">Sign up</router-link></p>
       <p>
         Forgot your password?
         <router-link to="/reset-password" class="link">Reset password</router-link>

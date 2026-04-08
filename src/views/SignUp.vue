@@ -19,7 +19,7 @@ const register = async () => {
       email: email.value,
       password: password.value,
     })
-    router.push('/')
+    router.push({ path: '/verify-email', query: { email: email.value } })
   } catch {
     errorMessage.value = 'Failed to create account. Please check your details.'
   }
