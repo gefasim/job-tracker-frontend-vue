@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useUser } from '@/store/userStore'
 import { ref } from 'vue'
-import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import type { UpdateUser } from '@/models/user/update-user.dto'
+import ProfileImage from '@/views/Shared/ProfileImage.vue'
 
 const { user, updateUser } = useUser()
 const formData = ref<UpdateUser>({})
@@ -51,15 +51,7 @@ const saveChanges = async () => {
   <div class="tab-border">
     <div v-if="!isEditMode" class="view-mode">
       <div class="profile-header">
-        <div class="logo-wrapper">
-          <img
-            v-if="user?.profilePicUrl"
-            :src="user.profilePicUrl"
-            :alt="user?.firstName"
-            class="profile-logo"
-          />
-          <AvatarIcon v-else class="profile-logo-fallback" />
-        </div>
+        <ProfileImage :src="user?.profilePicUrl" :alt="user?.firstName" size="64px" />
 
         <div class="header-info">
           <h2 class="profile-name">{{ user?.firstName }} {{ user?.lastName }}</h2>
@@ -154,29 +146,6 @@ const saveChanges = async () => {
   margin-bottom: 24px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--border-color);
-}
-
-.logo-wrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.profile-logo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.profile-logo-fallback {
-  width: 32px;
-  height: 32px;
 }
 
 .header-info {
