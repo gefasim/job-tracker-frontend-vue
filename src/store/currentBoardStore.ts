@@ -177,17 +177,14 @@ const getJobApplication = (jobId: string): JobApplication | undefined => {
   return undefined
 }
 
-const clearCache = (boardId?: string) => {
-  if (boardId) {
-    localStorage.removeItem(STORAGE_KEY_PREFIX + boardId)
-  } else {
-    // Clear all board caches
-    Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith(STORAGE_KEY_PREFIX)) {
-        localStorage.removeItem(key)
-      }
-    })
-  }
+const clearCurrentBoard = () => {
+  board.value = null
+  loadedBoardsInThisSession.value.clear()
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith(STORAGE_KEY_PREFIX)) {
+      localStorage.removeItem(key)
+    }
+  })
 }
 
 export const useCurrentBoard = () => {
@@ -200,6 +197,6 @@ export const useCurrentBoard = () => {
     moveJobApplication,
     deleteJobApplication,
     getJobApplication,
-    clearCache,
+    clearCurrentBoard,
   }
 }

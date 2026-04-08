@@ -3,9 +3,19 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/store/userStore'
 import { api } from '@/api/api'
+import { useBoards } from '@/store/boardStore'
+import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useDocumentStore } from '@/store/documentStore'
+import { useContacts } from '@/store/contactStore'
+import { useTheme } from '@/store/themeStore'
 
 const router = useRouter()
 const { clearUser } = useUser()
+const { clearBoards } = useBoards()
+const { clearCurrentBoard } = useCurrentBoard()
+const { clearDocuments } = useDocumentStore()
+const { clearContacts } = useContacts()
+const { clearTheme } = useTheme()
 
 const showConfirmation = ref(false)
 const confirmationCode = ref('')
@@ -27,11 +37,20 @@ const confirmDelete = async () => {
 
   try {
     await api.users.delete(confirmationCode.value)
-    clearUser()
+    clearAllData()
     router.push('/welcome')
   } catch (error) {
     console.error('Failed to delete user:', error)
   }
+}
+
+const clearAllData = () => {
+  clearUser()
+  clearBoards()
+  clearCurrentBoard()
+  clearDocuments()
+  clearContacts()
+  clearTheme()
 }
 </script>
 

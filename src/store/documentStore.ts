@@ -112,6 +112,12 @@ const unassignJobApplication = async (documentId: string, jobId: string) => {
   }
 }
 
+const clearDocuments = () => {
+  documentsByBoard.value = {}
+  loadedBoardsInThisSession.value.clear()
+  localStorage.removeItem(STORAGE_KEY)
+}
+
 export const useDocumentStore = () => {
   const cachedDocuments = loadFromCache<Record<string, Document[]>>(STORAGE_KEY, CACHE_DURATION)
   if (cachedDocuments) {
@@ -127,5 +133,6 @@ export const useDocumentStore = () => {
     deleteDocument,
     assignJobApplication,
     unassignJobApplication,
+    clearDocuments,
   }
 }

@@ -102,6 +102,12 @@ const deleteContact = async (boardId: string, contactId: string) => {
   }
 }
 
+const clearContacts = () => {
+  contactsPerBoard.value = {}
+  loadedBoardsInThisSession.value.clear()
+  localStorage.removeItem(STORAGE_KEY)
+}
+
 export const useContacts = () => {
   // Load from cache first
   const cachedContacts = loadFromCache<Record<string, Contact[]>>(STORAGE_KEY, CACHE_DURATION)
@@ -117,5 +123,6 @@ export const useContacts = () => {
     assignJobApplication,
     unassignJobApplication,
     deleteContact,
+    clearContacts,
   }
 }
