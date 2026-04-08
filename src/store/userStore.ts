@@ -17,6 +17,16 @@ const login = async (email: string, password: string) => {
   }
 }
 
+const logout = async () => {
+  try {
+    await api.auth.logout()
+    clearUser()
+  } catch (error) {
+    console.error('Failed to logout:', error)
+    throw error
+  }
+}
+
 const setUser = (userData: User) => {
   user.value = userData
   localStorage.setItem(USER_KEY, JSON.stringify(userData))
@@ -47,6 +57,7 @@ export const useUser = () => {
     user,
     isAuthenticated,
     login,
+    logout,
     setUser,
     updateUser,
     clearUser,
