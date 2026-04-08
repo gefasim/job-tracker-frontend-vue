@@ -1,6 +1,6 @@
-import type { User } from '@/models/user.dto'
+import type { User } from '@/models/user/user.dto'
 import { httpClient } from './http-client'
-import type { UpdateUser } from '@/models/update-user.dto'
+import type { UpdateUser } from '@/models/user/update-user.dto'
 
 export const userApi = {
   async update(user: UpdateUser): Promise<User> {

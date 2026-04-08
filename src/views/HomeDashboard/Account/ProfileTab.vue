@@ -3,7 +3,7 @@ import { useUser } from '@/store/userStore'
 import { ref } from 'vue'
 import AvatarIcon from '@/assets/icons/AvatarIcon.vue'
 import { api } from '@/api/api'
-import type { UpdateUser } from '@/models/update-user.dto'
+import type { UpdateUser } from '@/models/user/update-user.dto'
 
 const { user } = useUser()
 const formData = ref<UpdateUser>({})

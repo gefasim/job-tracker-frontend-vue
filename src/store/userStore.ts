@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import type { User } from '@/models/user.dto'
+import type { User } from '@/models/user/user.dto'
 import { api } from '@/api/api'
 
 const USER_KEY = 'user'

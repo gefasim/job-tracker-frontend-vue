@@ -1,5 +1,5 @@
 import { httpClient } from './http-client'
-import type { User } from '@/models/user.dto'
+import type { User } from '@/models/user/user.dto'
 
 export const authApi = {
   async login(email: string, password: string): Promise<User> {
