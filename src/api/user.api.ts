@@ -11,6 +11,12 @@ export const userApi = {
     })
     return response.data
   },
+  async updatePassword(oldPassword: string, newPassword: string): Promise<void> {
+    await httpClient.post(`/users/update-password`, {
+      oldPassword,
+      newPassword,
+    })
+  },
   async createVerificationCodeForDelete(): Promise<void> {
     await httpClient.post(`/users/delete/create-verification-code`)
   },
