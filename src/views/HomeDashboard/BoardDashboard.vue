@@ -148,6 +148,5 @@ html.dark .board-card:hover {
 .board-card-created {
   font-size: 0.8rem;
   font-weight: 200;
-  color: var(--text-secondary);
 }
 </style>

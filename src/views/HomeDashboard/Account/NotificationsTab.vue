@@ -171,14 +171,12 @@ const saveChanges = async () => {
 }
 
 .subtitle {
-  color: var(--text-secondary);
   font-size: 14px;
   margin: 0;
 }
 
 .loading {
   padding: 32px 0;
-  color: var(--text-secondary);
 }
 
 .notification-card {
@@ -203,7 +201,6 @@ const saveChanges = async () => {
 }
 
 .card-header p {
-  color: var(--text-secondary);
   font-size: 14px;
   margin: 0 0 16px 0;
 }

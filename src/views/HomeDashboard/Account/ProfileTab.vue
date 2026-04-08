@@ -165,7 +165,6 @@ const saveChanges = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--surface-hover);
   flex-shrink: 0;
 }
 
@@ -178,7 +177,6 @@ const saveChanges = async () => {
 .profile-logo-fallback {
   width: 32px;
   height: 32px;
-  color: var(--text-secondary);
 }
 
 .header-info {
@@ -193,7 +191,6 @@ const saveChanges = async () => {
 
 .profile-email {
   font-size: 14px;
-  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -222,7 +219,6 @@ const saveChanges = async () => {
 }
 
 .upload-btn {
-  background-color: var(--surface-hover);
   color: var(--text-primary);
   padding: 8px 16px;
   border-radius: 6px;
@@ -239,7 +235,6 @@ const saveChanges = async () => {
 
 .drop-text {
   font-size: 13px;
-  color: var(--text-secondary);
 }
 
 .selected-file-name {

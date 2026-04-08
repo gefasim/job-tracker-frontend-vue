@@ -115,7 +115,6 @@ const clearAllData = () => {
 }
 
 .warning-text {
-  color: var(--text-secondary);
   font-size: 14px;
   margin-bottom: 20px;
 }
@@ -184,21 +183,5 @@ const clearAllData = () => {
 
 .confirm-btn {
   padding: 10px 16px;
-}
-
-.btn-outline {
-  padding: 10px 16px;
-  background-color: transparent;
-  border: 1px solid var(--border-color, #e0e0e0);
-  border-radius: 6px;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-outline:hover {
-  background-color: var(--surface-hover, #f1f3f4);
 }
 </style>
