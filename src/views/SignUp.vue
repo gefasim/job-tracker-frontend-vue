@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '@/api/api'
 
@@ -9,6 +9,16 @@ const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const router = useRouter()
+
+// 8 characters, 1 number, 1 upper, 1 lower
+const isPasswordStrong = computed<boolean>(() => {
+  return (
+    password.value.length >= 8 &&
+    /[0-9]/.test(password.value) &&
+    /[A-Z]/.test(password.value) &&
+    /[a-z]/.test(password.value)
+  )
+})
 
 const register = async () => {
   errorMessage.value = ''
@@ -80,10 +90,12 @@ const register = async () => {
             required
           />
         </div>
-        <p class="password-hint"><b>*At least:</b> 8 characters, 1 number, 1 upper, 1 lower.</p>
+        <p class="password-hint" v-if="!isPasswordStrong && password.length > 0">
+          <b>*At least:</b> 8 characters, 1 number, 1 upper, 1 lower.
+        </p>
         <button
           class="btn-primary"
-          :disabled="!firstName || !lastName || !email || !password"
+          :disabled="!firstName || !lastName || !email || !isPasswordStrong"
           @click="register"
         >
           Create Account
