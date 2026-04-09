@@ -40,7 +40,7 @@ const handleHelpSelect = (selected: string) => {
       <div class="navbar-right">
         <BaseButtonDropdown :items="themeOptions" @select="handleThemeSelect">
           <template #buttonValue>
-            <div style="display: flex">
+            <div style="display: flex; align-items: center">
               <DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else />
             </div>
           </template>
@@ -521,13 +521,12 @@ main.content {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
   .hero-title {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 }
-
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .hidden-mobile {
     display: none !important;
   }
