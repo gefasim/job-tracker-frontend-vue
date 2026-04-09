@@ -173,13 +173,92 @@ const handleHelpSelect = (selected: string) => {
 <style scoped>
 /* Reset and base variables for layout */
 .guest-layout {
+  /* Light Theme variables by default */
+  --bg-color: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --nav-border: rgba(0, 0, 0, 0.1);
+
+  --hero-bg: radial-gradient(
+    circle at 30% 50%,
+    rgba(220, 230, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  --sec-blue-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(210, 235, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  --sec-purple-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(240, 220, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  --sec-green-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(220, 250, 230, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  --sec-orange-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(255, 235, 210, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  --sec-companies-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(230, 230, 230, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+
+  --footer-bg: #f3f4f6;
+  --footer-border: rgba(0, 0, 0, 0.1);
+
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
-  color: #fff;
-  background-color: #030712;
+  color: var(--text-primary);
+  background-color: var(--bg-color);
   scroll-behavior: smooth;
+}
+
+html.dark .guest-layout {
+  --bg-color: #030712;
+  --text-primary: #fff;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+
+  --nav-bg: rgba(3, 7, 18, 0.8);
+  --nav-border: rgba(255, 255, 255, 0.1);
+
+  --hero-bg: radial-gradient(circle at 30% 50%, rgba(20, 30, 60, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  --sec-blue-bg: radial-gradient(circle at 20% 50%, rgba(20, 50, 70, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  --sec-purple-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(50, 10, 70, 1) 0%,
+    rgba(3, 7, 18, 1) 100%
+  );
+  --sec-green-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(10, 60, 30, 1) 0%,
+    rgba(3, 7, 18, 1) 100%
+  );
+  --sec-orange-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(80, 40, 10, 1) 0%,
+    rgba(3, 7, 18, 1) 100%
+  );
+  --sec-companies-bg: radial-gradient(
+    circle at 20% 50%,
+    rgba(80, 10, 10, 1) 0%,
+    rgba(3, 7, 18, 1) 100%
+  );
+
+  --footer-bg: #000;
+  --footer-border: rgba(255, 255, 255, 0.1);
 }
 
 /* Navbar */
@@ -191,15 +270,15 @@ const handleHelpSelect = (selected: string) => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: rgba(3, 7, 18, 0.8);
+  background-color: var(--nav-bg);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   text-decoration: none;
   letter-spacing: -0.5px;
 }
@@ -210,7 +289,7 @@ const handleHelpSelect = (selected: string) => {
 }
 
 .nav-link {
-  color: #a1a1aa;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -218,7 +297,7 @@ const handleHelpSelect = (selected: string) => {
 }
 
 .nav-link:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .navbar-right {
@@ -234,14 +313,14 @@ const handleHelpSelect = (selected: string) => {
 }
 
 .btn-login {
-  color: #fff;
+  color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
   transition: color 0.2s;
 }
 .btn-login:hover {
-  color: #ccc;
+  color: var(--text-muted);
 }
 
 .btn-signup {
@@ -273,7 +352,7 @@ main.content {
   gap: 3rem;
   min-height: 100vh;
   padding: 0 10%;
-  background: radial-gradient(circle at 30% 50%, rgba(20, 30, 60, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  background: var(--hero-bg);
 }
 
 .hero-content {
@@ -297,7 +376,7 @@ main.content {
 
 .hero-subtitle {
   font-size: 1.25rem;
-  color: #d1d5db;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 2.5rem;
 }
@@ -324,7 +403,7 @@ main.content {
 
 .hero-note {
   font-size: 0.85rem;
-  color: #9ca3af;
+  color: var(--text-muted);
   margin-top: 1rem;
 }
 
@@ -365,34 +444,34 @@ main.content {
 .feature-content h3 {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #e5e7eb;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
 }
 
 .feature-content p {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .section-blue {
-  background: radial-gradient(circle at 20% 50%, rgba(20, 50, 70, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  background: var(--sec-blue-bg);
 }
 
 .section-purple {
-  background: radial-gradient(circle at 20% 50%, rgba(50, 10, 70, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  background: var(--sec-purple-bg);
 }
 
 .section-green {
-  background: radial-gradient(circle at 20% 50%, rgba(10, 60, 30, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  background: var(--sec-green-bg);
 }
 
 .section-orange {
-  background: radial-gradient(circle at 20% 50%, rgba(80, 40, 10, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  background: var(--sec-orange-bg);
 }
 
 .section-companies {
-  background: radial-gradient(circle at 20% 50%, rgba(40, 40, 40, 1) 0%, rgba(3, 7, 18, 1) 100%);
+  background: var(--sec-companies-bg);
 }
 
 /* Footer */
@@ -401,8 +480,8 @@ main.content {
   justify-content: space-between;
   align-items: center;
   padding: 3rem 5%;
-  background-color: #000;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
   flex-wrap: wrap;
   gap: 2rem;
 }
@@ -419,18 +498,18 @@ main.content {
 }
 
 .footer-link {
-  color: #9ca3af;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.95rem;
   transition: color 0.2s;
 }
 
 .footer-link:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .footer-right p {
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
