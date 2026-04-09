@@ -82,13 +82,6 @@ html.dark .tabs {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.tab-icon {
-  width: 18px;
-  height: 18px;
-  vertical-align: middle;
-  fill: currentColor;
-}
-
 /* Form Layout */
 .body {
   padding: 32px;

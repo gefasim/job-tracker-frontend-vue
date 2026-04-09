@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import BaseButtonDropdown from './Shared/BaseButtonDropdown.vue'
 import { useTheme } from '../store/themeStore'
+import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
+import NoteNavTabIcon from '@/assets/icons/NoteNavTabIcon.vue'
+import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
+import JobInfoNavTabIcon from '@/assets/icons/JobInfoNavTabIcon.vue'
+import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 
 const { theme, setTheme } = useTheme()
 
@@ -74,6 +79,9 @@ const handleHelpSelect = (selected: string) => {
 
       <section id="application" class="feature-section section-blue">
         <div class="feature-content">
+          <span class="icon-wrapper" style="background-color: rgba(59, 130, 246, 1)">
+            <JobInfoNavTabIcon size="2rem" />
+          </span>
           <h2>Applications</h2>
           <h3>Record and track your job applications.</h3>
           <p>
@@ -90,6 +98,9 @@ const handleHelpSelect = (selected: string) => {
 
       <section id="documents" class="feature-section section-purple">
         <div class="feature-content">
+          <span class="icon-wrapper" style="background-color: rgba(168, 85, 247, 1)">
+            <DocumentNavTabIcon size="2rem" />
+          </span>
           <h2>Documents</h2>
           <h3>Upload your resumes and cover letters.</h3>
           <p>
@@ -105,6 +116,9 @@ const handleHelpSelect = (selected: string) => {
 
       <section id="contacts" class="feature-section section-green">
         <div class="feature-content">
+          <span class="icon-wrapper" style="background-color: rgba(2, 129, 76, 1)">
+            <ContactNavTabIcon size="2rem" />
+          </span>
           <h2>Contacts</h2>
           <h3>Add your job search contacts.</h3>
           <p>
@@ -120,6 +134,9 @@ const handleHelpSelect = (selected: string) => {
 
       <section id="notes" class="feature-section section-orange">
         <div class="feature-content">
+          <span class="icon-wrapper" style="background-color: rgba(249, 115, 22, 1)">
+            <NoteNavTabIcon size="2rem" />
+          </span>
           <h2>Notes</h2>
           <h3>Capture and organize important insights.</h3>
           <p>
@@ -135,9 +152,16 @@ const handleHelpSelect = (selected: string) => {
 
       <section id="companies" class="feature-section section-companies">
         <div class="feature-content">
+          <span class="icon-wrapper" style="background-color: rgba(239, 68, 68, 1)">
+            <CompanyNavTabIcon size="2rem" />
+          </span>
           <h2>Companies</h2>
-          <h3>Keep an eye on companies.</h3>
-          <p>Save companies you're interested in and manage everything related to them.</p>
+          <h3>Build your target company database.</h3>
+          <p>
+            Build a comprehensive database of target companies with detailed profiles, culture
+            insights, and job openings. Track your interactions, save company research, and identify
+            the best opportunities that align with your career goals.
+          </p>
         </div>
         <div class="feature-image">
           <img src="/images/Company.png" alt="Companies Feature" />
@@ -429,6 +453,17 @@ main.content {
   height: auto;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: fit-content;
+  padding: 1rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
 }
 
 .feature-content {

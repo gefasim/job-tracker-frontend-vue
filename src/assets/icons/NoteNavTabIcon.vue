@@ -1,39 +1,21 @@
+<script setup lang="ts">
+withDefaults(defineProps<{ size?: string }>(), {
+  size: '1rem',
+})
+</script>
+
 <template>
   <svg
+    fill="none"
+    stroke-width="2"
+    focusable="false"
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    :height="size"
+    :width="size"
     stroke="currentColor"
-    fill="currentColor"
-    stroke-width="0"
-    viewBox="0 0 512 512"
-    class="h-5 w-5 mr-2"
-    height="1em"
-    width="1em"
-    xmlns="http://www.w3.org/2000/svg"
   >
-    <path
-      fill="none"
-      stroke-linejoin="round"
-      stroke-width="32"
-      d="M336 264.13V436c0 24.3-19.05 44-42.95 44H107c-23.95 0-43-19.7-43-44V172a44.26 44.26 0 0 1 44-44h94.12a24.55 24.55 0 0 1 17.49 7.36l109.15 111a25.4 25.4 0 0 1 7.24 17.77z"
-    ></path>
-    <path
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="32"
-      d="M200 128v108a28.34 28.34 0 0 0 28 28h108"
-    ></path>
-    <path
-      fill="none"
-      stroke-linejoin="round"
-      stroke-width="32"
-      d="M176 128V76a44.26 44.26 0 0 1 44-44h94a24.83 24.83 0 0 1 17.61 7.36l109.15 111A25.09 25.09 0 0 1 448 168v172c0 24.3-19.05 44-42.95 44H344"
-    ></path>
-    <path
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="32"
-      d="M312 32v108a28.34 28.34 0 0 0 28 28h108"
-    ></path>
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
   </svg>
 </template>
