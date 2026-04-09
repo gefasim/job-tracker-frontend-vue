@@ -7,7 +7,7 @@ import ContactUsIcon from '@/assets/icons/ContactUsIcon.vue'
 import HowToIcon from '@/assets/icons/HowToIcon.vue'
 import LightThemeIcon from '@/LightThemeIcon.vue'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
-import { useTheme, type ColorScheme } from '@/store/themeStore'
+import { useTheme } from '@/store/themeStore'
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useBoards } from '@/store/boardStore'
@@ -19,7 +19,7 @@ import { useCurrentBoard } from '@/store/currentBoardStore'
 import { useDocumentStore } from '@/store/documentStore'
 import { useContacts } from '@/store/contactStore'
 
-const { isDark, theme, setTheme, clearTheme } = useTheme()
+const { isDark, theme, themeOptions, setTheme, clearTheme } = useTheme()
 const { boards, updateBoard, clearBoards } = useBoards()
 const { logout, clearUser } = useUser()
 const { clearCurrentBoard } = useCurrentBoard()
@@ -29,8 +29,7 @@ const router = useRouter()
 const isCreateBoardModalOpen = ref(false)
 
 const switchTheme = () => {
-  const themeOptions: Array<ColorScheme> = ['light', 'dark', 'system']
-  const currentIndex = themeOptions.indexOf(theme.value as ColorScheme)
+  const currentIndex = themeOptions.indexOf(theme.value)
   const nextIndex = (currentIndex + 1) % themeOptions.length
   setTheme(themeOptions[nextIndex]!)
 }

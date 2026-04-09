@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import BaseButtonDropdown from './Shared/BaseButtonDropdown.vue'
-import { useTheme } from '../store/themeStore'
+import { useTheme, type ColorScheme } from '../store/themeStore'
 import DocumentNavTabIcon from '@/assets/icons/DocumentNavTabIcon.vue'
 import NoteNavTabIcon from '@/assets/icons/NoteNavTabIcon.vue'
 import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
 import JobInfoNavTabIcon from '@/assets/icons/JobInfoNavTabIcon.vue'
 import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
+import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
+import LightThemeIcon from '@/LightThemeIcon.vue'
 
-const { theme, setTheme } = useTheme()
-
-const themeOptions = ['Light', 'Dark', 'System']
+const { themeOptions, isDark, setTheme } = useTheme()
 const helpOptions = ['About', 'How to?', 'Contact Us']
 
 const handleThemeSelect = (selected: string) => {
-  setTheme(selected.toLowerCase() as 'light' | 'dark' | 'system')
+  setTheme(selected.toLowerCase() as ColorScheme)
 }
 
 const handleHelpSelect = (selected: string) => {
@@ -39,9 +39,11 @@ const handleHelpSelect = (selected: string) => {
 
       <div class="navbar-right">
         <BaseButtonDropdown :items="themeOptions" @select="handleThemeSelect">
-          <template #buttonValue
-            >Theme: {{ theme.charAt(0).toUpperCase() + theme.slice(1) }}</template
-          >
+          <template #buttonValue>
+            <div style="display: flex">
+              <DarkThemeIcon v-if="isDark" /><LightThemeIcon v-else />
+            </div>
+          </template>
           <template #item="{ item }">{{ item }}</template>
         </BaseButtonDropdown>
 
@@ -51,8 +53,8 @@ const handleHelpSelect = (selected: string) => {
         </BaseButtonDropdown>
 
         <div class="auth-buttons">
-          <RouterLink to="/login" class="btn-login">Login</RouterLink>
-          <RouterLink to="/signup" class="btn-signup">Sign Up</RouterLink>
+          <RouterLink to="/login" class="btn-outline">Login</RouterLink>
+          <RouterLink to="/signup" class="btn-primary">Sign Up</RouterLink>
         </div>
       </div>
     </nav>
@@ -69,7 +71,7 @@ const handleHelpSelect = (selected: string) => {
             Organize applications, manage documents, and stay on top of your job hunt with a
             beautiful, intuitive dashboard.
           </p>
-          <RouterLink to="/signup" class="btn-get-started">Get Started Free</RouterLink>
+          <RouterLink to="/signup" class="btn-primary btn-get-started">Get Started Free</RouterLink>
           <p class="hero-note">No credit card required</p>
         </div>
         <div class="hero-image">
@@ -336,34 +338,6 @@ html.dark .guest-layout {
   gap: 0.75rem;
 }
 
-.btn-login {
-  color: var(--text-primary);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: color 0.2s;
-}
-.btn-login:hover {
-  color: var(--text-muted);
-}
-
-.btn-signup {
-  background-color: #3b82f6;
-  color: #fff;
-  padding: 0.5rem 1.25rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition:
-    background-color 0.2s,
-    transform 0.1s;
-}
-
-.btn-signup:hover {
-  background-color: #2563eb;
-}
-
 /* Sections */
 main.content {
   flex: 1;
@@ -407,8 +381,6 @@ main.content {
 
 .btn-get-started {
   display: inline-block;
-  background-color: #3b82f6;
-  color: white;
   padding: 1.25rem 2.5rem;
   border-radius: 8px;
   font-size: 1.1rem;

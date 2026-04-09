@@ -9,6 +9,7 @@
   cursor: pointer;
   width: fit-content;
   color: var(--btn-primary-text);
+  text-decoration: none;
 }
 
 .btn-primary:disabled {
@@ -35,6 +36,7 @@ html.dark .btn-primary:hover:not(:disabled) {
   cursor: pointer;
   width: fit-content;
   color: var(--input-text);
+  text-decoration: none;
 }
 
 .btn-outline:hover:not(:disabled) {

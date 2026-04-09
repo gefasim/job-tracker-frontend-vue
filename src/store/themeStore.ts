@@ -1,7 +1,13 @@
 import { ref, computed, watch } from 'vue'
 
-export type ColorScheme = 'light' | 'dark' | 'system'
-const theme = ref(localStorage.getItem('theme') || 'system')
+export enum ColorScheme {
+  LIGHT = 'light',
+  DARK = 'dark',
+  SYSTEM = 'system',
+}
+
+const theme = ref<ColorScheme>((localStorage.getItem('theme') as ColorScheme) || ColorScheme.SYSTEM)
+const themeOptions = Object.values(ColorScheme)
 
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 const systemIsDark = ref(mediaQuery.matches)
@@ -11,8 +17,8 @@ mediaQuery.addEventListener('change', (e) => {
 })
 
 const isDark = computed(() => {
-  if (theme.value === 'dark') return true
-  if (theme.value === 'light') return false
+  if (theme.value === ColorScheme.DARK) return true
+  if (theme.value === ColorScheme.LIGHT) return false
   return systemIsDark.value
 })
 
@@ -25,7 +31,7 @@ watch(
 )
 
 const clearTheme = () => {
-  theme.value = 'system'
+  theme.value = ColorScheme.SYSTEM
   localStorage.removeItem('theme')
 }
 
@@ -37,6 +43,7 @@ export const useTheme = () => {
 
   return {
     theme,
+    themeOptions,
     isDark,
     setTheme,
     clearTheme,
