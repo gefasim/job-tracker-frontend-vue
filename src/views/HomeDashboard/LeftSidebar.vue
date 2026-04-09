@@ -14,11 +14,18 @@ import { useBoards } from '@/store/boardStore'
 import CreateBoardModal from './Board/CreateBoardModal.vue'
 import type { Board } from '@/models/board.dto'
 import DeleteIcon from '@/assets/icons/DeleteIcon.vue'
+import { useUser } from '@/store/userStore'
+import { useCurrentBoard } from '@/store/currentBoardStore'
+import { useDocumentStore } from '@/store/documentStore'
+import { useContacts } from '@/store/contactStore'
 
-const { isDark, theme, setTheme } = useTheme()
-const { boards, updateBoard } = useBoards()
+const { isDark, theme, setTheme, clearTheme } = useTheme()
+const { boards, updateBoard, clearBoards } = useBoards()
+const { logout, clearUser } = useUser()
+const { clearCurrentBoard } = useCurrentBoard()
+const { clearDocuments } = useDocumentStore()
+const { clearContacts } = useContacts()
 const router = useRouter()
-const activeItem = ref<string>('contacts')
 const isCreateBoardModalOpen = ref(false)
 
 const switchTheme = () => {
@@ -26,10 +33,6 @@ const switchTheme = () => {
   const currentIndex = themeOptions.indexOf(theme.value as ColorScheme)
   const nextIndex = (currentIndex + 1) % themeOptions.length
   setTheme(themeOptions[nextIndex]!)
-}
-
-const handleItemClick = (item: string) => {
-  activeItem.value = item
 }
 
 const onBoardCreated = (board: Board) => {
@@ -41,6 +44,21 @@ const handleArchive = async (boardId: string) => {
   if (confirm('Are you sure you want to archive this board?')) {
     await updateBoard(boardId, { isArchived: true })
   }
+}
+
+const handleLogout = () => {
+  logout()
+  clearAllData()
+  router.push({ name: 'login' })
+}
+
+const clearAllData = () => {
+  clearUser()
+  clearBoards()
+  clearCurrentBoard()
+  clearDocuments()
+  clearContacts()
+  clearTheme()
 }
 </script>
 <template>
@@ -100,13 +118,7 @@ const handleArchive = async (boardId: string) => {
       <RouterLink to="/account" class="sidebar-item" active-class="active">
         Personal Account
       </RouterLink>
-      <div
-        class="sidebar-item"
-        :class="{ active: activeItem === 'logout' }"
-        @click="handleItemClick('logout')"
-      >
-        Log Out
-      </div>
+      <div class="sidebar-item" @click="handleLogout">Log Out</div>
     </div>
   </div>
 

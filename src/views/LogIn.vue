@@ -2,39 +2,123 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/store/userStore'
+import { api } from '@/api/api'
 
-const credentials = ref({
-  email: '',
-  password: '',
-})
+const email = ref('')
+const password = ref('')
 const errorMessage = ref()
 const router = useRouter()
 const { login: loginUser } = useUser()
 
 const login = async () => {
-  errorMessage.value = '' // Clear previous errors
+  errorMessage.value = ''
   try {
-    await loginUser(credentials.value.email, credentials.value.password)
+    await loginUser(email.value, password.value).catch(async (error) => {
+      if (error.response.status === 403) {
+        await redirectToEmailVerificationAfterError()
+      }
+      throw error
+    })
+
     router.push('/')
-  } catch (error) {
-    errorMessage.value = error
-    throw error
+  } catch {
+    errorMessage.value = 'Invalid credentials or user not found.'
   }
+}
+
+const redirectToEmailVerificationAfterError = async () => {
+  errorMessage.value = 'Please verify your email'
+  await api.users.createEmailVerificationCode(email.value)
+  router.push({ path: '/verify-email', query: { email: email.value } })
 }
 </script>
 
 <template>
-  <form @submit.prevent="login">
-    <h1>Login</h1>
-    <div>
-      <label for="email">Email:</label>
-      <input type="text" id="email" v-model="credentials.email" required />
+  <div class="login-page">
+    <div class="login-container">
+      <div class="header">
+        <h1>Login</h1>
+        <p>Log into your account</p>
+      </div>
+      <div class="form">
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input
+            v-model="email"
+            id="email"
+            name="email"
+            type="text"
+            placeholder="john.doe@domain.com"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            v-model="password"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="********"
+            required
+          />
+        </div>
+        <button class="btn-primary" :disabled="email === '' || password === ''" @click="login">
+          Log In
+        </button>
+        <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
+      </div>
+      <p>Don't have an account? <router-link to="/signup" class="link">Sign up</router-link></p>
+      <p>
+        Forgot your password?
+        <router-link to="/reset-password" class="link">Reset password</router-link>
+      </p>
     </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" v-model="credentials.password" required />
-    </div>
-    <button type="submit">Log In</button>
-    <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
-  </form>
+  </div>
 </template>
+
+<style scoped>
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+}
+.header h1 {
+  margin: 0;
+}
+.header p {
+  color: #64748b;
+  margin: 0;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 30vw;
+}
+button {
+  width: stretch;
+  margin-top: 0.5rem;
+}
+.link {
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: inherit;
+}
+p {
+  color: #64748b;
+  margin-bottom: 0;
+}
+p:last-child {
+  margin-top: 0.2rem;
+}
+</style>

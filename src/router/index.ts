@@ -3,6 +3,8 @@ import GuestHome from '@/views/GuestHome.vue'
 import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/HomeDashboard/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
+import SignUp from '@/views/SignUp.vue'
+import VerifyEmail from '@/views/VerifyEmail.vue'
 import BoardDashboard from '@/views/HomeDashboard/BoardDashboard.vue'
 import ContactDashboard from '@/views/HomeDashboard/ContactDashboard.vue'
 import DocumentDashboard from '@/views/HomeDashboard/DocumentDashboard.vue'
@@ -30,6 +32,16 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LogIn,
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: SignUp,
+    },
+    {
+      path: '/verify-email',
+      name: 'verify-email',
+      component: VerifyEmail,
     },
     {
       path: '/',

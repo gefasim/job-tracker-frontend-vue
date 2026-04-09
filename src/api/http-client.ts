@@ -13,7 +13,11 @@ httpClient.interceptors.response.use(
     const originalRequest = error.config
 
     // Checks if it is a 401 error, and if we have not already tried to refresh the token
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      window.location.pathname !== '/login'
+    ) {
       originalRequest._retry = true
 
       try {
@@ -25,7 +29,6 @@ httpClient.interceptors.response.use(
 
         return httpClient(originalRequest)
       } catch (refreshError) {
-        // TODO: verify with JWT with 1m expiration time
         console.error('Session ended. Login required.')
         window.location.href = '/login'
         return Promise.reject(refreshError)
