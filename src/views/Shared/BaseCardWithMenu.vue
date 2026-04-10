@@ -93,6 +93,10 @@ html.dark .menu-btn:hover {
   cursor: pointer;
 }
 .dropdown-menu > div:hover {
-  background: #f1f3f4;
+  background-color: color-mix(in srgb, var(--bg-main), black 10%);
+}
+
+html.dark .dropdown-menu > div:hover {
+  background-color: color-mix(in srgb, var(--bg-main), white 10%);
 }
 </style>
