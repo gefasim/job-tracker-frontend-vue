@@ -293,7 +293,6 @@ html.dark .modal-tabs {
   width: 18px;
   height: 18px;
   vertical-align: middle;
-  fill: currentColor;
 }
 
 .tab-badge {

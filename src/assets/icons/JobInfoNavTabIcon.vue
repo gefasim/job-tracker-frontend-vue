@@ -1,12 +1,17 @@
+<script setup lang="ts">
+withDefaults(defineProps<{ size?: string }>(), {
+  size: '1rem',
+})
+</script>
+
 <template>
   <svg
     stroke="currentColor"
     fill="none"
     stroke-width="0"
     viewBox="0 0 15 15"
-    class="h-5 w-5 mr-2"
-    height="1em"
-    width="1em"
+    :height="size"
+    :width="size"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
