@@ -258,7 +258,7 @@ useKeydown('Escape', handleClose)
   gap: 8px;
 }
 html.dark .modal-tabs {
-  background: #1e293b;
+  background: var(--bg-card);
 }
 
 .tab-border {

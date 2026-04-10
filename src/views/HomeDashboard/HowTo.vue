@@ -426,7 +426,7 @@ html.dark .page-subtitle {
   background-color: #fffbeb;
 }
 html.dark .theme-amber {
-  background-color: #1e293b;
+  background-color: var(--bg-card);
 }
 
 .theme-blue {
@@ -447,14 +447,14 @@ html.dark .theme-purple {
   background-color: #eff6ff;
 }
 html.dark .theme-lightblue {
-  background-color: #1e293b;
+  background-color: var(--bg-card);
 }
 
 .theme-green {
   background-color: #f0fdf4;
 }
 html.dark .theme-green {
-  background-color: #1e293b;
+  background-color: var(--bg-card);
 }
 
 .section-title {

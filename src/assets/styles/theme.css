@@ -24,7 +24,7 @@
 /* When the .dark class is present on <html> */
 html.dark {
   --bg-main: #111827;
-  --bg-card: #1f2937;
+  --bg-card: #1e293b;
   --text-primary: #f9fafb;
   --border-color: #374151;
 

@@ -51,7 +51,7 @@ const navigateToTab = (tab: AccountTabEnum) => {
   gap: 8px;
 }
 html.dark .tabs {
-  background: #1e293b;
+  background: var(--bg-card);
 }
 
 .tab-border {

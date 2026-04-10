@@ -363,12 +363,8 @@ html.dark .ext-feature-card p {
 
 /* Tech Section */
 .tech-card {
-  background-color: #f0f6ff; /* Light blue */
-}
-
-html.dark .tech-card {
-  background-color: #1e293b;
-  border: 1px solid #334155;
+  background-color: var(--bg-card); /* Light blue */
+  border: 1px solid var(--border-color);
 }
 
 .tech-card h2 {
