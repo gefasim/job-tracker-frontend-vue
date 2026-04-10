@@ -18,7 +18,7 @@ import NotificationsTab from '@/views/HomeDashboard/Account/NotificationsTab.vue
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from '@/store/userStore'
 
-const { isAuthenticated } = useUser()
+const { hasAnActiveSession } = useUser()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,8 +46,8 @@ const router = createRouter({
     {
       path: '/',
       component: AuthenticatedHome,
-      beforeEnter: (to, from) => {
-        if (!isAuthenticated.value) return '/welcome'
+      beforeEnter: async (to, from) => {
+        if (!(await hasAnActiveSession())) return '/welcome'
       },
       children: [
         {

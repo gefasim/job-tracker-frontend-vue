@@ -9,4 +9,7 @@ export const authApi = {
   async logout(): Promise<void> {
     await httpClient.post(`/auth/logout`)
   },
+  async profile(): Promise<void> {
+    await httpClient.get(`/auth/profile`)
+  },
 }
