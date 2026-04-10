@@ -91,9 +91,10 @@ const onBoardCreated = async (board: Board) => {
         value-property="id"
         id="board-select"
         :hideLabel="true"
+        :max-width="'10rem'"
         @update:selected-item="onBoardChange"
       />
-      <input v-model="textFilter" type="text" placeholder="Search..." />
+      <input v-model="textFilter" type="text" placeholder="Search..." class="nav-input-max-width" />
     </div>
     <div class="nav-menu">
       <RouterLink :to="linkToSelectedBoard" class="sidebar-item" active-class="active">
@@ -154,5 +155,8 @@ const onBoardCreated = async (board: Board) => {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+.nav-input-max-width {
+  max-width: 10rem;
 }
 </style>

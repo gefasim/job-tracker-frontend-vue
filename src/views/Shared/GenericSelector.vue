@@ -9,6 +9,7 @@ interface Props<T> {
   valueProperty: keyof T
   id?: string
   hideLabel?: boolean
+  maxWidth?: string
 }
 
 const props = withDefaults(defineProps<Props<T>>(), {
@@ -52,7 +53,7 @@ const onChange = (event: Event) => {
 }
 </script>
 <template>
-  <div v-if="items.length > 0">
+  <div v-if="items.length > 0" :style="{ maxWidth: maxWidth }">
     <label v-if="!hideLabel" :for="inputId">{{ label }}</label>
     <select :id="inputId" v-model="localValue" @change="onChange" class="generic-dropdown">
       <option v-for="item in items" :key="getValue(item)" :value="getValue(item)">
