@@ -398,13 +398,9 @@
 .page-subtitle {
   font-size: 1.25rem;
   line-height: 1.75rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   max-width: 48rem;
   margin: 0 auto;
-}
-
-html.dark .page-subtitle {
-  color: #9ca3af;
 }
 
 .sections-container {
@@ -570,11 +566,8 @@ html.dark .ordered-list {
 .bullet-list {
   list-style-type: disc;
   list-style-position: inside;
-  color: #4b5563;
+  color: var(--text-secondary);
   padding: 0;
-}
-html.dark .bullet-list {
-  color: #9ca3af;
 }
 .bullet-list > li {
   margin-bottom: 0.25rem;
@@ -725,12 +718,9 @@ html.dark .icon.purple {
 }
 
 .inner-card p {
-  color: #4b5563;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
-}
-html.dark .inner-card p {
-  color: #9ca3af;
 }
 
 .mb-4 {

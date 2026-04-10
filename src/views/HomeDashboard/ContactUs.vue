@@ -60,12 +60,8 @@
 
 .contact-header .subtitle {
   font-size: 1.125rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   margin: 0;
-}
-
-html.dark .contact-header .subtitle {
-  color: #9ca3af;
 }
 
 /* Card */
