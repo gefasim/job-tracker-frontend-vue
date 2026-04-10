@@ -47,6 +47,25 @@ html.dark .btn-outline:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--btn-outline-bg), white 10%);
 }
 
+/* Card Menu button */
+.card-menu-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: var(--input-text);
+  letter-spacing: 1px;
+}
+
+.card-menu-btn:hover {
+  background-color: color-mix(in srgb, var(--bg-card), black 10%);
+}
+
+html.dark .card-menu-btn:hover {
+  background-color: color-mix(in srgb, var(--bg-card), white 10%);
+}
+
 /* Input */
 html.dark input[type='date'] {
   color-scheme: dark;

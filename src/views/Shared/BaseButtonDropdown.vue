@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-defineProps<{
-  items: string[]
-}>()
+withDefaults(
+  defineProps<{
+    items: string[]
+    buttonStyle?: string
+  }>(),
+  {
+    items: () => [],
+    buttonStyle: 'btn-outline',
+  },
+)
 
 const emit = defineEmits<{
   (e: 'select', item: string): void
@@ -38,12 +45,7 @@ onUnmounted(() => {
 
 <template>
   <div class="base-dropdown" ref="dropdownRef">
-    <button
-      type="button"
-      class="btn-outline"
-      :class="{ 'is-active': isOpen }"
-      @click="toggleDropdown"
-    >
+    <button type="button" :class="[buttonStyle, { 'is-active': isOpen }]" @click="toggleDropdown">
       <slot name="buttonValue">Select an option</slot>
     </button>
 
