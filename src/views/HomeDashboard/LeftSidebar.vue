@@ -84,7 +84,7 @@ const clearAllData = () => {
         active-class="active"
       >
         <div class="board-item-content">
-          <BoardIcon /> <span class="board-name">{{ board.name }}</span>
+          <span class="board-name"><BoardIcon /> {{ board.name }}</span>
         </div>
         <button class="archive-board-btn" @click.prevent="handleArchive(board.id)">
           <DeleteIcon />
@@ -147,6 +147,7 @@ const clearAllData = () => {
   padding: 0.5rem;
   cursor: pointer;
   border-radius: 8px;
+  max-width: 12rem;
 
   /* for RouterLink */
   text-decoration: none;

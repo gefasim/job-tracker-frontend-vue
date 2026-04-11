@@ -5,7 +5,6 @@ import type { UpdateUser } from '@/models/user/update-user.dto'
 
 const USER_KEY = 'user'
 const user = ref<User | null>(null)
-const isAuthenticated = computed(() => !!user.value)
 
 const login = async (email: string, password: string) => {
   try {
@@ -47,6 +46,17 @@ const clearUser = () => {
   localStorage.removeItem(USER_KEY)
 }
 
+// Checks if the user has an active session by calling API
+// instead of relying on the localStorage which might be stale
+const hasAnActiveSession = async () => {
+  try {
+    await api.auth.profile()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
 export const useUser = () => {
   const cachedUser = localStorage.getItem(USER_KEY)
   if (cachedUser) {
@@ -55,11 +65,11 @@ export const useUser = () => {
 
   return {
     user,
-    isAuthenticated,
     login,
     logout,
     setUser,
     updateUser,
     clearUser,
+    hasAnActiveSession,
   }
 }

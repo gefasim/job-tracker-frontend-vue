@@ -200,8 +200,6 @@ const handleHelpSelect = (selected: string) => {
 /* Reset and base variables for layout */
 .guest-layout {
   /* Light Theme variables by default */
-  --bg-color: #f9fafb;
-  --text-primary: #111827;
   --text-secondary: #374151;
   --text-muted: #6b7280;
 
@@ -245,15 +243,10 @@ const handleHelpSelect = (selected: string) => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
-  color: var(--text-primary);
-  background-color: var(--bg-color);
   scroll-behavior: smooth;
 }
 
 html.dark .guest-layout {
-  --bg-color: #030712;
-  --text-primary: #fff;
   --text-secondary: #d1d5db;
   --text-muted: #9ca3af;
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BaseButtonDropdown from './BaseButtonDropdown.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 defineProps<{
@@ -28,12 +29,14 @@ onUnmounted(() => document.removeEventListener('click', closeMenu))
       <slot></slot>
     </div>
     <div class="menu-container">
-      <button class="menu-btn" @click.stop="isMenuOpen = !isMenuOpen">•••</button>
-      <div v-if="isMenuOpen" class="dropdown-menu">
-        <div v-for="item in menuItems" :key="item" @click="handleMenuItemClick(item)">
-          {{ item }}
-        </div>
-      </div>
+      <BaseButtonDropdown
+        :items="menuItems"
+        button-style="card-menu-btn"
+        @select="handleMenuItemClick"
+      >
+        <template #buttonValue>•••</template>
+        <template #item="{ item }">{{ item }}</template>
+      </BaseButtonDropdown>
     </div>
   </div>
 </template>
@@ -50,49 +53,5 @@ onUnmounted(() => document.removeEventListener('click', closeMenu))
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-}
-.menu-btn {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 4px 8px;
-  cursor: pointer;
-  color: var(--input-text);
-  letter-spacing: 1px;
-}
-.menu-btn:hover {
-  background-color: color-mix(in srgb, var(--bg-card), black 10%);
-  border-color: color-mix(in srgb, var(--border-color), black 10%);
-}
-
-html.dark .menu-btn:hover {
-  background-color: color-mix(in srgb, var(--bg-card), white 10%);
-  border-color: color-mix(in srgb, var(--border-color), white 10%);
-}
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  bottom: 100%;
-  margin-bottom: 4px;
-  background: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 120px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.dropdown-menu > div {
-  background: none;
-  border: none;
-  padding: 10px 16px;
-  text-align: left;
-  font-size: 13px;
-  cursor: pointer;
-}
-.dropdown-menu > div:hover {
-  background: #f1f3f4;
 }
 </style>

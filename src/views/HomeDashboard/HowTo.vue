@@ -398,13 +398,9 @@
 .page-subtitle {
   font-size: 1.25rem;
   line-height: 1.75rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   max-width: 48rem;
   margin: 0 auto;
-}
-
-html.dark .page-subtitle {
-  color: #9ca3af;
 }
 
 .sections-container {
@@ -426,7 +422,7 @@ html.dark .page-subtitle {
   background-color: #fffbeb;
 }
 html.dark .theme-amber {
-  background-color: #1e293b;
+  background-color: var(--bg-card);
 }
 
 .theme-blue {
@@ -447,14 +443,14 @@ html.dark .theme-purple {
   background-color: #eff6ff;
 }
 html.dark .theme-lightblue {
-  background-color: #1e293b;
+  background-color: var(--bg-card);
 }
 
 .theme-green {
   background-color: #f0fdf4;
 }
 html.dark .theme-green {
-  background-color: #1e293b;
+  background-color: var(--bg-card);
 }
 
 .section-title {
@@ -570,11 +566,8 @@ html.dark .ordered-list {
 .bullet-list {
   list-style-type: disc;
   list-style-position: inside;
-  color: #4b5563;
+  color: var(--text-secondary);
   padding: 0;
-}
-html.dark .bullet-list {
-  color: #9ca3af;
 }
 .bullet-list > li {
   margin-bottom: 0.25rem;
@@ -725,12 +718,9 @@ html.dark .icon.purple {
 }
 
 .inner-card p {
-  color: #4b5563;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
-}
-html.dark .inner-card p {
-  color: #9ca3af;
 }
 
 .mb-4 {

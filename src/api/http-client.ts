@@ -29,8 +29,10 @@ httpClient.interceptors.response.use(
 
         return httpClient(originalRequest)
       } catch (refreshError) {
-        console.error('Session ended. Login required.')
-        window.location.href = '/login'
+        if (!isCheckingSessionRequest(originalRequest.url)) {
+          console.error('Session ended. Login required.')
+          window.location.href = '/login'
+        }
         return Promise.reject(refreshError)
       }
     }
@@ -38,5 +40,9 @@ httpClient.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+
+function isCheckingSessionRequest(url: string) {
+  return url === '/auth/profile'
+}
 
 export { httpClient }

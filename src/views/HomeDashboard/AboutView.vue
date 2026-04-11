@@ -161,14 +161,10 @@
 
 .about-header .subtitle {
   font-size: 1.125rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
-}
-
-html.dark .about-header .subtitle {
-  color: #9ca3af;
 }
 
 /* Section Card */
@@ -248,14 +244,10 @@ html.dark .mission-card p {
 }
 
 .feature-card p {
-  color: #4b5563;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
-}
-
-html.dark .feature-card p {
-  color: #9ca3af;
 }
 
 /* Extension Section */
@@ -341,13 +333,9 @@ html.dark .extension-header p {
 
 .ext-feature-card p {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-secondary);
   line-height: 1.5;
   margin: 0;
-}
-
-html.dark .ext-feature-card p {
-  color: #9ca3af;
 }
 
 .btn-purple {
@@ -363,12 +351,8 @@ html.dark .ext-feature-card p {
 
 /* Tech Section */
 .tech-card {
-  background-color: #f0f6ff; /* Light blue */
-}
-
-html.dark .tech-card {
-  background-color: #1e293b;
-  border: 1px solid #334155;
+  background-color: var(--bg-card); /* Light blue */
+  border: 1px solid var(--border-color);
 }
 
 .tech-card h2 {
@@ -390,14 +374,10 @@ html.dark .tech-card p {
 }
 
 .tech-card ul {
-  color: #4b5563;
+  color: var(--text-secondary);
   line-height: 2;
   padding-left: 1.5rem;
   margin: 0;
-}
-
-html.dark .tech-card ul {
-  color: #9ca3af;
 }
 
 /* CTA Section */

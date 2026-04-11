@@ -88,9 +88,9 @@ const handleSave = async (boardId: string, boardName: string | undefined) => {
             @keyup.escape="handleClose"
             @blur="handleClose"
           />
-          <span class="board-card-created">
+          <p class="board-card-created">
             Created: {{ new Date(board.createdAt).toLocaleDateString() }}
-          </span>
+          </p>
         </div>
       </BaseCardWithMenu>
     </div>
@@ -124,10 +124,12 @@ const handleSave = async (boardId: string, boardName: string | undefined) => {
   padding: 1rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  display: flex;
-  flex-direction: column;
   cursor: pointer;
   gap: 1rem;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .board-card:hover {

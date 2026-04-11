@@ -3,6 +3,7 @@
   --bg-main: #f9fafb;
   --bg-card: #ffffff;
   --text-primary: #111827;
+  --text-secondary: #4b5563;
   --border-color: #e5e7eb;
 
   /* Input Tokens */
@@ -24,8 +25,9 @@
 /* When the .dark class is present on <html> */
 html.dark {
   --bg-main: #111827;
-  --bg-card: #1f2937;
+  --bg-card: #1e293b;
   --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
   --border-color: #374151;
 
   /* Input Tokens (Dark) */
