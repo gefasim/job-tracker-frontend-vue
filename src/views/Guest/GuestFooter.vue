@@ -1,14 +1,14 @@
 <template>
   <footer class="footer">
     <div class="footer-left">
-      <RouterLink to="/" class="footer-link">Home</RouterLink>
+      <RouterLink :to="{ name: 'landing' }" class="footer-link">JobTracker</RouterLink>
     </div>
 
     <div class="footer-center">
       <div class="footer-col">
-        <a href="#" class="footer-link">About Us</a>
-        <a href="#" class="footer-link">How it works</a>
-        <a href="#" class="footer-link">Features</a>
+        <RouterLink :to="{ name: 'guest-about' }" class="footer-link">About Us</RouterLink>
+        <RouterLink :to="{ name: 'guest-contact-us' }" class="footer-link">Contact Us</RouterLink>
+        <RouterLink :to="{ name: 'guest-how-to' }" class="footer-link">How To</RouterLink>
       </div>
       <div class="footer-col">
         <a href="#" class="footer-link">Privacy Policy</a>

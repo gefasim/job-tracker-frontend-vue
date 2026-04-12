@@ -31,11 +31,19 @@ const handleHelpSelect = (selected: string) => {
     </div>
 
     <div class="navbar-center hidden-mobile">
-      <a href="#application" class="nav-link">Application</a>
-      <a href="#documents" class="nav-link">Documents</a>
-      <a href="#contacts" class="nav-link">Contacts</a>
-      <a href="#notes" class="nav-link">Notes</a>
-      <a href="#companies" class="nav-link">Companies</a>
+      <RouterLink :to="{ name: 'landing', hash: '#application' }" class="nav-link">
+        Application
+      </RouterLink>
+      <RouterLink :to="{ name: 'landing', hash: '#documents' }" class="nav-link">
+        Documents
+      </RouterLink>
+      <RouterLink :to="{ name: 'landing', hash: '#contacts' }" class="nav-link">
+        Contacts
+      </RouterLink>
+      <RouterLink :to="{ name: 'landing', hash: '#notes' }" class="nav-link"> Notes </RouterLink>
+      <RouterLink :to="{ name: 'landing', hash: '#companies' }" class="nav-link">
+        Companies
+      </RouterLink>
     </div>
 
     <div class="navbar-right">
