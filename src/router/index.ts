@@ -1,5 +1,6 @@
 import AuthenticatedHome from '@/views/HomeDashboard/AuthenticatedHome.vue'
 import GuestHome from '@/views/GuestHome.vue'
+import GuestMain from '@/views/Guest/GuestMain.vue'
 import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/HomeDashboard/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
@@ -22,11 +23,44 @@ const { hasAnActiveSession } = useUser()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    } else if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0, behavior: 'smooth' }
+    }
+  },
   routes: [
     {
       path: '/welcome',
-      name: 'landing',
       component: GuestHome,
+      children: [
+        {
+          path: '',
+          name: 'landing',
+          component: GuestMain,
+        },
+        {
+          path: 'about',
+          name: 'guest-about',
+          component: AboutView,
+        },
+        {
+          path: 'contact-us',
+          name: 'guest-contact-us',
+          component: ContactUs,
+        },
+        {
+          path: 'how-to',
+          name: 'guest-how-to',
+          component: HowTo,
+        },
+      ],
     },
     {
       path: '/login',
