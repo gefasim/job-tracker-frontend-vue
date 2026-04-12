@@ -29,16 +29,17 @@ import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 
     <section id="application" class="feature-section section-blue">
       <div class="feature-content">
-        <span class="icon-wrapper" style="background-color: rgba(59, 130, 246, 1)">
-          <JobInfoNavTabIcon size="2rem" />
-        </span>
-        <h2>Applications</h2>
+        <div class="feature-header">
+          <span class="icon-wrapper" style="background-color: rgba(59, 130, 246, 1)">
+            <JobInfoNavTabIcon size="2rem" />
+          </span>
+          <h2>Applications</h2>
+        </div>
         <h3>Record and track your job applications.</h3>
         <p>
-          Bring all your job search details together—no more scattered spreadsheets or sticky
-          notes. Track every opportunity, from company data and job descriptions to interview
-          dates, contacts, and more. Your entire job search, organized and accessible in one
-          place.
+          Bring all your job search details together—no more scattered spreadsheets or sticky notes.
+          Track every opportunity, from company data and job descriptions to interview dates,
+          contacts, and more. Your entire job search, organized and accessible in one place.
         </p>
       </div>
       <div class="feature-image">
@@ -48,10 +49,12 @@ import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 
     <section id="documents" class="feature-section section-purple">
       <div class="feature-content">
-        <span class="icon-wrapper" style="background-color: rgba(168, 85, 247, 1)">
-          <DocumentNavTabIcon size="2rem" />
-        </span>
-        <h2>Documents</h2>
+        <div class="feature-header">
+          <span class="icon-wrapper" style="background-color: rgba(168, 85, 247, 1)">
+            <DocumentNavTabIcon size="2rem" />
+          </span>
+          <h2>Documents</h2>
+        </div>
         <h3>Upload your resumes and cover letters.</h3>
         <p>
           Easily upload and manage your resumes, cover letters, and supporting documents. Attach
@@ -66,10 +69,12 @@ import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 
     <section id="contacts" class="feature-section section-green">
       <div class="feature-content">
-        <span class="icon-wrapper" style="background-color: rgba(2, 129, 76, 1)">
-          <ContactNavTabIcon size="2rem" />
-        </span>
-        <h2>Contacts</h2>
+        <div class="feature-header">
+          <span class="icon-wrapper" style="background-color: rgba(2, 129, 76, 1)">
+            <ContactNavTabIcon size="2rem" />
+          </span>
+          <h2>Contacts</h2>
+        </div>
         <h3>Add your job search contacts.</h3>
         <p>
           Keep track of everyone you meet along your journey—recruiters, interviewers, and
@@ -84,14 +89,16 @@ import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 
     <section id="notes" class="feature-section section-orange">
       <div class="feature-content">
-        <span class="icon-wrapper" style="background-color: rgba(249, 115, 22, 1)">
-          <NoteNavTabIcon size="2rem" />
-        </span>
-        <h2>Notes</h2>
+        <div class="feature-header">
+          <span class="icon-wrapper" style="background-color: rgba(249, 115, 22, 1)">
+            <NoteNavTabIcon size="2rem" />
+          </span>
+          <h2>Notes</h2>
+        </div>
         <h3>Capture and organize important insights.</h3>
         <p>
-          Capture important insights, meeting summaries, and interview feedback as they happen.
-          Add notes to jobs, contacts, or activities to keep context at your fingertips and make
+          Capture important insights, meeting summaries, and interview feedback as they happen. Add
+          notes to jobs, contacts, or activities to keep context at your fingertips and make
           informed decisions throughout your search.
         </p>
       </div>
@@ -102,10 +109,12 @@ import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
 
     <section id="companies" class="feature-section section-companies">
       <div class="feature-content">
-        <span class="icon-wrapper" style="background-color: rgba(239, 68, 68, 1)">
-          <CompanyNavTabIcon size="2rem" />
-        </span>
-        <h2>Companies</h2>
+        <div class="feature-header">
+          <span class="icon-wrapper" style="background-color: rgba(239, 68, 68, 1)">
+            <CompanyNavTabIcon size="2rem" />
+          </span>
+          <h2>Companies</h2>
+        </div>
         <h3>Build your target company database.</h3>
         <p>
           Build a comprehensive database of target companies with detailed profiles, culture
@@ -219,6 +228,13 @@ main.content {
   padding: 1rem;
   border-radius: 50%;
   margin-bottom: 1rem;
+  color: white;
+}
+
+.feature-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .feature-content {
@@ -288,6 +304,21 @@ main.content {
 
   .hero-title {
     font-size: 3rem;
+  }
+
+  .feature-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .icon-wrapper {
+    margin: 0;
+  }
+
+  .feature-content h2 {
+    margin: 0;
   }
 }
 </style>
