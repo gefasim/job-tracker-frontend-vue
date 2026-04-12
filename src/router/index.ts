@@ -38,6 +38,16 @@ const router = createRouter({
           name: 'guest-about',
           component: AboutView,
         },
+        {
+          path: 'contact-us',
+          name: 'guest-contact-us',
+          component: ContactUs,
+        },
+        {
+          path: 'how-to',
+          name: 'guest-how-to',
+          component: HowTo,
+        },
       ],
     },
     {
