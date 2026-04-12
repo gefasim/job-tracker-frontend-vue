@@ -1,9 +1,9 @@
 import { ref, computed, watch } from 'vue'
 
 export enum ColorScheme {
-  LIGHT = 'light',
-  DARK = 'dark',
-  SYSTEM = 'system',
+  LIGHT = 'Light',
+  DARK = 'Dark',
+  SYSTEM = 'System',
 }
 
 const theme = ref<ColorScheme>((localStorage.getItem('theme') as ColorScheme) || ColorScheme.SYSTEM)

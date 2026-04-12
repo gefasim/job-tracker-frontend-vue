@@ -10,7 +10,7 @@ const { themeOptions, isDark, setTheme } = useTheme()
 const helpOptions = ['About', 'How to?', 'Contact Us']
 
 const handleThemeSelect = (selected: string) => {
-  setTheme(selected.toLowerCase() as ColorScheme)
+  setTheme(selected as ColorScheme)
 }
 
 const handleHelpSelect = (selected: string) => {
