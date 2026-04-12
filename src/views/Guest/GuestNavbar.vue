@@ -3,7 +3,9 @@ import BaseButtonDropdown from '@/views/Shared/BaseButtonDropdown.vue'
 import { useTheme, type ColorScheme } from '@/store/themeStore'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
 import LightThemeIcon from '@/assets/icons/LightThemeIcon.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const { themeOptions, isDark, setTheme } = useTheme()
 const helpOptions = ['About', 'How to?', 'Contact Us']
 
@@ -12,8 +14,13 @@ const handleThemeSelect = (selected: string) => {
 }
 
 const handleHelpSelect = (selected: string) => {
-  // Handle help options click
-  console.log('Help selected:', selected)
+  if (selected === 'About') {
+    router.push('/welcome/about')
+  } else if (selected === 'How to?') {
+    router.push('/welcome/how-to')
+  } else if (selected === 'Contact Us') {
+    router.push('/welcome/contact-us')
+  }
 }
 </script>
 

@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import GuestNavbar from './Guest/GuestNavbar.vue'
-import GuestMain from './Guest/GuestMain.vue'
 import GuestFooter from './Guest/GuestFooter.vue'
 </script>
 
 <template>
   <div class="guest-layout">
     <GuestNavbar />
-    <GuestMain />
+    <RouterView />
     <GuestFooter />
   </div>
 </template>

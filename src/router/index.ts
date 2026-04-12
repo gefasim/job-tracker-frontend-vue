@@ -1,5 +1,6 @@
 import AuthenticatedHome from '@/views/HomeDashboard/AuthenticatedHome.vue'
 import GuestHome from '@/views/GuestHome.vue'
+import GuestMain from '@/views/Guest/GuestMain.vue'
 import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
 import JobBoard from '@/views/HomeDashboard/JobBoard.vue'
 import LogIn from '@/views/LogIn.vue'
@@ -25,8 +26,19 @@ const router = createRouter({
   routes: [
     {
       path: '/welcome',
-      name: 'landing',
       component: GuestHome,
+      children: [
+        {
+          path: '',
+          name: 'landing',
+          component: GuestMain,
+        },
+        {
+          path: 'about',
+          name: 'guest-about',
+          component: AboutView,
+        },
+      ],
     },
     {
       path: '/login',
