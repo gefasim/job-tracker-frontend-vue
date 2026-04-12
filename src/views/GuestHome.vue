@@ -4,8 +4,8 @@ import NoteNavTabIcon from '@/assets/icons/NoteNavTabIcon.vue'
 import ContactNavTabIcon from '@/assets/icons/ContactNavTabIcon.vue'
 import JobInfoNavTabIcon from '@/assets/icons/JobInfoNavTabIcon.vue'
 import CompanyNavTabIcon from '@/assets/icons/CompanyNavTabIcon.vue'
-import GuestNavbar from './Shared/GuestNavbar.vue'
-import GuestFooter from './Shared/GuestFooter.vue'
+import GuestNavbar from './Guest/GuestNavbar.vue'
+import GuestFooter from './Guest/GuestFooter.vue'
 </script>
 
 <template>

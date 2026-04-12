@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import BaseButtonDropdown from './BaseButtonDropdown.vue'
-import { useTheme, type ColorScheme } from '../../store/themeStore'
+import BaseButtonDropdown from '@/views/Shared/BaseButtonDropdown.vue'
+import { useTheme, type ColorScheme } from '@/store/themeStore'
 import DarkThemeIcon from '@/assets/icons/DarkThemeIcon.vue'
-import LightThemeIcon from '@/LightThemeIcon.vue'
+import LightThemeIcon from '@/assets/icons/LightThemeIcon.vue'
 
 const { themeOptions, isDark, setTheme } = useTheme()
 const helpOptions = ['About', 'How to?', 'Contact Us']
