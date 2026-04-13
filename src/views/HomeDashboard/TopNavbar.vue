@@ -48,6 +48,13 @@ watch(
   },
 )
 
+// useBoard calls an asynchronous function to fetch the list of boards without using 'await'.
+// Consequently, this watch() function monitors 'activeBoards' for updates.
+watch(
+  () => activeBoards.value,
+  () => setSelectBoardDropdownValue(),
+)
+
 const linkToSelectedBoard = computed(() => {
   return selectedBoard.value
     ? { name: 'board', params: { boardId: selectedBoard.value?.id } }
