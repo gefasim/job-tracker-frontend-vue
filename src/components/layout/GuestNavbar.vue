@@ -15,11 +15,11 @@ const handleThemeSelect = (selected: string) => {
 
 const handleHelpSelect = (selected: string) => {
   if (selected === 'About') {
-    router.push('/welcome/about')
+    router.push('/about')
   } else if (selected === 'How to?') {
-    router.push('/welcome/how-to')
+    router.push('/how-to')
   } else if (selected === 'Contact Us') {
-    router.push('/welcome/contact-us')
+    router.push('/contact-us')
   }
 }
 </script>

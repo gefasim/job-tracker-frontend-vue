@@ -57,6 +57,10 @@ const hasAnActiveSession = async () => {
   }
 }
 
+const isAuthenticated = computed(() => {
+  return user.value !== null
+})
+
 export const useUser = () => {
   const cachedUser = localStorage.getItem(USER_KEY)
   if (cachedUser) {
@@ -71,5 +75,6 @@ export const useUser = () => {
     updateUser,
     clearUser,
     hasAnActiveSession,
+    isAuthenticated,
   }
 }

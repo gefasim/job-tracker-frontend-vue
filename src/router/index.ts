@@ -18,8 +18,7 @@ import SettingsTab from '@/pages/Account/SettingsTab.vue'
 import NotificationsTab from '@/pages/Account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from '@/stores/userStore'
-
-const { hasAnActiveSession } = useUser()
+import HomeView from '@/layouts/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,11 +36,19 @@ const router = createRouter({
   },
   routes: [
     {
-      path: '/welcome',
-      component: GuestHome,
+      path: '/',
+      component: HomeView,
       children: [
         {
           path: '',
+          name: 'home',
+          redirect: () => {
+            const { isAuthenticated } = useUser()
+            return isAuthenticated.value ? { name: 'boards' } : { name: 'landing' }
+          },
+        },
+        {
+          path: 'landing',
           name: 'landing',
           component: GuestMain,
         },
@@ -60,32 +67,25 @@ const router = createRouter({
           name: 'guest-how-to',
           component: HowTo,
         },
-      ],
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: LogIn,
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: SignUp,
-    },
-    {
-      path: '/verify-email',
-      name: 'verify-email',
-      component: VerifyEmail,
-    },
-    {
-      path: '/',
-      component: AuthenticatedHome,
-      beforeEnter: async (to, from) => {
-        if (!(await hasAnActiveSession())) return '/welcome'
-      },
-      children: [
         {
-          path: '',
+          path: '/login',
+          name: 'login',
+          component: LogIn,
+        },
+        {
+          path: '/signup',
+          name: 'signup',
+          component: SignUp,
+        },
+        {
+          path: '/verify-email',
+          name: 'verify-email',
+          component: VerifyEmail,
+        },
+
+        /* Authenticated routes */
+        {
+          path: 'boards',
           name: 'boards',
           component: BoardDashboard,
         },
@@ -98,21 +98,6 @@ const router = createRouter({
           path: 'documents',
           name: 'documents',
           component: DocumentDashboard,
-        },
-        {
-          path: 'about',
-          name: 'about',
-          component: AboutView,
-        },
-        {
-          path: 'contact-us',
-          name: 'contact-us',
-          component: ContactUs,
-        },
-        {
-          path: 'how-to',
-          name: 'how-to',
-          component: HowTo,
         },
         {
           path: 'account',
@@ -153,6 +138,18 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+router.beforeEach((to, from) => {
+  const { isAuthenticated } = useUser()
+
+  if (to.name === 'landing' && isAuthenticated.value) {
+    return { name: 'boards' }
+  }
+
+  if (to.name === 'boards' && !isAuthenticated.value) {
+    return { name: 'landing' }
+  }
 })
 
 export default router
