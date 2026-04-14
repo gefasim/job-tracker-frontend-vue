@@ -1,0 +1,95 @@
+<script setup lang="ts">
+import type { JobApplication } from '@/types/dtos/job-application.dto'
+import RichTextEditor from '@/components/common/RichTextEditor.vue'
+
+import CompanySelectDropdown from '@/components/common/CompanySelectDropdown.vue'
+import type { Company } from '@/types/dtos/company.dto'
+import { api } from '@/services/api'
+import ColorPicker from '@/components/common/ColorPicker.vue'
+import { computed } from 'vue'
+import { useCurrentBoard } from '@/stores/currentBoardStore'
+
+const jobApplication = defineModel<JobApplication>({ required: true })
+const { board } = useCurrentBoard()
+const boardColors = computed(() => {
+  return [
+    ...new Set(
+      board
+        .value!.columns.flatMap((c) => c.jobApplications)
+        .map((j) => j.color)
+        .filter((color) => color) as string[],
+    ),
+  ]
+})
+
+const handleCompanyUpdate = async (company: Company) => {
+  if (!company.name || company.name === jobApplication.value.company!.name) return
+
+  // TODO: replace with strict check
+  const companies = (await api.companies.getByNameStartsWith(company.name)).filter(
+    (c) => c.name === company.name,
+  )
+  const companyResponse = companies.length == 1 ? companies[0] : await api.companies.create(company)
+
+  jobApplication.value = await api.jobs.updatePartial(jobApplication.value.id, {
+    companyId: companyResponse!.id,
+  })
+}
+</script>
+
+<template>
+  <div class="job-info-tab">
+    <div class="form-grid" v-if="jobApplication">
+      <CompanySelectDropdown
+        :company-name="jobApplication.company!.name"
+        @select="handleCompanyUpdate"
+      ></CompanySelectDropdown>
+      <div class="input-group">
+        <label>Job Title</label>
+        <input v-model="jobApplication.title" type="text" />
+      </div>
+      <div class="input-group full-row">
+        <label>Deadline</label>
+        <input v-model="jobApplication.deadline" type="date" placeholder="August 30th, 2025" />
+      </div>
+
+      <div class="input-group">
+        <label>Post URL</label>
+        <input
+          v-model="jobApplication.postUrl"
+          type="text"
+          placeholder="+ add URL e.g. https://google.com"
+        />
+      </div>
+      <div class="input-group">
+        <label>Salary</label>
+        <input v-model="jobApplication.salary" type="text" />
+      </div>
+
+      <div class="input-group">
+        <label>Location</label>
+        <input v-model="jobApplication.location" type="text" placeholder="+ add location" />
+      </div>
+      <div class="input-group">
+        <label>Color</label>
+        <ColorPicker
+          :model-value="jobApplication.color"
+          :board-colors="boardColors"
+          @update:model-value="(newColor) => (jobApplication.color = newColor)"
+        ></ColorPicker>
+      </div>
+    </div>
+
+    <label>Description</label>
+    <RichTextEditor v-model="jobApplication.description" />
+  </div>
+</template>
+
+<style scoped>
+.job-info-tab {
+  background: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+}
+</style>
