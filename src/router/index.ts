@@ -13,8 +13,8 @@ import ProfileTab from '@/pages/Account/ProfileTab.vue'
 import SettingsTab from '@/pages/Account/SettingsTab.vue'
 import NotificationsTab from '@/pages/Account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeLayout from '@/layouts/HomeLayout.vue'
 import HomePageProxy from '@/pages/HomePageProxy.vue'
+import HomeLayoutProxy from '@/layouts/HomeLayoutProxy.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,7 +33,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: HomeLayout,
+      component: HomeLayoutProxy,
       children: [
         {
           path: '',
