@@ -1,4 +1,4 @@
-import GuestMain from '@/layouts/GuestLayout.vue'
+import GuestLayout from '@/pages/GuestLayout.vue'
 import JobApplicationModal from '@/components/jobs/JobApplicationModal.vue'
 import JobBoard from '@/pages/JobBoard.vue'
 import LogIn from '@/pages/LogIn.vue'
@@ -48,7 +48,7 @@ const router = createRouter({
         {
           path: 'landing',
           name: 'landing',
-          component: GuestMain,
+          component: GuestLayout,
         },
         {
           path: 'about',

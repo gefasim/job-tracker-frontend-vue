@@ -2,7 +2,7 @@
 import { useUser } from '@/stores/userStore'
 import { computed } from 'vue'
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.vue'
-import GuestHome from '@/pages/GuestHome.vue'
+import GuestHome from '@/layouts/GuestHome.vue'
 
 const { isAuthenticated } = useUser()
 
