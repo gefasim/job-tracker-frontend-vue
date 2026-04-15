@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useUser } from '@/stores/userStore'
 import { computed } from 'vue'
-import AuthenticatedHome from '@/pages/AuthenticatedHome.vue'
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.vue'
 import GuestHome from '@/pages/GuestHome.vue'
 
 const { isAuthenticated } = useUser()
 
 const homeLayout = computed(() => {
-  return isAuthenticated.value ? AuthenticatedHome : GuestHome
+  return isAuthenticated.value ? AuthenticatedLayout : GuestHome
 })
 </script>
 

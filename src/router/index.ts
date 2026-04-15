@@ -1,5 +1,3 @@
-import AuthenticatedHome from '@/pages/AuthenticatedHome.vue'
-import GuestHome from '@/pages/GuestHome.vue'
 import GuestMain from '@/layouts/GuestLayout.vue'
 import JobApplicationModal from '@/components/jobs/JobApplicationModal.vue'
 import JobBoard from '@/pages/JobBoard.vue'
