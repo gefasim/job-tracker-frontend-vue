@@ -18,7 +18,7 @@ import SettingsTab from '@/pages/Account/SettingsTab.vue'
 import NotificationsTab from '@/pages/Account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from '@/stores/userStore'
-import HomeView from '@/layouts/HomeView.vue'
+import HomeLayout from '@/layouts/HomeLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,7 +37,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: HomeView,
+      component: HomeLayout,
       children: [
         {
           path: '',
