@@ -58,7 +58,7 @@ watch(
 const linkToSelectedBoard = computed(() => {
   return selectedBoard.value
     ? { name: 'board', params: { boardId: selectedBoard.value?.id } }
-    : { name: 'boards' }
+    : { name: 'home' }
 })
 
 const onBoardChange = async (board: Board) => {

@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="footer-left">
-      <RouterLink :to="{ name: 'landing' }" class="footer-link">JobTracker</RouterLink>
+      <RouterLink :to="{ name: 'home' }" class="footer-link">JobTracker</RouterLink>
     </div>
 
     <div class="footer-center">

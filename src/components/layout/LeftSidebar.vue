@@ -73,7 +73,7 @@ const clearAllData = () => {
       <hr />
 
       <div class="boards-header">
-        <RouterLink to="/boards" class="hide-link-decor"> Your boards: </RouterLink>
+        <RouterLink to="/" class="hide-link-decor"> Your boards: </RouterLink>
         <button class="add-board-btn" @click="isCreateBoardModalOpen = true"><b>+</b></button>
       </div>
       <RouterLink
@@ -90,11 +90,7 @@ const clearAllData = () => {
           <DeleteIcon />
         </button>
       </RouterLink>
-      <RouterLink
-        v-if="boards.filter((b) => !b.isArchived).length > 5"
-        to="/boards"
-        class="sidebar-item"
-      >
+      <RouterLink v-if="boards.filter((b) => !b.isArchived).length > 5" to="/" class="sidebar-item">
         See all boards
       </RouterLink>
 

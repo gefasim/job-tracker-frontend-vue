@@ -3,7 +3,6 @@ import JobBoard from '@/pages/JobBoard.vue'
 import LogIn from '@/pages/LogIn.vue'
 import SignUp from '@/pages/SignUp.vue'
 import VerifyEmail from '@/pages/VerifyEmail.vue'
-import BoardDashboard from '@/pages/BoardDashboard.vue'
 import ContactDashboard from '@/pages/ContactDashboard.vue'
 import DocumentDashboard from '@/pages/DocumentDashboard.vue'
 import AboutView from '@/pages/AboutView.vue'
@@ -14,9 +13,8 @@ import ProfileTab from '@/pages/Account/ProfileTab.vue'
 import SettingsTab from '@/pages/Account/SettingsTab.vue'
 import NotificationsTab from '@/pages/Account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUser } from '@/stores/userStore'
 import HomeLayout from '@/layouts/HomeLayout.vue'
-import LandingPage from '@/pages/LandingPage.vue'
+import HomePageProxy from '@/pages/HomePageProxy.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,15 +38,7 @@ const router = createRouter({
         {
           path: '',
           name: 'home',
-          redirect: () => {
-            const { isAuthenticated } = useUser()
-            return isAuthenticated.value ? { name: 'boards' } : { name: 'landing' }
-          },
-        },
-        {
-          path: 'landing',
-          name: 'landing',
-          component: LandingPage,
+          component: HomePageProxy,
         },
         {
           path: 'about',
@@ -82,11 +72,6 @@ const router = createRouter({
         },
 
         /* Authenticated routes */
-        {
-          path: 'boards',
-          name: 'boards',
-          component: BoardDashboard,
-        },
         {
           path: 'contacts',
           name: 'contacts',
@@ -136,18 +121,6 @@ const router = createRouter({
       ],
     },
   ],
-})
-
-router.beforeEach((to, from) => {
-  const { isAuthenticated } = useUser()
-
-  if (to.name === 'landing' && isAuthenticated.value) {
-    return { name: 'boards' }
-  }
-
-  if (to.name === 'boards' && !isAuthenticated.value) {
-    return { name: 'landing' }
-  }
 })
 
 export default router
