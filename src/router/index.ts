@@ -1,4 +1,3 @@
-import GuestLayout from '@/pages/GuestLayout.vue'
 import JobApplicationModal from '@/components/jobs/JobApplicationModal.vue'
 import JobBoard from '@/pages/JobBoard.vue'
 import LogIn from '@/pages/LogIn.vue'
@@ -17,6 +16,7 @@ import NotificationsTab from '@/pages/Account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUser } from '@/stores/userStore'
 import HomeLayout from '@/layouts/HomeLayout.vue'
+import LandingPage from '@/pages/LandingPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,7 +48,7 @@ const router = createRouter({
         {
           path: 'landing',
           name: 'landing',
-          component: GuestLayout,
+          component: LandingPage,
         },
         {
           path: 'about',
