@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUser } from '@/stores/userStore'
 import { computed } from 'vue'
-import BoardDashboard from './BoardDashboard.vue'
+import BoardDashboard from './Dashboards/BoardDashboard.vue'
 import LandingPage from './LandingPage.vue'
 
 const { isAuthenticated } = useUser()
