@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AccountTabEnum } from './Account/account-tabs'
+import { AccountTabEnum } from './account-tabs'
 import { computed } from 'vue'
 import { useRoute, useRouter, RouterView } from 'vue-router'
 
