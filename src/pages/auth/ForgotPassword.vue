@@ -9,7 +9,6 @@ const code = ref('')
 const newPassword = ref('')
 const repeatPassword = ref('')
 const errorMessage = ref('')
-const successMessage = ref('')
 const step = ref(1)
 
 const router = useRouter()
@@ -22,7 +21,6 @@ const sendResetCode = async () => {
     await api.users.sendPasswordResetCode(email.value)
 
     step.value = 2
-    successMessage.value = 'Verification code sent to your email'
   } catch {
     errorMessage.value = 'Failed to send reset code. Please try again.'
   }
@@ -104,22 +102,6 @@ const resetPassword = async () => {
             <b>*At least:</b> 8 characters, 1 number, 1 upper, 1 lower.
           </p>
 
-          <div class="success-banner" v-if="successMessage">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="success-icon"
-            >
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <span>{{ successMessage }}</span>
-          </div>
-
           <button
             class="btn-primary"
             :disabled="!code || !newPassword || newPassword !== repeatPassword || !isPasswordStrong"
@@ -184,21 +166,5 @@ button {
 p {
   color: #64748b;
   margin-bottom: 0;
-}
-.success-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #e6f6ee;
-  color: #10b981;
-  padding: 0.75rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 400;
-}
-.success-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
 }
 </style>
