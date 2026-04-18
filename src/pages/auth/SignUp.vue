@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '@/services/api'
+import { checkPasswordStrength } from '@/utils/validators'
 
 const firstName = ref('')
 const lastName = ref('')
@@ -10,15 +11,7 @@ const password = ref('')
 const errorMessage = ref('')
 const router = useRouter()
 
-// 8 characters, 1 number, 1 upper, 1 lower
-const isPasswordStrong = computed<boolean>(() => {
-  return (
-    password.value.length >= 8 &&
-    /[0-9]/.test(password.value) &&
-    /[A-Z]/.test(password.value) &&
-    /[a-z]/.test(password.value)
-  )
-})
+const isPasswordStrong = computed<boolean>(() => checkPasswordStrength(password.value))
 
 const register = async () => {
   errorMessage.value = ''

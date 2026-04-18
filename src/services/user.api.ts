@@ -33,6 +33,18 @@ export const userApi = {
       newPassword,
     })
   },
+  async sendPasswordResetCode(email: string): Promise<void> {
+    await httpClient.post(`/users/reset-password/create-verification-code`, {
+      email,
+    })
+  },
+  async resetPassword(email: string, verificationCode: string, newPassword: string): Promise<void> {
+    await httpClient.post(`/users/reset-password`, {
+      email,
+      code: verificationCode,
+      newPassword,
+    })
+  },
   async createVerificationCodeForDelete(): Promise<void> {
     await httpClient.post(`/users/delete/create-verification-code`)
   },

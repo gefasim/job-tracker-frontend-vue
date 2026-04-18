@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/stores/userStore'
 import { api } from '@/services/api'
+import { useKeydown } from '@/composables/useKeydown'
 
 const email = ref('')
 const password = ref('')
@@ -31,6 +32,12 @@ const redirectToEmailVerificationAfterError = async () => {
   await api.users.createEmailVerificationCode(email.value)
   router.push({ path: '/verify-email', query: { email: email.value } })
 }
+
+useKeydown('Enter', () => {
+  if (email.value && password.value) {
+    login()
+  }
+})
 </script>
 
 <template>
@@ -71,7 +78,7 @@ const redirectToEmailVerificationAfterError = async () => {
       <p>Don't have an account? <router-link to="/signup" class="link">Sign up</router-link></p>
       <p>
         Forgot your password?
-        <router-link to="/reset-password" class="link">Reset password</router-link>
+        <router-link to="/forgot-password" class="link">Forgot password</router-link>
       </p>
     </div>
   </div>
