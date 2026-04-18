@@ -1,25 +1,20 @@
-import AuthenticatedHome from '@/views/HomeDashboard/AuthenticatedHome.vue'
-import GuestHome from '@/views/GuestHome.vue'
-import GuestMain from '@/views/Guest/GuestMain.vue'
-import JobApplicationModal from '@/views/JobApplication/JobApplicationModal.vue'
-import JobBoard from '@/views/HomeDashboard/JobBoard.vue'
-import LogIn from '@/views/LogIn.vue'
-import SignUp from '@/views/SignUp.vue'
-import VerifyEmail from '@/views/VerifyEmail.vue'
-import BoardDashboard from '@/views/HomeDashboard/BoardDashboard.vue'
-import ContactDashboard from '@/views/HomeDashboard/ContactDashboard.vue'
-import DocumentDashboard from '@/views/HomeDashboard/DocumentDashboard.vue'
-import AboutView from '@/views/HomeDashboard/AboutView.vue'
-import ContactUs from '@/views/HomeDashboard/ContactUs.vue'
-import HowTo from '@/views/HomeDashboard/HowTo.vue'
-import PersonalAccount from '@/views/HomeDashboard/PersonalAccount.vue'
-import ProfileTab from '@/views/HomeDashboard/Account/ProfileTab.vue'
-import SettingsTab from '@/views/HomeDashboard/Account/SettingsTab.vue'
-import NotificationsTab from '@/views/HomeDashboard/Account/NotificationsTab.vue'
+import JobApplicationModal from '@/components/jobs/JobApplicationModal.vue'
+import JobBoard from '@/pages/JobBoard.vue'
+import LogIn from '@/pages/auth/LogIn.vue'
+import SignUp from '@/pages/auth/SignUp.vue'
+import VerifyEmail from '@/pages/auth/VerifyEmail.vue'
+import ContactDashboard from '@/pages/dashboards/ContactDashboard.vue'
+import DocumentDashboard from '@/pages/dashboards/DocumentDashboard.vue'
+import AboutView from '@/pages/help/AboutView.vue'
+import ContactUs from '@/pages/help/ContactUs.vue'
+import HowTo from '@/pages/help/HowTo.vue'
+import PersonalAccount from '@/pages/account/PersonalAccount.vue'
+import ProfileTab from '@/pages/account/ProfileTab.vue'
+import SettingsTab from '@/pages/account/SettingsTab.vue'
+import NotificationsTab from '@/pages/account/NotificationsTab.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUser } from '@/store/userStore'
-
-const { hasAnActiveSession } = useUser()
+import HomePageProxy from '@/pages/HomePageProxy.vue'
+import HomeLayoutProxy from '@/layouts/HomeLayoutProxy.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,13 +32,13 @@ const router = createRouter({
   },
   routes: [
     {
-      path: '/welcome',
-      component: GuestHome,
+      path: '/',
+      component: HomeLayoutProxy,
       children: [
         {
           path: '',
-          name: 'landing',
-          component: GuestMain,
+          name: 'home',
+          component: HomePageProxy,
         },
         {
           path: 'about',
@@ -60,35 +55,23 @@ const router = createRouter({
           name: 'guest-how-to',
           component: HowTo,
         },
-      ],
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: LogIn,
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: SignUp,
-    },
-    {
-      path: '/verify-email',
-      name: 'verify-email',
-      component: VerifyEmail,
-    },
-    {
-      path: '/',
-      component: AuthenticatedHome,
-      beforeEnter: async (to, from) => {
-        if (!(await hasAnActiveSession())) return '/welcome'
-      },
-      children: [
         {
-          path: '',
-          name: 'boards',
-          component: BoardDashboard,
+          path: '/login',
+          name: 'login',
+          component: LogIn,
         },
+        {
+          path: '/signup',
+          name: 'signup',
+          component: SignUp,
+        },
+        {
+          path: '/verify-email',
+          name: 'verify-email',
+          component: VerifyEmail,
+        },
+
+        /* Authenticated routes */
         {
           path: 'contacts',
           name: 'contacts',
@@ -98,21 +81,6 @@ const router = createRouter({
           path: 'documents',
           name: 'documents',
           component: DocumentDashboard,
-        },
-        {
-          path: 'about',
-          name: 'about',
-          component: AboutView,
-        },
-        {
-          path: 'contact-us',
-          name: 'contact-us',
-          component: ContactUs,
-        },
-        {
-          path: 'how-to',
-          name: 'how-to',
-          component: HowTo,
         },
         {
           path: 'account',
