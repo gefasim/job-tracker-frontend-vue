@@ -13,6 +13,7 @@ import PersonalAccount from '@/pages/account/PersonalAccount.vue'
 import ProfileTab from '@/pages/account/ProfileTab.vue'
 import SettingsTab from '@/pages/account/SettingsTab.vue'
 import NotificationsTab from '@/pages/account/NotificationsTab.vue'
+import NotFound from '@/pages/NotFound.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePageProxy from '@/pages/HomePageProxy.vue'
 import HomeLayoutProxy from '@/layouts/HomeLayoutProxy.vue'
@@ -148,6 +149,11 @@ const router = createRouter({
           meta: {
             requiresAuth: true,
           },
+        },
+        {
+          path: '/:pathMatch(.*)*',
+          name: 'not-found',
+          component: NotFound,
         },
       ],
     },
