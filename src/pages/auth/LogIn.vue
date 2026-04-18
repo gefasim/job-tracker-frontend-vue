@@ -71,7 +71,7 @@ const redirectToEmailVerificationAfterError = async () => {
       <p>Don't have an account? <router-link to="/signup" class="link">Sign up</router-link></p>
       <p>
         Forgot your password?
-        <router-link to="/reset-password" class="link">Reset password</router-link>
+        <router-link to="/forgot-password" class="link">Forgot password</router-link>
       </p>
     </div>
   </div>

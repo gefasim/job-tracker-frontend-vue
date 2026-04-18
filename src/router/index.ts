@@ -2,6 +2,7 @@ import JobApplicationModal from '@/components/jobs/JobApplicationModal.vue'
 import JobBoard from '@/pages/JobBoard.vue'
 import LogIn from '@/pages/auth/LogIn.vue'
 import SignUp from '@/pages/auth/SignUp.vue'
+import ForgotPassword from '@/pages/auth/ForgotPassword.vue'
 import VerifyEmail from '@/pages/auth/VerifyEmail.vue'
 import ContactDashboard from '@/pages/dashboards/ContactDashboard.vue'
 import DocumentDashboard from '@/pages/dashboards/DocumentDashboard.vue'
@@ -64,6 +65,11 @@ const router = createRouter({
           path: '/signup',
           name: 'signup',
           component: SignUp,
+        },
+        {
+          path: '/forgot-password',
+          name: 'forgot-password',
+          component: ForgotPassword,
         },
         {
           path: '/verify-email',
