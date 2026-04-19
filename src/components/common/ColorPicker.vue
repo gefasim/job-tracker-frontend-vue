@@ -190,7 +190,7 @@ html.dark .dropdown-trigger:hover {
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color);
   display: inline-block;
 }
 
@@ -221,7 +221,7 @@ html.dark .dropdown-trigger:hover {
   gap: 16px;
   padding: 16px;
   background: var(--bg-main);
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   width: stretch;
   min-width: 200px;
@@ -239,7 +239,7 @@ html.dark .dropdown-trigger:hover {
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color);
   overflow: hidden;
   cursor: pointer;
   position: relative;
@@ -264,7 +264,7 @@ html.dark .dropdown-trigger:hover {
 .hex-input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-family: monospace;
   font-size: 14px;

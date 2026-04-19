@@ -71,6 +71,48 @@ html.dark input[type='date'] {
   color-scheme: dark;
 }
 
+input,
+textarea,
+select {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--input-text);
+  background: var(--bg-main);
+  transition: border-color 0.2s;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #1a73e8;
+  outline: none;
+}
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Input Group */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.input-group label {
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+}
+.input-group-required label {
+  justify-content: left;
+}
+.input-group-required span {
+  color: red;
+}
+
 /* Header */
 .header {
   margin-bottom: 24px;
@@ -88,4 +130,64 @@ html.dark input[type='date'] {
   align-items: center;
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+
+/* Tabs */
+.modal-tabs {
+  display: flex;
+  background: #f1f4f9;
+  padding: 8px 32px;
+  gap: 8px;
+}
+html.dark .modal-tabs {
+  background: var(--bg-card);
+}
+
+.tab-border {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #5f6368;
+  gap: 8px;
+  font-weight: 500;
+  position: relative; /* for badge */
+}
+
+.tab-item.active {
+  background: var(--bg-main);
+  color: #1a73e8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.tab-badge {
+  background-color: #818b9c;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  height: 20px;
+  min-width: 20px;
+  padding: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }

@@ -2,6 +2,7 @@ import { computed, ref } from 'vue'
 import type { User } from '@/types/dtos/user/user.dto'
 import { api } from '@/services/api'
 import type { UpdateUser } from '@/types/dtos/user/update-user.dto'
+import { authBus, AUTH_EVENTS } from '@/utils/auth-bus'
 
 const USER_KEY = 'user'
 const user = ref<User | null>(null)
@@ -45,6 +46,8 @@ const clearUser = () => {
   user.value = null
   localStorage.removeItem(USER_KEY)
 }
+
+authBus.addEventListener(AUTH_EVENTS.UNAUTHORIZED, clearUser)
 
 // Checks if the user has an active session by calling API
 // instead of relying on the localStorage which might be stale
