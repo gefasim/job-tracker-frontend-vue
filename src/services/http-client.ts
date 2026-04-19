@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { authBus, AUTH_EVENTS } from '@/utils/auth-bus'
 
 const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -31,6 +32,7 @@ httpClient.interceptors.response.use(
       } catch (refreshError) {
         if (!isCheckingSessionRequest(originalRequest.url)) {
           console.error('Session ended. Login required.')
+          authBus.dispatchEvent(new Event(AUTH_EVENTS.UNAUTHORIZED))
           window.location.href = '/login'
         }
         return Promise.reject(refreshError)
