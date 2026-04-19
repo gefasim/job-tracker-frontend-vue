@@ -13,9 +13,11 @@ import PersonalAccount from '@/pages/account/PersonalAccount.vue'
 import ProfileTab from '@/pages/account/ProfileTab.vue'
 import SettingsTab from '@/pages/account/SettingsTab.vue'
 import NotificationsTab from '@/pages/account/NotificationsTab.vue'
+import NotFound from '@/pages/NotFound.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePageProxy from '@/pages/HomePageProxy.vue'
 import HomeLayoutProxy from '@/layouts/HomeLayoutProxy.vue'
+import { useUser } from '@/stores/userStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,21 +62,33 @@ const router = createRouter({
           path: '/login',
           name: 'login',
           component: LogIn,
+          meta: {
+            authPage: true,
+          },
         },
         {
           path: '/signup',
           name: 'signup',
           component: SignUp,
+          meta: {
+            authPage: true,
+          },
         },
         {
           path: '/forgot-password',
           name: 'forgot-password',
           component: ForgotPassword,
+          meta: {
+            authPage: true,
+          },
         },
         {
           path: '/verify-email',
           name: 'verify-email',
           component: VerifyEmail,
+          meta: {
+            authPage: true,
+          },
         },
 
         /* Authenticated routes */
@@ -82,11 +96,17 @@ const router = createRouter({
           path: 'contacts',
           name: 'contacts',
           component: ContactDashboard,
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: 'documents',
           name: 'documents',
           component: DocumentDashboard,
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: 'account',
@@ -109,6 +129,9 @@ const router = createRouter({
               component: NotificationsTab,
             },
           ],
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: 'boards/:boardId',
@@ -123,10 +146,32 @@ const router = createRouter({
               props: true,
             },
           ],
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: '/:pathMatch(.*)*',
+          name: 'not-found',
+          component: NotFound,
         },
       ],
     },
   ],
+})
+
+// Redirects unauthenticated users from protected routes to login page
+// and authenticated users from auth pages to home page (Board Dashboard)
+router.beforeEach((to, from) => {
+  const { isAuthenticated } = useUser()
+
+  if (isAuthenticated.value && to.meta.authPage) {
+    return { name: 'home' }
+  }
+
+  if (!isAuthenticated.value && to.meta.requiresAuth) {
+    return { name: 'login' }
+  }
 })
 
 export default router
