@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import { useUser } from '@/stores/userStore'
+
+const { isAuthenticated } = useUser()
+</script>
+
 <template>
   <div class="about-page">
     <div class="about-container">
@@ -115,15 +121,15 @@
         </div>
       </section>
 
-      <section class="cta-section">
+      <section class="cta-section" v-if="!isAuthenticated">
         <h2>Ready to Get Started?</h2>
         <p>
           Join thousands of job seekers who are already using JobTracker to organize their job
           search.
         </p>
         <div class="cta-buttons">
-          <button class="btn-primary">Sign Up Free</button>
-          <RouterLink to="contact-us" class="btn-secondary">Contact Us</RouterLink>
+          <RouterLink to="/signup" class="btn-primary">Sign Up Free</RouterLink>
+          <RouterLink to="/contact-us" class="btn-outline">Contact Us</RouterLink>
         </div>
       </section>
     </div>
@@ -408,31 +414,5 @@ html.dark .cta-section p {
   display: flex;
   justify-content: center;
   gap: 1rem;
-}
-
-.btn-secondary {
-  background-color: #e2e8f0;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  color: #0f172a;
-  transition: background-color 0.2s;
-  font-size: 0.95rem;
-  text-decoration: none;
-}
-
-.btn-secondary:hover {
-  background-color: #cbd5e1;
-}
-
-html.dark .btn-secondary {
-  background-color: #334155;
-  color: #f8fafc;
-}
-
-html.dark .btn-secondary:hover {
-  background-color: #475569;
 }
 </style>
