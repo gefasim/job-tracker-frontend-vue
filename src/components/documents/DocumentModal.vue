@@ -2,7 +2,10 @@
 import { ref, computed, onMounted } from 'vue'
 import type { Document } from '@/types/dtos/document.dto'
 import type { JobApplication } from '@/types/dtos/job-application.dto'
-import { DocumentCategoryEnum, type DocumentCategoryType } from '@/types/dtos/document-category.enum'
+import {
+  DocumentCategoryEnum,
+  type DocumentCategoryType,
+} from '@/types/dtos/document-category.enum'
 import BaseModalWithJobLinkWrapper from '@/components/common/BaseModalWithJobLinkWrapper.vue'
 import { useDocumentStore } from '@/stores/documentStore'
 
@@ -119,7 +122,7 @@ const sendAssignOrUnassignJobRequests = (documentId: string, linkedJobIds: strin
         <label>Select file <span>*</span></label>
         <div class="file-drop-zone">
           <input type="file" id="file-upload" class="file-input" @change="handleFileChange" />
-          <label for="file-upload" class="upload-btn">Upload file</label>
+          <label for="file-upload" class="btn-outline">Upload file</label>
           <span class="drop-text">or drag and drop a file here</span>
           <div v-if="form.file" class="selected-file-name">Selected: {{ form.file.name }}</div>
         </div>
@@ -153,7 +156,7 @@ const sendAssignOrUnassignJobRequests = (documentId: string, linkedJobIds: strin
 <style scoped>
 /* File Drop Zone */
 .file-drop-zone {
-  border: 1px dashed #dadce0;
+  border: 1px dashed var(--border-color);
   border-radius: 8px;
   padding: 32px;
   display: flex;
@@ -169,21 +172,6 @@ const sendAssignOrUnassignJobRequests = (documentId: string, linkedJobIds: strin
   width: 0;
   height: 0;
   opacity: 0;
-}
-
-.upload-btn {
-  background-color: #b2bac0;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.upload-btn:hover {
-  background-color: #2c3e50;
 }
 
 .drop-text {
