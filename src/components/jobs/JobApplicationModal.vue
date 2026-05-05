@@ -47,19 +47,31 @@ const tabComponents: Record<JobApplicationTabEnum, { icon: unknown; component: u
 }
 const currentComponent = computed(() => tabComponents[activeTab.value].component)
 
-const getJobApplicationFromCasheOrLoad = async (jobId: string): Promise<JobApplication> => {
+const getJobApplicationFromCacheOrLoad = async (jobId: string): Promise<JobApplication> => {
   const job = getJobApplication(jobId)
   if (!job) {
     return await loadJobApplication(jobId)
   }
-  job!.contacts =
-    contactsPerBoard.value[props.boardId]?.filter((c) =>
-      c.jobApplications.find((j) => j.id === jobId),
-    ) || []
-  job!.documents =
-    documentsByBoard.value[props.boardId]?.filter((d) =>
-      d.jobApplications.find((j) => j.id === jobId),
-    ) || []
+
+  // TODO: JS returns `.filter() is not a function` error
+  if (
+    contactsPerBoard.value[props.boardId] &&
+    Array.isArray(contactsPerBoard.value[props.boardId])
+  ) {
+    job.contacts =
+      contactsPerBoard.value[props.boardId]?.filter((c) =>
+        c.jobApplications.find((j) => j.id === jobId),
+      ) || []
+  }
+  if (
+    documentsByBoard.value[props.boardId] &&
+    Array.isArray(documentsByBoard.value[props.boardId])
+  ) {
+    job.documents =
+      documentsByBoard.value[props.boardId]?.filter((d) =>
+        d.jobApplications.find((j) => j.id === jobId),
+      ) || []
+  }
   return job!
 }
 
@@ -68,7 +80,7 @@ watch(
   () => props.jobId,
   async (newJobId) => {
     if (!newJobId) return
-    jobApplicationBeforeUpdate = await getJobApplicationFromCasheOrLoad(newJobId)
+    jobApplicationBeforeUpdate = await getJobApplicationFromCacheOrLoad(newJobId)
     jobApplication.value = { ...jobApplicationBeforeUpdate }
     selectedColumnId.value = board.value!.columns.find((c) =>
       c.jobApplications.some((j) => j.id === newJobId),
